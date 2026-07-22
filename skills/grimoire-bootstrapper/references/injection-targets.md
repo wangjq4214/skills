@@ -23,7 +23,7 @@ Append this block to each target file:
 
 This project maintains a grimoire at `.grimoire/`:
 
-- `CONTEXT.md` — project concepts and terminology
+- `CONTEXT.md` — domain concepts and terminology (may split into `CONTEXT-[domain].md`)
 - `adr/` — architecture decision records
 - `spec/` — requirements specifications
 - `ticket/` — implementation plans

@@ -16,23 +16,13 @@ Unified project concept descriptions and terminology.
 
 Records the shared vocabulary of the project domain. Every significant term, entity, or concept gets a definition here. Other grimoire files reference these definitions instead of re-explaining them.
 
-Template:
-
-```markdown
-# Project Context
-
-## Concepts
-
-### [concept-name]
-- Definition:
-- Used in:
-```
+When entries grow large, grimoire-modeler may split into domain files (`CONTEXT-[domain].md`), with CONTEXT.md becoming a domain index.
 
 ## adr/
 
 Architecture Decision Records.
 
-Each file records one significant architectural decision. Use the ADR format: title, status, context, decision, consequences.
+Each file records one significant architectural decision. Maintained by grimoire-modeler.
 
 Naming: `NNNN-title-with-dashes.md` (zero-padded sequence number).
 
