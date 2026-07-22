@@ -32,11 +32,14 @@ Think of it as an **instruction manual for your AI pair programmer** 🤖. Every
 
 ## 🗂️ Skills
 
-| Skill                                                                  | Description                                                                         | Invocation |
-| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------- |
-| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**                     | Create, review, and refactor agent skills with predictable execution paths          | User       |
-| 📦 **[grimoire-bootstrapper](./skills/grimoire-bootstrapper/SKILL.md)** | Initialize `.grimoire` directories and inject them into agent configs               | User       |
-| 🔍 **[grimoire-interrogator](./skills/grimoire-interrogator/SKILL.md)** | Round-based Q&A that builds a design tree — every assumption resolved before action | User       |
+| Skill                                                                  | Description                                                                         |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**                     | Create, review, and refactor agent skills for predictable execution                 |
+| 📦 **[grimoire-bootstrapper](./skills/grimoire-bootstrapper/SKILL.md)** | Initialize `.grimoire` directories and register them with agent configs             |
+| 🔍 **[grimoire-interrogator](./skills/grimoire-interrogator/SKILL.md)** | Round-based Q&A that builds a design tree — every assumption resolved before action |
+| 🧠 **[grimoire-modeler](./skills/grimoire-modeler/SKILL.md)**           | Record domain terminology and architectural decisions from conversations            |
+| 🗣️ **[grimoire-scout](./skills/grimoire-scout/SKILL.md)**               | Discuss with the user to update project knowledge and refine requirements           |
+| 📝 **[grimoire-scribe](./skills/grimoire-scribe/SKILL.md)**             | Synthesize context, repo structure, domain knowledge & ADRs into structured specs   |
 
 ---
 
@@ -55,17 +58,26 @@ pnpx skills@latest add wangjq4214/skills
 ```
 .
 ├── skills/
-│   ├── skill-forge/           🔨 Meta-skill: build better skills
-│   │   ├── SKILL.md           📋 Core workflow
-│   │   └── references/        📚 Deep dives (hierarchy, pruning, etc.)
-│   ├── grimoire-bootstrapper/ 📦 Project knowledge bootstrapper
-│   │   ├── SKILL.md           📋 Core workflow
-│   │   └── references/        📚 Directory structure & injection targets
-│   └── grimoire-interrogator/ 🔍 Design tree interrogator
-│       └── SKILL.md           📋 Core workflow
-├── .changeset/                🏷️ Version bump changesets
-├── package.json               ⚙️ pnpm workspace config
-└── README.md                  📖 You are here!
+│   ├── skill-forge/              🔨 Meta-skill: build better skills
+│   │   ├── SKILL.md              📋 Core workflow
+│   │   └── references/           📚 Deep dives (hierarchy, pruning, failure modes, etc.)
+│   ├── grimoire-bootstrapper/    📦 Project knowledge bootstrapper
+│   │   ├── SKILL.md              📋 Core workflow
+│   │   └── references/           📚 Directory structure & injection targets
+│   ├── grimoire-interrogator/    🔍 Design tree interrogator
+│   │   └── SKILL.md              📋 Core workflow
+│   ├── grimoire-modeler/         🧠 Domain knowledge & ADR recorder
+│   │   ├── SKILL.md              📋 Core workflow
+│   │   └── references/           📚 ADR & context templates
+│   ├── grimoire-scout/           🗣️ Project knowledge discussion
+│   │   └── SKILL.md              📋 Core workflow
+│   └── grimoire-scribe/          📝 Spec synthesizer
+│       ├── SKILL.md              📋 Core workflow
+│       └── references/           📚 Spec template & minimum seams
+├── .changeset/                   🏷️ Version bump changesets
+├── skills.sh.json                🔗 skills.sh grouping manifest
+├── package.json                  ⚙️ pnpm workspace config
+└── README.md                     📖 You are here!
 ```
 
 ---

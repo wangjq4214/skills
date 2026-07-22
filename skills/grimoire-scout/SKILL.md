@@ -1,5 +1,5 @@
 ---
-name: grimoire-sout
+name: grimoire-scout
 description: Discuss with the user to update project knowledge and refine requirements.
 disable-model-invocation: true
 ---
