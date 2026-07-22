@@ -18,7 +18,7 @@ This skill does NOT:
 - Implement code
 - Record domain concepts or ADRs (use grimoire-modeler)
 
-Completion: A plan file exists at `.grimoire/plans/NNNN-title.md` with all five sections filled.
+Completion: A plan file exists at `.grimoire/plans/NNNN-title.md` with all six sections filled.
 
 ---
 
@@ -71,7 +71,17 @@ Apply the litmus test from design principles: "Can this type exist independently
 
 Prioritize minimal changes. Prefer extending existing types over creating new ones when the change belongs to the same concept. Prefer composition over inheritance.
 
-Completion: Every affected type has a record with all five fields. The rationale for every boundary decision is explicit. No type owns more than one concept.
+**Produce a type relationship diagram** using Mermaid classDiagram syntax (see
+[references/diagram-guide.md](./references/diagram-guide.md)). The diagram must:
+
+- Show every type from step 3.
+- Show relationships: composition (has-a), implementation (can-do), and usage
+  dependencies.
+- Show key fields and methods relevant to the plan for each type.
+
+Completion: Every affected type has a record with all five fields. The rationale
+for every boundary decision is explicit. No type owns more than one concept. A
+Mermaid classDiagram exists showing all types and their relationships.
 
 ---
 
@@ -130,14 +140,15 @@ Completion: Every type from step 3 has a test approach. Mocking boundaries are i
 Assemble the plan with these sections:
 
 1. **Type Design** — from step 3.
-2. **Implementation Steps** — from step 4.
-3. **Edge Cases** — from step 5.
-4. **Test Strategy** — from step 6.
-5. **Affected Files** — list every file the plan touches, with action (create/modify) and which step references it.
+2. **Type Relationship Diagram** — Mermaid classDiagram from step 3.
+3. **Implementation Steps** — from step 4.
+4. **Edge Cases** — from step 5.
+5. **Test Strategy** — from step 6.
+6. **Affected Files** — list every file the plan touches, with action (create/modify) and which step references it.
 
 Write to `.grimoire/plans/NNNN-title.md`.
 
-Verify the file exists and all five sections are present.
+Verify the file exists and all six sections are present.
 
 Completion: Plan file exists. All sections present. Sequence number is correct.
 

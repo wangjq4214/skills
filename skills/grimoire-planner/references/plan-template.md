@@ -32,7 +32,23 @@ Use this template when writing the plan in step 7.
 
 ---
 
-## 2. Implementation Steps
+## 2. Type Relationship Diagram
+
+```mermaid
+classDiagram
+    class TypeName {
+        +field: Type
+        +method(): ReturnType
+    }
+
+    TypeA *-- TypeB : composes
+    TypeC <|-- TypeD : implements
+    TypeE --> TypeF : uses
+```
+
+---
+
+## 3. Implementation Steps
 
 ### Step 1: [action verb + target + brief description]
 
@@ -54,7 +70,7 @@ Use this template when writing the plan in step 7.
 
 ---
 
-## 3. Edge Cases
+## 4. Edge Cases
 
 | #   | Condition   | Expected Behavior | Owning Step |
 | --- | ----------- | ----------------- | ----------- |
@@ -63,7 +79,7 @@ Use this template when writing the plan in step 7.
 
 ---
 
-## 4. Test Strategy
+## 5. Test Strategy
 
 ### [Type Name]
 
@@ -75,7 +91,7 @@ Use this template when writing the plan in step 7.
 
 ---
 
-## 5. Affected Files
+## 6. Affected Files
 
 | File   | Action          | Referenced By         |
 | ------ | --------------- | --------------------- |
