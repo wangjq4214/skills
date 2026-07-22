@@ -1,7 +1,6 @@
 ---
 name: grimoire-interrogator
 description: Round-based interrogation that builds a design tree to resolve every implicit assumption before action.
-disable-model-invocation: true
 ---
 
 # Purpose
