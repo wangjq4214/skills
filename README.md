@@ -86,8 +86,6 @@ pnpx skills@latest add wangjq4214/skills
 
 ---
 
----
-
 ## 📜 License
 
 MIT © 2025 — See [LICENSE](./LICENSE) for full terms.
