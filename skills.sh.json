@@ -1,0 +1,13 @@
+{
+  "groupings": [
+    {
+      "title": "Grimoire",
+      "skills": [
+        "grimoire-interrogator",
+        "grimoire-scout",
+        "grimoire-bootstrapper",
+        "grimoire-modeler"
+      ]
+    }
+  ]
+}
