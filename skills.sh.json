@@ -8,7 +8,8 @@
         "grimoire-scout",
         "grimoire-bootstrapper",
         "grimoire-modeler",
-        "grimoire-scribe"
+        "grimoire-scribe",
+        "grimoire-reporter"
       ]
     }
   ]
