@@ -1,5 +1,5 @@
 ---
-name: planner
+name: grimoire-planner
 description: Generate a code-level implementation plan from a ticket or conversation, covering type design, pseudo-code steps, edge cases, and test strategy.
 disable-model-invocation: true
 ---
