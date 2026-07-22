@@ -36,7 +36,7 @@ Determine the input source:
 
 - If the user provided a spec path (e.g., `.grimoire/spec/0001-xxx.md`), use that spec. Derive the folder name `NNNN-title` from the spec filename.
 - If a spec was just generated in this conversation (via grimoire-scribe), use that spec and its sequence number.
-- If neither, extract requirements directly from the conversation. Prompt the user for a short kebab-case feature name. Assign the next available sequence number from `.grimoire/ticket/`.
+- If neither, extract requirements directly from the conversation. Derive a short kebab-case feature name from the conversation. Do not ask the user. Assign the next available sequence number from `.grimoire/ticket/`.
 
 Completion: `.grimoire/` exists. Input source determined. Target folder name known. `.grimoire/ticket/NNNN-title/` created or confirmed writable.
 
@@ -72,11 +72,9 @@ Discovery process:
 
 2. Name each layer with a term the project already uses (infer from directory names, package names, or ADR terminology).
 
-3. Present the discovered layers to the user for confirmation. The user may add, remove, or rename layers.
+3. The discovered layer list becomes the canonical layer checklist for every ticket in this decomposition. Do not ask the user for confirmation.
 
-4. The confirmed layer list becomes the canonical layer checklist for every ticket in this decomposition.
-
-Completion: Layer list is confirmed by user. Every layer has a name drawn from project terminology. The list has at least 2 layers.
+Completion: Every layer has a name drawn from project terminology. The list has at least 2 layers.
 
 ---
 
@@ -160,15 +158,11 @@ Present the complete decomposition to the user before writing files. Show:
 4. Dependency graph — blocking arrows and parallel groups.
 5. Recommended implementation order.
 
-Wait for explicit user approval. The user may:
-- Merge slices that are too small.
-- Split slices that are too large.
-- Reorder based on team availability.
-- Adjust dependency judgments.
+Ask the user only one question: is the split appropriate? Do not ask about layers, naming, or any other details. The user may respond with adjustments (merge, split, reorder, dependency changes).
 
 Loop back to the relevant step if changes are requested.
 
-Completion: User approves the decomposition. All adjustments are incorporated.
+Completion: User confirms the split is appropriate. All adjustments are incorporated.
 
 ---
 
@@ -229,12 +223,12 @@ Completion: All five checks pass. Every failure is resolved.
 
 # Rules
 
-- Never write tickets before user approval of the decomposition.
-- Layers are discovered from the project, not assumed. Never hardcode layer names.
+- Never write tickets before user confirms the split is appropriate.
+- Layers are discovered from the project, not assumed. Never hardcode layer names. Do not ask the user to confirm layers.
 - Pre-refactoring first. Every slice that blocks others must complete before those others start.
 - One observable outcome per ticket. If a ticket has two independent outcomes, split it.
-- Every ticket must touch all confirmed layers. If a layer has no work, state why explicitly.
+- Every ticket must touch all discovered layers. If a layer has no work, state why explicitly.
 - Tickets describe what and how. The spec describes why. Do not duplicate spec content in tickets — reference the spec.
 - All tickets in a folder belong to the same requirement. Do not mix requirements in one folder.
 - Dependency graph must be acyclic. Circular dependencies indicate a decomposition error — merge the tickets.
-- No ticket may violate an ADR. If a ticket requires violating an ADR, flag the conflict and stop.
+- No ticket may violate an ADR. If a ticket requires violating an ADR, flag the conflict in the ticket's Out of Scope or the README.

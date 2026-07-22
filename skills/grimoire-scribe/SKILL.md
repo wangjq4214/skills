@@ -32,9 +32,9 @@ Verify `.grimoire/spec/` exists. If not, create it.
 
 Determine the next sequence number by listing existing files in `.grimoire/spec/`. The naming convention is `NNNN-title-with-dashes.md` (zero-padded, e.g., `0001-user-authentication.md`).
 
-Ask the user for the spec title. If the user does not provide one, derive a short kebab-case title from the requirement.
+Derive a short kebab-case title from the requirement. Do not ask the user.
 
-Completion: `.grimoire/spec/` exists. Next sequence number known. Title confirmed with user.
+Completion: `.grimoire/spec/` exists. Next sequence number known. Title derived.
 
 ---
 
@@ -58,9 +58,9 @@ Compare the proposed requirement against every ADR. For each ADR, answer:
 - Does the requirement comply with this decision?
 - Does the requirement introduce a new decision that contradicts an existing ADR?
 
-If any conflict is found, stop and present the conflict to the user. Do not proceed until the conflict is resolved (user either revises the requirement or updates the ADR).
+If any conflict is found, document the conflict in the spec's Decisions section with a clear explanation of the tension and a recommended resolution. Do not stop or ask the user — the spec captures the conflict and proceeds.
 
-Completion: Every ADR is checked. No unresolved conflicts remain. Conflicts found are reported to the user.
+Completion: Every ADR is checked. All conflicts are documented in the spec's Decisions section.
 
 ---
 
@@ -98,22 +98,20 @@ Completion: Draft contains all seven sections. Every decision cites relevant ADR
 
 ## 6. Present draft
 
-Show the complete draft to the user. Do not write the file yet.
+Show the complete draft to the user and immediately proceed to write the file. Do not wait for approval.
 
-Highlight:
+Briefly call out:
 - Which ADRs were referenced and how.
 - Which seams were included and why.
 - What was placed in Out of Scope and why.
 
-Wait for explicit user approval. The user may request revisions — loop back to the relevant step.
-
-Completion: User approves the draft.
+Completion: Draft is presented and write proceeds without waiting.
 
 ---
 
 ## 7. Write
 
-Write the approved spec to `.grimoire/spec/NNNN-title-with-dashes.md`.
+Write the spec to `.grimoire/spec/NNNN-title-with-dashes.md`.
 
 Verify the file exists and all seven sections are present.
 
@@ -123,9 +121,9 @@ Completion: Spec file exists. All sections present. Sequence number is correct.
 
 # Rules
 
-- Never write a spec before user approval.
-- Never violate an existing ADR. If the requirement demands it, flag the conflict and stop.
-- One requirement per spec. If the user describes multiple independent requirements, ask which one to spec first.
+- Write the spec immediately — do not wait for user approval.
+- Never silently violate an existing ADR. If the requirement demands it, document the conflict in the Decisions section.
+- One requirement per spec. If the user describes multiple independent requirements, pick the first and proceed.
 - Use the template. Do not improvise section structure.
 - Minimum seams: include only necessary integration points. Move everything else to Out of Scope or Future Evolution.
 - Specs describe what and why. Tickets (in `.grimoire/ticket/`) describe how and in what order. Do not cross-contaminate.
