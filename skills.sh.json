@@ -13,6 +13,7 @@
         "grimoire-slice",
         "grimoire-implement",
         "grimoire-test",
+        "grimoire-check",
         "grimoire-review"
       ]
     }
