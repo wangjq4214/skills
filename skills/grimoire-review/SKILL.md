@@ -1,7 +1,6 @@
 ---
 name: grimoire-review
 description: Systematic code review that prioritizes correctness and maintainability, distinguishes blocking issues from suggestions, and uses objective constructive language.
-disable-model-invocation: true
 ---
 
 # Purpose

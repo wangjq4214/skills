@@ -1,7 +1,6 @@
 ---
 name: grimoire-test
 description: Write unit tests that verify module behavior through isolated, well-structured test cases.
-disable-model-invocation: true
 ---
 
 # Purpose

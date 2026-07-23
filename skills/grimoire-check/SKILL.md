@@ -1,7 +1,6 @@
 ---
 name: grimoire-check
 description: Audit code implementation completeness against a plan — identify every match, gap, deviation, and extra, then report ticket and spec alignment.
-disable-model-invocation: true
 ---
 
 # Purpose

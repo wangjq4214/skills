@@ -1,7 +1,6 @@
 ---
 name: grimoire-implement
 description: Implement code from a plan or conversation by applying structural design principles — lifecycle boundaries, composition, stable abstractions, and surgical changes. Requires a plan.
-disable-model-invocation: true
 ---
 
 # Purpose
