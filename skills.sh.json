@@ -4,12 +4,14 @@
     {
       "title": "Grimoire",
       "skills": [
-        "grimoire-clarify",
-        "grimoire-refine",
         "grimoire-init",
+        "grimoire-clarify",
         "grimoire-record",
+        "grimoire-refine",
         "grimoire-spec",
-        "grimoire-slice"
+        "grimoire-plan",
+        "grimoire-slice",
+        "grimoire-implement"
       ]
     }
   ]
