@@ -1,5 +1,5 @@
 ---
-name: grimoire-scribe
+name: grimoire-spec
 description: Synthesize conversation context, repo structure, domain knowledge, and ADRs into a structured spec document in .grimoire/spec/.
 disable-model-invocation: true
 ---
@@ -13,9 +13,9 @@ Write a structured spec document to `.grimoire/spec/` by synthesizing conversati
 This skill writes to `.grimoire/spec/`.
 
 This skill does NOT:
-- Bootstrap `.grimoire/` (use grimoire-bootstrapper)
-- Record domain concepts or ADRs (use grimoire-modeler)
-- Interrogate the user for requirements (use grimoire-interrogator)
+- Bootstrap `.grimoire/` (use grimoire-init)
+- Record domain concepts or ADRs (use grimoire-record)
+- Interrogate the user for requirements (use grimoire-clarify)
 - Write `ticket/` files or implement code
 
 Completion: A spec file exists at `.grimoire/spec/NNNN-title-with-dashes.md` with all required sections filled.
@@ -26,7 +26,7 @@ Completion: A spec file exists at `.grimoire/spec/NNNN-title-with-dashes.md` wit
 
 ## 1. Pre-flight
 
-Verify `.grimoire/` exists. If not, stop and tell the user to run grimoire-bootstrapper first.
+Verify `.grimoire/` exists. If not, stop and tell the user to run grimoire-init first.
 
 Verify `.grimoire/spec/` exists. If not, create it.
 

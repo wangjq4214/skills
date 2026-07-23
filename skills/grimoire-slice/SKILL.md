@@ -1,5 +1,5 @@
 ---
-name: grimoire-reporter
+name: grimoire-slice
 description: Decompose a spec or conversation into vertical-slice tickets — each cutting through every architectural layer, independently demonstrable, sized for a single context window.
 disable-model-invocation: true
 ---
@@ -15,9 +15,9 @@ A vertical slice is a narrow but complete path through every architectural layer
 This skill writes to `.grimoire/ticket/NNNN-title/`.
 
 This skill does NOT:
-- Write specs (use grimoire-scribe)
-- Record domain concepts or ADRs (use grimoire-modeler)
-- Interrogate the user for requirements (use grimoire-interrogator)
+- Write specs (use grimoire-spec)
+- Record domain concepts or ADRs (use grimoire-record)
+- Interrogate the user for requirements (use grimoire-clarify)
 - Implement code
 
 Completion: A ticket folder exists with a relationship file and sub-tickets. Every slice cuts through all discovered layers. Every slice is independently demonstrable.
@@ -28,14 +28,14 @@ Completion: A ticket folder exists with a relationship file and sub-tickets. Eve
 
 ## 1. Pre-flight
 
-Verify `.grimoire/` exists. If not, stop — tell the user to run grimoire-bootstrapper first.
+Verify `.grimoire/` exists. If not, stop — tell the user to run grimoire-init first.
 
 Verify `.grimoire/ticket/` exists. If not, create it.
 
 Determine the input source:
 
 - If the user provided a spec path (e.g., `.grimoire/spec/0001-xxx.md`), use that spec. Derive the folder name `NNNN-title` from the spec filename.
-- If a spec was just generated in this conversation (via grimoire-scribe), use that spec and its sequence number.
+- If a spec was just generated in this conversation (via grimoire-spec), use that spec and its sequence number.
 - If neither, extract requirements directly from the conversation. Derive a short kebab-case feature name from the conversation. Do not ask the user. Assign the next available sequence number from `.grimoire/ticket/`.
 
 Completion: `.grimoire/` exists. Input source determined. Target folder name known. `.grimoire/ticket/NNNN-title/` created or confirmed writable.

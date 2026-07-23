@@ -7,7 +7,7 @@
 
 ## Concepts
 
-<!-- Domain concepts are recorded here. See grimoire-modeler skill for format. -->
+<!-- Domain concepts are recorded here. See grimoire-record skill for format. -->
 ```
 
 ---

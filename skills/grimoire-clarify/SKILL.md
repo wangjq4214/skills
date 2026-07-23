@@ -1,5 +1,5 @@
 ---
-name: grimoire-interrogator
+name: grimoire-clarify
 description: Round-based interrogation that builds a design tree to resolve every implicit assumption before action.
 ---
 

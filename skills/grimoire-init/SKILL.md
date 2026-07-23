@@ -1,5 +1,5 @@
 ---
-name: grimoire-bootstrapper
+name: grimoire-init
 description: Initialize the .grimoire project knowledge directory and register it with the agent configuration.
 disable-model-invocation: true
 ---

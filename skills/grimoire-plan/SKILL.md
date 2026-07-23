@@ -1,5 +1,5 @@
 ---
-name: grimoire-planner
+name: grimoire-plan
 description: Generate a code-level implementation plan from a ticket or conversation, covering type design, pseudo-code steps, edge cases, and test strategy.
 disable-model-invocation: true
 ---
@@ -13,10 +13,10 @@ Generate a code-level implementation plan from a ticket, spec, or conversation. 
 This skill writes HTML plans to `.grimoire/plans/`.
 
 This skill does NOT:
-- Write specs (use grimoire-scribe)
-- Decompose into tickets (use grimoire-reporter)
+- Write specs (use grimoire-spec)
+- Decompose into tickets (use grimoire-slice)
 - Implement code
-- Record domain concepts or ADRs (use grimoire-modeler)
+- Record domain concepts or ADRs (use grimoire-record)
 
 Completion: A plan file exists at `.grimoire/plans/NNNN-title.html` with all six sections filled.
 
@@ -26,7 +26,7 @@ Completion: A plan file exists at `.grimoire/plans/NNNN-title.html` with all six
 
 ## 1. Pre-flight
 
-Verify `.grimoire/` exists. If not, stop — tell the user to run grimoire-bootstrapper first.
+Verify `.grimoire/` exists. If not, stop — tell the user to run grimoire-init first.
 
 Verify `.grimoire/plans/` exists. If not, create it.
 

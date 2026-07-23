@@ -32,14 +32,16 @@ Think of it as an **instruction manual for your AI pair programmer** 🤖. Every
 
 ## 🗂️ Skills
 
-| Skill                                                                  | Description                                                                         |
-| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**                     | Create, review, and refactor agent skills for predictable execution                 |
-| 📦 **[grimoire-bootstrapper](./skills/grimoire-bootstrapper/SKILL.md)** | Initialize `.grimoire` directories and register them with agent configs             |
-| 🔍 **[grimoire-interrogator](./skills/grimoire-interrogator/SKILL.md)** | Round-based Q&A that builds a design tree — every assumption resolved before action |
-| 🧠 **[grimoire-modeler](./skills/grimoire-modeler/SKILL.md)**           | Record domain terminology and architectural decisions from conversations            |
-| 🗣️ **[grimoire-scout](./skills/grimoire-scout/SKILL.md)**               | Discuss with the user to update project knowledge and refine requirements           |
-| 📝 **[grimoire-scribe](./skills/grimoire-scribe/SKILL.md)**             | Synthesize context, repo structure, domain knowledge & ADRs into structured specs   |
+| Skill                                                        | Description                                                                         |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**           | Create, review, and refactor agent skills for predictable execution                 |
+| 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**       | Initialize `.grimoire` directories and register them with agent configs             |
+| 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)** | Round-based Q&A that builds a design tree — every assumption resolved before action |
+| 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)**   | Record domain terminology and architectural decisions from conversations            |
+| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)**   | Discuss with the user to update project knowledge and refine requirements           |
+| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**       | Synthesize context, repo structure, domain knowledge & ADRs into structured specs   |
+| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**       | Generate a code-level implementation plan from a ticket, spec, or conversation      |
+| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**     | Decompose a spec into vertical-slice tickets — each independently demonstrable      |
 
 ---
 
@@ -61,19 +63,25 @@ pnpx skills@latest add wangjq4214/skills
 │   ├── skill-forge/              🔨 Meta-skill: build better skills
 │   │   ├── SKILL.md              📋 Core workflow
 │   │   └── references/           📚 Deep dives (hierarchy, pruning, failure modes, etc.)
-│   ├── grimoire-bootstrapper/    📦 Project knowledge bootstrapper
+│   ├── grimoire-init/            📦 Project knowledge initializer
 │   │   ├── SKILL.md              📋 Core workflow
 │   │   └── references/           📚 Directory structure & injection targets
-│   ├── grimoire-interrogator/    🔍 Design tree interrogator
+│   ├── grimoire-clarify/         🔍 Design tree clarifier
 │   │   └── SKILL.md              📋 Core workflow
-│   ├── grimoire-modeler/         🧠 Domain knowledge & ADR recorder
+│   ├── grimoire-record/          🧠 Domain knowledge & ADR recorder
 │   │   ├── SKILL.md              📋 Core workflow
 │   │   └── references/           📚 ADR & context templates
-│   ├── grimoire-scout/           🗣️ Project knowledge discussion
+│   ├── grimoire-refine/          🗣️ Project knowledge discussion
 │   │   └── SKILL.md              📋 Core workflow
-│   └── grimoire-scribe/          📝 Spec synthesizer
+│   ├── grimoire-spec/            📝 Spec writer
+│   │   ├── SKILL.md              📋 Core workflow
+│   │   └── references/           📚 Spec template & minimum seams
+│   ├── grimoire-plan/            🗺️ Implementation planner
+│   │   ├── SKILL.md              📋 Core workflow
+│   │   └── references/           📚 Plan template, diagram & edge case guides
+│   └── grimoire-slice/           ✂️ Ticket slicer
 │       ├── SKILL.md              📋 Core workflow
-│       └── references/           📚 Spec template & minimum seams
+│       └── references/           📚 Slicing rules, vertical slice & pre-refactoring guides
 ├── .changeset/                   🏷️ Version bump changesets
 ├── skills.sh.json                🔗 skills.sh grouping manifest
 ├── package.json                  ⚙️ pnpm workspace config

@@ -4,12 +4,12 @@
     {
       "title": "Grimoire",
       "skills": [
-        "grimoire-interrogator",
-        "grimoire-scout",
-        "grimoire-bootstrapper",
-        "grimoire-modeler",
-        "grimoire-scribe",
-        "grimoire-reporter"
+        "grimoire-clarify",
+        "grimoire-refine",
+        "grimoire-init",
+        "grimoire-record",
+        "grimoire-spec",
+        "grimoire-slice"
       ]
     }
   ]

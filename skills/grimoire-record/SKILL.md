@@ -1,5 +1,5 @@
 ---
-name: grimoire-modeler
+name: grimoire-record
 description: Record domain terminology and architectural decisions from conversations.
 ---
 
@@ -16,8 +16,8 @@ This skill edits two areas under `.grimoire/`:
 
 This skill does NOT:
 
-- Bootstrap `.grimoire/` (use grimoire-bootstrapper)
-- Interrogate the user (use grimoire-interrogator)
+- Bootstrap `.grimoire/` (use grimoire-init)
+- Interrogate the user (use grimoire-clarify)
 - Write `spec/` or `ticket/` files
 
 Completion: Only CONTEXT.md and adr/ are modified by this skill.
@@ -193,7 +193,7 @@ Completion: Status field reflects current reality. Superseded ADRs point to thei
 
 Before writing any file:
 
-- Verify `.grimoire/` exists. If not, tell the user to run grimoire-bootstrapper first. Do NOT create it.
+- Verify `.grimoire/` exists. If not, tell the user to run grimoire-init first. Do NOT create it.
 - Verify `.grimoire/CONTEXT.md` exists. If not, create it from the template in references.
 - Verify `.grimoire/adr/` exists. If not, create the directory.
 
