@@ -11,7 +11,9 @@
         "grimoire-spec",
         "grimoire-plan",
         "grimoire-slice",
-        "grimoire-implement"
+        "grimoire-implement",
+        "grimoire-test",
+        "grimoire-review"
       ]
     }
   ]
