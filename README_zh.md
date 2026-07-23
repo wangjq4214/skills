@@ -42,6 +42,7 @@
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**       | 将上下文、仓库结构、领域知识和 ADR 综合为结构化规格说明  |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**       | 从工单、规格说明或对话生成代码级实现计划                |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**     | 将规格说明分解为垂直切片工单——每张都可独立演示            |
+| ✍️ **[commit](./skills/commit/SKILL.md)**   | 编写 Conventional Commits 格式的提交信息并执行提交            |
 
 ---
 

@@ -42,6 +42,7 @@ Think of it as an **instruction manual for your AI pair programmer** 🤖. Every
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**       | Synthesize context, repo structure, domain knowledge & ADRs into structured specs   |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**       | Generate a code-level implementation plan from a ticket, spec, or conversation      |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**     | Decompose a spec into vertical-slice tickets — each independently demonstrable      |
+| ✍️ **[commit](./skills/commit/SKILL.md)**   | Write Conventional Commits messages with gitmoji and execute the commit             |
 
 ---
 

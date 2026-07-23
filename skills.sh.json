@@ -16,6 +16,13 @@
         "grimoire-check",
         "grimoire-review"
       ]
+    },
+    {
+      "title": "Common",
+      "skills": [
+        "commit",
+        "skill-forge"
+      ]
     }
   ]
 }
