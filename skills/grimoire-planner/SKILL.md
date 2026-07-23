@@ -10,7 +10,7 @@ Generate a code-level implementation plan from a ticket, spec, or conversation. 
 
 # Scope
 
-This skill writes to `.grimoire/plans/`.
+This skill writes HTML plans to `.grimoire/plans/`.
 
 This skill does NOT:
 - Write specs (use grimoire-scribe)
@@ -18,7 +18,7 @@ This skill does NOT:
 - Implement code
 - Record domain concepts or ADRs (use grimoire-modeler)
 
-Completion: A plan file exists at `.grimoire/plans/NNNN-title.md` with all six sections filled.
+Completion: A plan file exists at `.grimoire/plans/NNNN-title.html` with all six sections filled.
 
 ---
 
@@ -36,7 +36,7 @@ Determine the input source:
 - If the user provided a spec path (e.g., `.grimoire/spec/0001-xxx.md`), use that spec.
 - If neither, treat the conversation as the input. Derive a short kebab-case title from the user's goal. Do not ask.
 
-Assign the next available sequence number from `.grimoire/plans/`. Naming: `NNNN-title.md` (zero-padded).
+Assign the next available sequence number from `.grimoire/plans/`. Naming: `NNNN-title.html` (zero-padded).
 
 Completion: `.grimoire/plans/` exists. Input source determined. Plan path known.
 
@@ -137,20 +137,22 @@ Completion: Every type from step 3 has a test approach. Mocking boundaries are i
 
 ## 7. Assemble and write
 
-Assemble the plan with these sections:
+Use the HTML template in [references/html-template.md](./references/html-template.md).
 
-1. **Type Design** — from step 3.
-2. **Type Relationship Diagram** — Mermaid classDiagram from step 3.
-3. **Implementation Steps** — from step 4.
-4. **Edge Cases** — from step 5.
-5. **Test Strategy** — from step 6.
-6. **Affected Files** — list every file the plan touches, with action (create/modify) and which step references it.
+Fill each placeholder with the content from steps 3–6:
 
-Write to `.grimoire/plans/NNNN-title.md`.
+1. **Type Design** — from step 3. Fill `MODIFIED_TYPES_ROWS`, `NEW_TYPES_ROWS`, `DESIGN_DECISIONS`.
+2. **Type Relationship Diagram** — from step 3. Paste the raw Mermaid classDiagram body into `MERMAID_DIAGRAM` (no outer ```mermaid fence).
+3. **Implementation Steps** — from step 4. Use the `.step` block structure for each step.
+4. **Edge Cases** — from step 5. Fill `EDGE_CASES_ROWS`.
+5. **Test Strategy** — from step 6. Use the test strategy block structure for each type.
+6. **Affected Files** — list every file the plan touches, with action (create/modify) and which step references it. Fill `AFFECTED_FILES_ROWS`.
 
-Verify the file exists and all six sections are present.
+Write to `.grimoire/plans/NNNN-title.html`.
 
-Completion: Plan file exists. All sections present. Sequence number is correct.
+Verify the file exists, is valid HTML, and all six sections are present.
+
+Completion: HTML plan file exists. All sections present. Sequence number is correct.
 
 ---
 
@@ -159,5 +161,5 @@ Completion: Plan file exists. All sections present. Sequence number is correct.
 - One plan per ticket or conversation goal. Do not merge unrelated work.
 - Never violate an existing ADR. If the input requires it, flag the conflict in the plan and stop.
 - Plans are temporary design artifacts. They guide implementation, not archive it. Do not maintain plans after the implementation is complete.
-- Use the template structure. Do not improvise sections.
+- Use the HTML template structure. Do not improvise sections or styling.
 - Design principles are in references. SKILL.md controls workflow only.
