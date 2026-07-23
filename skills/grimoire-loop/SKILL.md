@@ -1,6 +1,7 @@
 ---
 name: grimoire-loop
 description: Orchestrate implement→check+review+test→fix loop until clean, then format. Use when implementation is complete and needs verification, or when code changes must pass all quality gates automatically.
+disable-model-invocation: true
 ---
 
 # Purpose

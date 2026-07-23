@@ -1,6 +1,7 @@
 ---
 name: commit
 description: Write commit messages in Conventional Commits format with gitmoji and execute the commit — type, scope, summary, and body.
+disable-model-invocation: true
 ---
 
 # Purpose
