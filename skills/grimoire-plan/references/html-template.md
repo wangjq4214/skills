@@ -12,7 +12,7 @@ Use this template when writing the plan in step 7. Write the output to `.grimoir
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PLAN_TITLE</title>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:true, theme:'default'});</script>
+<script>mermaid.initialize({startOnLoad:true, theme:'default', securityLevel:'loose', logLevel:'error'});</script>
 <style>
   :root {
     --bg: #fafafa;
@@ -297,19 +297,19 @@ MERMAID_DIAGRAM
 
 ### Placeholder reference
 
-| Placeholder              | Replacement                                                                     |
-| ------------------------ | ------------------------------------------------------------------------------- |
-| `PLAN_TITLE`             | Plan title (same as the file title)                                             |
-| `INPUT_SOURCE`           | Ticket path, spec path, or "Conversation: &lt;one-line goal&gt;"                   |
-| `DATE`                   | `YYYY-MM-DD`                                                                    |
-| `MERMAID_DIAGRAM`        | The raw Mermaid classDiagram content (no outer ```mermaid fence needed)        |
-| `MODIFIED_TYPES_ROWS`    | `<tr>` rows for each modified type                                             |
-| `NEW_TYPES_ROWS`         | `<tr>` rows for each new type                                                  |
-| `DESIGN_DECISIONS`       | `<li>` items for each design decision                                          |
-| `IMPLEMENTATION_STEPS`   | A sequence of `.step` blocks (see Step block below)                            |
-| `EDGE_CASES_ROWS`        | `<tr>` rows for each edge case                                                 |
-| `TEST_STRATEGY`          | `<h3>` + `<p>` + `<ul>` for each type's test strategy                          |
-| `AFFECTED_FILES_ROWS`    | `<tr>` rows for each affected file                                             |
+| Placeholder            | Replacement                                                             |
+| ---------------------- | ----------------------------------------------------------------------- |
+| `PLAN_TITLE`           | Plan title (same as the file title)                                     |
+| `INPUT_SOURCE`         | Ticket path, spec path, or "Conversation: &lt;one-line goal&gt;"        |
+| `DATE`                 | `YYYY-MM-DD`                                                            |
+| `MERMAID_DIAGRAM`      | The raw Mermaid classDiagram content (no outer ```mermaid fence needed) |
+| `MODIFIED_TYPES_ROWS`  | `<tr>` rows for each modified type                                      |
+| `NEW_TYPES_ROWS`       | `<tr>` rows for each new type                                           |
+| `DESIGN_DECISIONS`     | `<li>` items for each design decision                                   |
+| `IMPLEMENTATION_STEPS` | A sequence of `.step` blocks (see Step block below)                     |
+| `EDGE_CASES_ROWS`      | `<tr>` rows for each edge case                                          |
+| `TEST_STRATEGY`        | `<h3>` + `<p>` + `<ul>` for each type's test strategy                   |
+| `AFFECTED_FILES_ROWS`  | `<tr>` rows for each affected file                                      |
 
 ### Step block
 

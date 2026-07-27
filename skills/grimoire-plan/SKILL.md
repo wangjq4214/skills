@@ -71,17 +71,14 @@ Apply the litmus test from design principles: "Can this type exist independently
 
 Prioritize minimal changes. Prefer extending existing types over creating new ones when the change belongs to the same concept. Prefer composition over inheritance.
 
-**Produce a type relationship diagram** using Mermaid classDiagram syntax (see
-[references/diagram-guide.md](./references/diagram-guide.md)). The diagram must:
+**Produce a type relationship diagram** using simple Mermaid classDiagram syntax (see [references/diagram-guide.md](./references/diagram-guide.md)). Use only basic syntax: class definitions with `+`/`-` members, and simple relationship arrows. Avoid namespace, stereotypes, generics, and other advanced features, they cause rendering errors. The diagram must:
 
 - Show every type from step 3.
 - Show relationships: composition (has-a), implementation (can-do), and usage
   dependencies.
 - Show key fields and methods relevant to the plan for each type.
 
-Completion: Every affected type has a record with all five fields. The rationale
-for every boundary decision is explicit. No type owns more than one concept. A
-Mermaid classDiagram exists showing all types and their relationships.
+Completion: Every affected type has a record with all five fields. The rationale for every boundary decision is explicit. No type owns more than one concept. A simple Mermaid classDiagram (no namespace, no stereotypes) exists showing all types and their relationships.
 
 ---
 
@@ -152,7 +149,9 @@ Write to `.grimoire/plans/NNNN-title.html`.
 
 Verify the file exists, is valid HTML, and all six sections are present.
 
-Completion: HTML plan file exists. All sections present. Sequence number is correct.
+Open the plan in the default browser for preview. Use the platform-appropriate command: `start` on Windows, `open` on macOS, `xdg-open` on Linux.
+
+Completion: HTML plan file exists. All sections present. Sequence number is correct. Plan is open in browser.
 
 ---
 
