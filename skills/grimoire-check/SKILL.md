@@ -1,17 +1,17 @@
 ---
 name: grimoire-check
-description: Audit code implementation completeness against a plan — identify every match, gap, deviation, and extra, then report ticket and spec alignment.
+description: Audit code implementation completeness against a plan — identify every match, gap, deviation, and extra, report ticket and spec alignment, and update artifact statuses.
 ---
 
 # Purpose
 
-Audit whether current code correctly implements a plan. Identify every planned item that is missing, implemented differently, or never planned. Secondary: report ticket and spec alignment.
+Audit whether current code correctly implements a plan. Identify every planned item that is missing, implemented differently, or never planned. Report ticket and spec alignment. Update artifact statuses (ADR, spec, ticket) to reflect implementation reality.
 
 # Scope
 
-This skill reads plans, tickets, specs, and code. It reports findings. It does NOT write code, fix issues, create plans, or modify files.
+This skill reads plans, tickets, specs, ADRs, and code. It reports findings and updates status fields in artifacts. It does NOT write code, fix issues, create plans, or modify artifact content beyond status fields.
 
-Outside scope: writing fixes, refactoring, creating plans, writing specs, running tests, merging changes.
+Outside scope: writing fixes, refactoring, creating plans, writing specs, running tests, merging changes, modifying artifact content other than the Status field.
 
 # Leading words
 
@@ -134,16 +134,64 @@ Completion: Report delivered with all four sections. Every gap has a location. E
 
 ---
 
+## 7. Update artifact statuses
+
+Based on the classifications from steps 4 and 5, determine the correct status for each loaded artifact and write the update back to the file.
+
+### Ticket status
+
+Compare acceptance criteria against code reality:
+
+- All criteria satisfied → `Done`
+- Some criteria satisfied, some not → `In Progress`
+- No criteria satisfied → leave as `Todo` (or unchanged if already Todo)
+
+Update the `**Status:**` field in the ticket file.
+
+### Spec status
+
+Compare spec seams against code reality:
+
+- All seams match → `Implemented`
+- Some seams match, some gaps or deviations → `In Progress`
+- No seams implemented → leave as `Draft` (or unchanged if already Draft)
+
+Update the `**Status:**` field in the spec file.
+
+### ADR status
+
+For each ADR referenced by the plan or spec, check whether the decision is realized in code:
+
+- Decision fully realized → `Completed`
+- Decision partially realized → `Implementing`
+- Decision not yet acted on → `Proposed`
+
+Update the `**Status:**` field in the ADR file.
+
+Rules:
+
+- Only update status if it differs from the current value. Do not rewrite unchanged files.
+- If an artifact was not loaded (no ticket, no spec, no referenced ADRs), skip that artifact type.
+- Status transitions are based on code evidence, not speculation. If uncertain, do not update.
+- Write the updated file content back with `write` or `edit`. Preserve all other content.
+
+See: [references/status-transitions.md](./references/status-transitions.md)
+
+Completion: Every loaded artifact has its status field updated to reflect implementation reality. Unchanged files are not rewritten.
+
+---
+
 # Rules
 
 - No plan, no check. Stop at step 1 if no plan is resolved.
 - The plan is ground truth. Ticket and spec inform context, not the primary comparison.
 - Read code, don't assume. Every classification is based on actual file contents.
 - One classification per item. Do not merge unrelated findings.
-- Report only. Do not fix gaps, rewrite deviations, or remove extras.
+- Report findings and update artifact statuses. Do not fix gaps, rewrite deviations, or remove extras.
 
 ---
 
 # References
 
 - [check-patterns.md](./references/check-patterns.md) — detailed classification patterns with concrete examples
+- [status-transitions.md](./references/status-transitions.md) — artifact status determination rules and write procedures
