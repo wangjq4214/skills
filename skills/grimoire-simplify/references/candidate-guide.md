@@ -17,6 +17,12 @@ A name, wrapper, or interface alone is not evidence. Verify the property in curr
 
 ## Common candidates
 
+### Confusing private decomposition
+
+Rewrite a section or bounded module when its behavior is spread across private helpers, temporary representations, or control-flow fragments that only make sense as a historical sequence of edits. Preserve the behavior contract and established responsibility, but do not retain private shapes merely to minimize the diff.
+
+Prefer incremental edits when they produce equally direct code. Prefer a rewrite when it removes the need to understand the old decomposition and can be validated against callers and tests.
+
 ### Forwarding wrapper
 
 Inline when it only forwards arguments and preserves no policy, invariant, lifecycle, or boundary.
@@ -57,4 +63,4 @@ Before removing a candidate, check for:
 - tracing, metrics, audit, authorization, or transaction boundaries
 - allocation count, algorithmic complexity, batching, caching, and I/O round trips on sensitive paths
 
-If a hidden contract exists, retain the boundary or preserve the contract explicitly in the simpler path.
+If a hidden contract exists, retain the boundary or preserve the contract explicitly in the simpler path. A rewrite is acceptable only when these guarantees remain demonstrably intact.

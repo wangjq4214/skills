@@ -160,6 +160,39 @@ const activeUsers = users.filter(user => user.status === "active");
 
 Decision: stop when `isActive` is a shared domain predicate or hides a nontrivial rule. The alternative is not inherently simpler; it may only move the same concept into another location.
 
+## 7. Rewrite a confusing internal pipeline
+
+Before:
+
+```ts
+function prepare(input: Input) {
+  const staged = stageInput(input);
+  return routeStaged(staged);
+}
+
+function stageInput(input: Input): StagedInput {
+  return { raw: input.value, valid: input.value.length > 0 };
+}
+
+function routeStaged(staged: StagedInput) {
+  if (!staged.valid) return rejectStaged(staged);
+  return acceptStaged(staged);
+}
+```
+
+After:
+
+```ts
+function prepare(input: Input) {
+  if (input.value.length === 0) return reject(input.value);
+  return accept(input.value);
+}
+```
+
+Why: the intermediate representation and helper pipeline carry no invariant or boundary. Rewriting the whole private path is clearer than separately inlining and repairing each helper. The public entry point and behavior remain unchanged; the old decomposition does not.
+
+Do not apply this rewrite if staging owns validation policy, instrumentation, lifecycle, or an external integration boundary.
+
 ## Explanation test
 
 A valid result should admit a shorter explanation.
@@ -172,4 +205,4 @@ After:
 
 > Update the status and save its normalized value.
 
-If the explanation merely uses different nouns or hides steps behind a new name, the change has not reduced the understanding path.
+If the explanation merely uses different nouns or hides steps behind a new name, the change has not reduced the understanding path. Diff size is not part of this test: a larger rewrite is preferable when it produces a materially shorter and more direct explanation.
