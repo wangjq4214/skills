@@ -20,26 +20,26 @@
 - **职责范围清楚** — 每个技能都会说明自己负责什么，以及明确不负责什么，避免任务不断扩张。
 - **完成状态可验证** — 每一步都有可检查的完成条件，不再以“看起来完成了”为准。
 - **按需加载内容** — 核心流程放在一个文件中，详细资料放在 `references/`，需要时再读取。
-- **可以组合使用** — clarify → record → refine → spec → slice → plan → implement → check → review → test → loop → commit。每个环节的输出可以继续交给后续环节使用。
+- **可以按风险组合** — 各技能既能独立使用，也能按任务规模组合；流程是工具箱，不是必须走完的流水线。
 
-目标很简单：让相同的输入，尽量得到稳定一致的结果。
+> 目标是在稳定性与自主判断之间取得平衡：相同约束应得到一致质量，但简单任务不承担复杂流程的成本。
 
 ---
 
 ## ✨ 特性
 
-| 特性                   | 说明                                                     | 作用                                                 |
-| ---------------------- | -------------------------------------------------------- | ---------------------------------------------------- |
-| 🎯 **两种调用方式**     | 技能会声明是由用户调用，还是由模型自动调用               | 减少误触发，也不会遗漏该用的流程                     |
-| 🚦 **可验证的完成条件** | 工作流中的每一步都有对应的检查条件                       | 完成与否有据可查，交接也更明确                       |
-| 📐 **明确的职责边界**   | 每个技能都会定义包含范围与排除范围                       | 写规格的技能只写规格，不会越过边界去改代码           |
-| 🗺️ **渐进式展开**       | 核心内容在 `SKILL.md`，详细资料在 `references/`          | 初始上下文更轻，需要细节时再加载                     |
-| 🌲 **设计树**           | 通过多轮问答，在编码前逐项澄清隐含假设                   | 尽早发现理解偏差，减少返工                           |
-| 🔄 **质量循环**         | `grimoire-loop` 自动执行实现 → 检查 → 审查 → 测试 → 修复 | 一条命令跑完整个质量流程，直到问题清理完毕后再格式化 |
-| ✂️ **垂直切片**         | 每张工单都会覆盖必要的架构层，并可单独演示               | 交付的是端到端的价值，而不是半成品                   |
-| 🔨 **Skill Forge**      | 用于创建、审查和重构其他技能的元技能                     | 技能体系本身也可以持续维护和改进                     |
-| 📂 **自动初始化**       | 一条命令创建 `.grimoire/` 项目知识目录                   | 不需要额外配置，开箱即可使用                         |
-| 🏷️ **版本管理就绪**     | 使用 `@changesets/cli` 为技能做语义化版本管理            | 可以记录变更、安心回退并发布更新                     |
+| 特性 | 说明 | 作用 |
+| --- | --- | --- |
+| 🎯 **两种调用方式** | 用户可显式调用，模型也可按风险选择适用技能 | 避免误触发完整工作流 |
+| 🚦 **可验证的结果** | 对关键结果定义可检查条件 | 防止提前完成，而非制造机械步骤 |
+| 📐 **弹性职责边界** | 技能有明确主责，同时允许用户授权安全的相邻工作 | 减少不必要的来回交接 |
+| 🗺️ **按需加载** | 只读取当前决策需要的上下文和 references | 降低上下文负担 |
+| 🌲 **定点澄清** | 只询问会显著改变方向的阻塞性问题 | 保持执行动量 |
+| 🔄 **自适应 QA** | 小改动直接验证，高风险改动再并行运行完整检查 | 把成本投入真正的风险 |
+| ✂️ **弹性拆分** | 优先垂直价值切片，也支持迁移、基础设施和组件切片 | 避免人为跨层和伪依赖 |
+| 🔨 **Skill Forge** | 用于创建、审查和精简技能 | 持续提升规则信号密度 |
+| 📂 **自动初始化** | 创建 `.grimoire/` 项目知识目录 | 按需采用项目知识库 |
+| 🏷️ **版本管理就绪** | 使用 changesets 管理版本 | 支持审计与回退 |
 
 ---
 
@@ -49,65 +49,35 @@
 pnpx skills@latest add wangjq4214/skills
 ```
 
-> 💡 无需额外配置。每个技能的 frontmatter 都包含 Pi 可识别的 `name` 和 `description` 字段。
+> 💡 每个技能都可单独使用。无需先完成整条 Grimoire 流程。
 
 ### 怎么用
 
-需要用户主动调用的技能列在下面。由模型调用的技能会在 Agent 判断有必要时自动运行。
+直接描述目标；需要特定产物时再显式调用对应技能：
 
-**👤 用户调用的技能** — 直接告诉 Agent 你要做什么即可：
+```bash
+# 小型改动：直接实现并运行相关测试
+修复登录按钮的重复提交问题并验证
 
-```
-# 初始化项目知识
-运行 grimoire-init，创建 .grimoire
+# 高风险功能：先规格/计划，再执行完整 QA
+用 grimoire-spec 设计账户迁移
 
-# 编写规格
-用 grimoire-spec 为用户登录功能编写规格说明
-
-# 生成计划
-用 grimoire-plan 为待办事项功能生成实现计划
-
-# 拆分工单
-用 grimoire-slice 将规格拆分为工单
-
-# 运行质量循环
-运行 grimoire-loop，验证当前实现
-
-# 提交
-暂存我的改动并运行 commit
+# 只做质量验证
+运行 grimoire-loop，按风险选择检查
 ```
 
-**🤖 模型调用的技能** — Agent 会根据上下文自动调用，不需要额外指令。
+### 自适应工作流
 
-### 常见工作流
+根据任务选择最小充分流程：
 
-讨论需求后，`grimoire-refine` 会根据任务范围建议使用**完整流程**或**简化流程**。
-
-**完整流程**（适合复杂功能）：
-
-```
-grimoire-init  →  refine  →  spec  →  slice  →  plan  →  loop  →  commit
-```
-
-1. 使用 `grimoire-init` 初始化项目知识目录
-2. 使用 `grimoire-refine` 梳理项目知识和需求；讨论过程中，**clarify** 与 **record** 会自动运行
-3. 使用 `grimoire-spec` 编写规格说明
-4. 使用 `grimoire-slice` 将规格拆分为垂直切片工单
-5. 使用 `grimoire-plan` 为每张工单生成实现计划
-6. 运行 `grimoire-loop`；它会自动执行 **实现 → 检查 → 审查 → 测试 → 修复**，直到通过所有检查
-7. 使用 `commit` 提交结果
-
-**简化流程**（适合直接、范围较小的任务）：
-
-```
-grimoire-init  →  refine  →  plan  →  loop  →  commit
+```text
+小型、可回滚       直接实现 → 定向验证
+明确的多文件改动   轻量计划 → 实现 → 定向验证
+高风险或跨系统     规格/计划 → 实现 → 完整 QA
+多个独立交付目标   规格 → 可选拆分 → 分工单实现
 ```
 
-1. 使用 `grimoire-init` 初始化项目知识目录
-2. 使用 `grimoire-refine` 梳理项目知识和需求；**clarify** 与 **record** 会自动运行
-3. 直接使用 `grimoire-plan` 生成实现计划
-4. 使用 `grimoire-loop` 运行质量循环
-5. 使用 `commit` 提交结果
+`clarify` 只解决阻塞性歧义，`record` 只记录持久知识，`slice` 仅在分解确实降低交付风险时使用。`grimoire-loop` 会根据改动风险选择 inline 检查、定向 sub-agent 或完整并行 QA。
 
 ---
 
@@ -122,33 +92,33 @@ Grimoire Skills 分为两种调用方式：
 
 ### 👤 用户调用
 
-这类技能都设置了 `disable-model-invocation: true`，必须由用户明确请求。
+这类技能设置了 `disable-model-invocation: true`，需要用户明确选择。
 
-| 技能                                                       | 描述                                                                       |
-| ---------------------------------------------------------- | -------------------------------------------------------------------------- |
-| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**         | 创建、审查和重构 Agent 技能，让执行过程更稳定                              |
-| 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | 初始化 `.grimoire` 项目知识目录，并注册到 Agent 配置中                     |
-| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 与用户讨论，更新项目知识并细化需求                                         |
-| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | 综合上下文、仓库结构、领域知识和 ADR，生成结构化规格文档                   |
-| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | 将规格拆分为垂直切片工单；每张工单都可独立演示，规模适合一个上下文窗口处理 |
-| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**     | 根据工单、规格或对话生成代码级实现计划                                     |
-| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | 编排实现 → 检查 → 审查 → 测试 → 修复，全部通过后再格式化                   |
-| ✍️ **[commit](./skills/commit/SKILL.md)**                   | 按 Conventional Commits 格式编写含 gitmoji 的提交信息并执行提交            |
+| 技能 | 描述 |
+| --- | --- |
+| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)** | 创建、审查和精简 Agent 技能 |
+| 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)** | 按需初始化 `.grimoire` 项目知识库 |
+| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 解决关键不确定性并推荐最小充分流程 |
+| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)** | 根据需求和相关上下文生成适量规格 |
+| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)** | 将需求拆成连贯的价值或使能工单 |
+| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | 生成按风险缩放、可修订的实现计划 |
+| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)** | 根据改动风险运行自适应实现和 QA |
+| ✍️ **[commit](./skills/commit/SKILL.md)** | 准备并执行经确认的 Conventional Commit |
 
 ---
 
 ### 🤖 模型调用
 
-Agent 会根据上下文自动发现并调用这些技能。
+这些技能在适合当前任务时可由模型使用，但不应强制触发整条流水线。
 
-| 技能                                                             | 描述                                                     |
-| ---------------------------------------------------------------- | -------------------------------------------------------- |
-| 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)**     | 通过多轮问答构建设计树，在行动前澄清所有隐含假设         |
-| 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)**       | 从对话中记录领域术语和架构决策到 `.grimoire` 知识库      |
-| ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | 按计划实现生产代码，关注生命周期边界、组合与精确改动     |
-| ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | 对照计划审计代码，找出符合项、缺口、偏差和多余内容       |
-| 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)**       | 系统审查代码的正确性与可维护性，并区分阻塞问题和改进建议 |
-| 🧪 **[grimoire-test](./skills/grimoire-test/SKILL.md)**           | 编写隔离、结构清晰的单元测试，验证模块行为               |
+| 技能 | 描述 |
+| --- | --- |
+| 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)** | 只解决会阻塞行动的关键歧义 |
+| 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)** | 维护持久的项目术语和架构决策 |
+| ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | 根据明确的计划、工单、规格或对话实现代码 |
+| ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)** | 对照意图、验收标准、相关产物和证据审计实现 |
+| 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)** | 使用证据、严重度和置信度审查代码 |
+| 🧪 **[grimoire-test](./skills/grimoire-test/SKILL.md)** | 选择合适结构和边界编写适量测试 |
 
 ---
 
@@ -158,7 +128,7 @@ Agent 会根据上下文自动发现并调用这些技能。
 | ---------------------- | -------------------------------------------------------------- |
 | 🥇 **单一事实来源**     | 每条规则只定义一次，在其他地方引用，避免重复与漂移。           |
 | 🚦 **可验证的完成状态** | 每一步都以 Agent 能检查的条件结束，而不是凭感觉判断。          |
-| 📐 **清晰的边界**       | 每项工作的范围应当能用一句话说明；说明不清时，就该拆分。       |
+| 📐 **连贯边界**         | 共享意图、风险和验证方式的工作保持在一起；拆分应当真正降低耦合。 |
 | 🧹 **及时删减**         | 不影响执行的内容不保留。文档本身不是目标。                     |
 | 🗺️ **渐进式展开**       | 必要内容直接写在流程中，深入资料放在 `references/`，按需读取。 |
 | 🎮 **明确调用责任**     | 技能自行声明由模型还是用户调用，双方都不需要猜测。             |

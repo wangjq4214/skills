@@ -1,40 +1,37 @@
 ---
 name: grimoire-clarify
-description: Round-based interrogation that builds a design tree to resolve every implicit assumption before action.
+description: Resolve material ambiguity while preserving progress through explicit, reversible assumptions.
 ---
 
 # Purpose
 
-Question the user round by round until every decision is resolved and no hidden assumptions remain.
+Resolve only the uncertainties that could materially change behavior, public interfaces, architecture, cost, or irreversible decisions. Preserve momentum by making explicit, reversible assumptions for low-risk details.
 
 # Design tree
 
-A tree of decisions. Each node is a question. Children depend on parent answers. Frontier nodes = unanswered nodes whose every ancestor is answered. These are the questions ready to ask now.
+A tree of material decisions. Each node is a question whose answer can change the chosen approach. Frontier nodes are unanswered, unblocked decisions that are ready to resolve.
 
 # Loop
 
-Repeat until frontier is empty:
+Repeat until no blocking frontier remains:
 
-1. **Calculate frontier** — walk the tree. Collect every unanswered node whose ancestors are all answered. Skip nodes blocked by a pending sub-agent.
-
-2. **Dispatch fact-checks** — for any frontier question that needs file contents, tool output, or environment data, dispatch a sub-agent now. The node remains blocked until results arrive. Do not wait. Do not ask the user for verifiable facts.
-
-3. **Present frontier** — number every ready question. Give each a recommended answer with reasoning. List pending fact-checks separately.
-
-4. **Collect answers** — wait for user. User accepts, overrides, or skips each question. User may also revise past answers (prune affected subtree).
-
-5. **Reshape** — for each answered node, generate children: "Given this answer, what else must be decided?" Attach children. Check sub-agent results; unblock any that returned.
-
-6. **Repeat** — recalculate frontier. If empty, proceed to close.
+1. **Calculate frontier** — collect unanswered decisions whose answers could materially change the work. Drop questions that can be handled by a safe, reversible assumption.
+2. **Resolve facts directly** — use repository and environment tools for targeted facts. Dispatch a sub-agent only when discovery spans multiple modules, requires independent research, or would overload the current context.
+3. **Present decisions** — group related questions. For each, recommend an answer, explain the consequence, and mark whether work is blocked without it.
+4. **Collect answers or proceed** — wait only for blocking decisions. For non-blocking decisions, state the assumption and continue unless the user overrides it.
+5. **Reshape** — add child decisions only when the answer exposes another material choice. Do not recursively expand low-stakes details.
+6. **Repeat** — recalculate the frontier. Close when no blocking decisions remain.
 
 # Close
 
-Summarize every decision path from root to leaf. Announce completion. Ask user to confirm consensus. Do nothing until confirmed.
+Summarize the decisions and explicit assumptions. Request confirmation only when unresolved choices are irreversible or high-impact; otherwise proceed with the stated assumptions and invite corrections.
+
+Completion: No material blocking decisions remain; assumptions and unresolved risks are explicit.
 
 # Rules
 
-- Complete interrogation within 5 rounds. Prioritize high-impact decisions. Merge low-stakes questions.
-- Never ask the user for something you can look up.
-- Never execute the objective during interrogation.
-- User has final authority on every answer.
-- Sub-agent results are checked once per round (step 5).
+- Prefer zero or one clarification round for small, reversible work.
+- Use additional rounds only while material blocking decisions remain; five rounds is a warning to narrow scope, not a target.
+- Look up verifiable facts directly when a targeted tool call is sufficient.
+- Continue useful, reversible work while non-blocking questions or delegated research are pending.
+- The user has final authority, but the model may recommend and act on clearly stated low-risk assumptions.

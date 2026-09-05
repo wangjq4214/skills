@@ -1,150 +1,89 @@
 ---
 name: grimoire-loop
-description: Orchestrate implement→check+review+test→fix loop until clean, then format. Use when implementation is complete and needs verification, or when code changes must pass all quality gates automatically.
+description: Run an adaptive implement-and-verify loop, scaling checks and delegation to change risk.
 disable-model-invocation: true
 ---
 
 # Purpose
 
-Orchestrate a quality assurance loop: implement code from a plan, run check+review+test in parallel against the actual changes, fix blocking findings, repeat until clean, then format.
-
-# Scope
-
-This skill controls the QA loop that runs after initial implementation. It orchestrates grimoire-implement, grimoire-check, grimoire-test, and grimoire-review.
-
-Outside scope: writing plans, writing specs, decomposing tickets, recording ADRs, clarifying requirements.
+Implement or assess a change, select proportionate quality checks, fix confirmed blocking findings, and finish with a final verification pass.
 
 # Leading words
 
-- **iteration** — one complete cycle of implement → QA → assess
-- **finding** — an issue reported by check, review, or test
-- **clean** — zero blocking findings from all three QA skills
-- **blocking finding** — a gap, blocking deviation, test failure, or blocking review issue
+- **iteration** — one cycle of change, verification, and assessment
+- **clean** — the selected quality gates have no confirmed blocking findings
+- **needs-verification** — plausible concern requiring evidence before it can block
 
 # Workflow
 
-## 1. Pre-flight
+## 1. Resolve source and scope
 
-Determine the plan source:
+Accept a plan, ticket, spec, diff, or clear conversation goal. If implementation is already complete, begin from the current diff. Ask only when the target cannot be identified safely.
 
-- Plan file path provided by user → use it directly.
-- No plan given → ask: "Which plan should I implement and verify?"
+Classify risk:
 
-Read the plan. Confirm it is a valid grimoire plan file (`.grimoire/plans/NNNN-title.html`).
+- **Low** — local, reversible, no security/data/schema/public API impact.
+- **Medium** — multi-file behavior or meaningful integration change.
+- **High** — security, data migration, concurrency, public API, architecture, or broad cross-module impact.
 
-Completion: Plan path is resolved and plan content is loaded.
-
----
-
-## 2. Implement
-
-Invoke grimoire-implement against the plan. Produce all code changes.
-
-Completion: Implementation complete. All planned changes are coded and compiles.
+Completion: Target, current state, and risk level are known.
 
 ---
 
-## 3. Capture changes
+## 2. Implement if needed
 
-Capture the diff of all changes produced by implement:
+Invoke or follow grimoire-implement using the available source. Capture the resulting diff, including untracked files.
 
-```
-git diff
-```
-
-Also capture untracked new files:
-
-```
-git diff --cached && git diff && git ls-files --others --exclude-standard
-```
-
-Prefer: `git diff HEAD` if changes are unstaged, or `git diff --cached` if staged.
-
-Save the diff content. It will be injected into every QA sub-agent.
-
-Completion: Diff captured. Contains every line added, modified, or removed by implement.
+Completion: The intended change exists and the complete diff is available.
 
 ---
 
-## 4. Parallel QA — use sub-agents
+## 3. Select QA
 
-**Mandatory: use the Agent tool to launch sub-agents.** Do NOT run check, review, or test inline in the main agent. Each must be a separate sub-agent so they execute in parallel.
+Choose checks by evidence and risk:
 
-Launch all three sub-agents in one message with `run_in_background: true` on each:
+- **Low risk** — main agent performs focused review plus targeted compile/test.
+- **Medium risk** — delegate one or more independent review/test dimensions when this improves coverage or protects context.
+- **High risk** — run check, review, and relevant tests independently; parallelize only genuinely independent work.
 
-| Sub-agent    | Invoke skill    | Injected context        | Writes files? |
-| ------------ | --------------- | ----------------------- | :-----------: |
-| Check agent  | grimoire-check  | plan content + git diff |      No       |
-| Review agent | grimoire-review | git diff                |      No       |
-| Test agent   | grimoire-test   | git diff                |      Yes      |
+Use sub-agents for broad, independent, or context-heavy analysis. Keep checks inline when delegation overhead exceeds its value. Sequence checks when one result should inform the next.
 
-Prompt templates live in [references/agent-prompts.md](./references/agent-prompts.md).
-
-Rules:
-- Launch all three sub-agents in a single message. All three MUST use `run_in_background: true`.
-- Use `get_subagent_result` to collect results. Do not poll — wait for completion notifications.
-- Check and Review agents read and analyze only — they do not modify files.
-- Test agent writes test files and executes them.
-
-Completion: All three sub-agents have returned results. All three reports collected via `get_subagent_result`.
+Completion: Every selected gate has a reason tied to changed behavior or risk.
 
 ---
 
-## 5. Assess
+## 4. Assess findings
 
-Collect all three reports. Classify every finding:
+Classify findings as confirmed blocking, advisory, praise, or needs-verification. A finding blocks only when supported by code evidence, a failing command, a violated acceptance criterion, or a credible concrete impact.
 
-| Source | Blocking                 | Advisory                           |
-| ------ | ------------------------ | ---------------------------------- |
-| Check  | gap, blocking deviation  | advisory deviation, harmless extra |
-| Review | blocking issue           | suggestion, praise                 |
-| Test   | test failure, test error | uncovered edge case noted          |
+Resolve needs-verification findings through targeted inspection or execution before deciding. Feed implement all confirmed blockers and any adjacent advisory fix that is low-risk, directly related, and cheaper to address now; report other advisory findings separately.
 
-Decision tree:
-
-```
-Blocking findings = 0?
-├── Yes → proceed to step 6 (Format)
-└── No
-    └── Iteration count < 3?
-        ├── Yes → feed blocking findings to step 2 (Implement), increment counter
-        └── No → report remaining blocking findings, stop
-```
-
-When feeding findings back to implement: include the concrete file paths, line references, and the exact issue description from each finding. The implement step uses these as fix targets.
-
-Completion: Decision recorded. Either exit-clean, iterate, or exit-with-issues.
+Completion: Every finding has an evidence-backed disposition.
 
 ---
 
-## 6. Format
+## 5. Iterate adaptively
 
-Detect project formatters. See [references/format-detection.md](./references/format-detection.md).
+Fix confirmed blockers and rerun checks affected by the fix. Do not rerun clean, unrelated gates on every iteration. Run a final integrated verification when all blockers are resolved.
 
-Run the detected formatter on all modified files. Verify formatting produces no unexpected changes.
+Use progress rather than a fixed count: continue while each iteration removes blockers and the next fix is safe. Stop when blocked by missing authority/information, failures do not converge, or additional work exceeds the requested scope.
 
-Completion: All modified files pass the project formatter.
+Completion: Selected gates are clean, or the stopping reason and remaining evidence are reported.
 
 ---
 
-## 7. Report
+## 6. Format and report
 
-Deliver final summary:
+Format modified files after behavioral QA is stable when a project formatter exists; use [references/format-detection.md](./references/format-detection.md) when detection is not obvious. Report risk level, checks selected, iterations, confirmed blockers fixed, advisory findings, and final status.
 
-- Iterations completed.
-- Final status: **clean** or **issues remaining**.
-- Per-skill summary: check matches/gaps/deviations, review blocking/suggestions, test pass/fail counts.
-- If issues remain: list each blocking finding with location and description.
-
-Completion: Report delivered.
+Completion: Final status is **clean**, **blocked**, or **issues remaining**, with supporting evidence.
 
 ---
 
 # Rules
 
-- Max 3 iterations. After 3 iterations with remaining blocking findings, stop and report.
-- Feed only blocking findings back to implement. Advisory findings are noted but do not block progress.
-- Parallel QA must use sub-agents (Agent tool with `run_in_background: true`). Never run QA inline or sequentially.
-- Format only after QA is clean. Do not format between iterations.
-- Every iteration re-runs all three QA skills — do not skip a skill because it was clean before.
-- Do not modify files during assessment. Only the implement step writes code.
+- Scale orchestration to risk; three sub-agents are an option, not a mandatory baseline.
+- Prefer executable verification over model judgment when a claim can be tested.
+- Parallelize independent checks; sequence dependent checks.
+- Rerun affected checks after fixes and perform one final integrated pass.
+- Stop based on convergence, authority, and scope rather than an arbitrary iteration count.

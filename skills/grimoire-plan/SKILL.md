@@ -1,24 +1,18 @@
 ---
 name: grimoire-plan
-description: Generate a code-level implementation plan from a ticket or conversation, covering type design, pseudo-code steps, edge cases, and test strategy.
+description: Generate a risk-scaled, revisable implementation plan from a ticket, spec, or conversation.
 disable-model-invocation: true
 ---
 
 # Purpose
 
-Generate a code-level implementation plan from a ticket, spec, or conversation. The plan is a temporary design artifact — it documents how to implement, not what or why.
+Create a temporary implementation hypothesis with enough design, sequencing, risk, and verification detail for the task—without pretending every file or type is known in advance.
 
 # Scope
 
-This skill writes HTML plans to `.grimoire/plans/`.
+This skill writes HTML plans to `.grimoire/plans/`. It does not implement production code unless the user separately authorizes execution.
 
-This skill does NOT:
-- Write specs (use grimoire-spec)
-- Decompose into tickets (use grimoire-slice)
-- Implement code
-- Record domain concepts or ADRs (use grimoire-record)
-
-Completion: A plan file exists at `.grimoire/plans/NNNN-title.html` with all six sections filled.
+Completion: A readable plan exists with actionable steps, material design choices, affected areas, risks, and verification appropriate to the task.
 
 ---
 
@@ -41,124 +35,80 @@ Assign the next available sequence number from `.grimoire/plans/`. Naming: `NNNN
 Completion: `.grimoire/plans/` exists. Input source determined. Plan path known.
 
 ---
-
 ## 2. Load context
 
-Read every source that constrains the plan:
+Load enough context to make reliable implementation decisions:
 
 1. The input source (ticket, spec, or conversation goal).
-2. `.grimoire/CONTEXT.md` — domain terms. Include domain split files if the index references them.
-3. `.grimoire/adr/*.md` — every ADR. The plan must not violate architecture decisions.
-4. Repository structure — explore relevant directories to understand existing types, modules, and conventions. Focus on files the ticket or spec references.
+2. Relevant domain entries and referenced domain files.
+3. ADRs referenced by the input or governing affected modules. Scan ADR metadata first; expand only applicable decisions.
+4. Relevant repository files, nearby patterns, and integration surfaces.
 
-Completion: Input fully understood. Domain terms loaded. Every ADR checked. Relevant repo structure known.
+Completion: The goal, applicable constraints, and existing implementation patterns are understood.
 
 ---
 
-## 3. Analyze type design
+## 3. Analyze design impact
 
-Identify every type that must change or be created, following the design principles in [references/design-principles.md](./references/design-principles.md).
+Identify the files, types, functions, schemas, or configuration likely to change. Treat this as a revisable design hypothesis, not an exhaustive contract.
 
-For each type, record:
+For each material boundary change, record:
 
-- **Action**: Modify or Create.
-- **Concept**: What stable concept does this type represent? One sentence.
-- **Responsibility**: What rules and behavior does it own?
-- **Relationships**: What does it compose, implement, or communicate with?
-- **Rationale**: Why this boundary? If modifying an existing type, why extend rather than split? If creating, why split rather than extend?
+- **Action** — create, modify, move, or remove.
+- **Responsibility** — behavior or invariant affected.
+- **Relationships** — important dependencies or collaborators.
+- **Rationale** — why this boundary is appropriate and what alternatives were rejected.
 
-Apply the litmus test from design principles: "Can this type exist independently, change independently, and be tested independently?"
+Apply [references/design-principles.md](./references/design-principles.md) as heuristics. Prefer minimal changes, but allow a new abstraction when it creates a stable boundary, enables substitution/testing, or contains real complexity.
 
-Prioritize minimal changes. Prefer extending existing types over creating new ones when the change belongs to the same concept. Prefer composition over inheritance.
+Include a Mermaid relationship diagram only when multiple components or non-obvious dependency changes make it useful.
 
-**Produce a type relationship diagram** using simple Mermaid classDiagram syntax (see [references/diagram-guide.md](./references/diagram-guide.md)). Use only basic syntax: class definitions with `+`/`-` members, and simple relationship arrows. Avoid namespace, stereotypes, generics, and other advanced features, they cause rendering errors. The diagram must:
-
-- Show every type from step 3.
-- Show relationships: composition (has-a), implementation (can-do), and usage
-  dependencies.
-- Show key fields and methods relevant to the plan for each type.
-
-Completion: Every affected type has a record with all five fields. The rationale for every boundary decision is explicit. No type owns more than one concept. A simple Mermaid classDiagram (no namespace, no stereotypes) exists showing all types and their relationships.
+Completion: Material design choices and uncertainties are visible; incidental edits need not be predicted.
 
 ---
 
 ## 4. Draft implementation steps
 
-Describe each implementation action as a numbered concrete step. Each step names the specific action:
+Describe concrete implementation steps at the smallest coherent unit of change. Name specific files or symbols when known; otherwise name the discovery point that will resolve them.
 
-- "Modify method `X` to ..."
-- "Add method `Y` to type `Z`"
-- "Add class `W` implementing interface `V`"
-- "Remove field `U` from type `T`"
+Use pseudo-code only for non-trivial logic. State an observable outcome or verification method for each coherent step. Order steps by real dependency, allowing coupled changes to land atomically.
 
-For steps that involve non-trivial logic, follow the action description with pseudo-code. For mechanical changes (add a field, rename a parameter, delegate to an existing method), the action description alone is sufficient.
-
-Each step must also state the observable outcome. Group steps by type or feature area. Order by dependency: foundational types first, integration points last.
-
-Completion: Every step names a concrete action on a specific type or file. Steps with logic changes include pseudo-code. Every step has an observable outcome.
+Completion: The plan is actionable without pretending all implementation details are known in advance.
 
 ---
 
 ## 5. Identify edge cases
 
-List only edge cases that meet the criteria in [references/edge-case-guide.md](./references/edge-case-guide.md):
+List credible edge cases whose omission could cause incorrect behavior, data loss, security exposure, or operational failure. Use [references/edge-case-guide.md](./references/edge-case-guide.md) when needed.
 
-- The edge case has a non-zero probability in real usage.
-- The edge case would produce incorrect behavior or a crash if missed.
-- The edge case is not already covered by normal error handling patterns in the codebase.
+For each, record the condition, expected behavior, and owning step or verification.
 
-For each edge case, record: the condition, the expected behavior, and which step (from step 4) must handle it.
-
-Do not list:
-- Null/undefined checks unless the value crosses a trust boundary.
-- "What if the database is down" unless the plan specifically touches connection handling.
-- Generic validation that the language's type system already prevents.
-
-Completion: Every listed edge case has a condition, expected behavior, and owning step. No generic or zero-probability cases are listed.
+Completion: Material edge cases are covered; generic boilerplate is excluded.
 
 ---
 
-## 6. Design test strategy
+## 6. Design verification strategy
 
-Describe how to unit-test the implementation. For each type identified in step 3:
+Match verification to the behavior and risk: unit, integration, end-to-end, static checks, manual validation, or performance measurement. Prefer public contracts, but permit focused internal assertions when they are the clearest regression boundary.
 
-- What observable behavior must be verified?
-- What dependencies need mocking/stubbing?
-- What input variations produce qualitatively different outcomes?
-
-Prefer testing the type's public contract, not internal implementation.
-
-Completion: Every type from step 3 has a test approach. Mocking boundaries are identified. Test cases cover the edge cases from step 5.
+Completion: Every material behavior has an appropriate verification method.
 
 ---
 
 ## 7. Assemble and write
 
-Use the HTML template in [references/html-template.md](./references/html-template.md).
+Use [references/html-template.md](./references/html-template.md) as the default presentation. Adapt or omit sections that do not apply, while preserving clear implementation steps, affected areas, risks, and verification.
 
-Fill each placeholder with the content from steps 3–6:
+Write to `.grimoire/plans/NNNN-title.html`, verify valid HTML, and open it for preview when the environment supports doing so without disruption.
 
-1. **Type Design** — from step 3. Fill `MODIFIED_TYPES_ROWS`, `NEW_TYPES_ROWS`, `DESIGN_DECISIONS`.
-2. **Type Relationship Diagram** — from step 3. Paste the raw Mermaid classDiagram body into `MERMAID_DIAGRAM` (no outer ```mermaid fence).
-3. **Implementation Steps** — from step 4. Use the `.step` block structure for each step.
-4. **Edge Cases** — from step 5. Fill `EDGE_CASES_ROWS`.
-5. **Test Strategy** — from step 6. Use the test strategy block structure for each type.
-6. **Affected Files** — list every file the plan touches, with action (create/modify) and which step references it. Fill `AFFECTED_FILES_ROWS`.
-
-Write to `.grimoire/plans/NNNN-title.html`.
-
-Verify the file exists, is valid HTML, and all six sections are present.
-
-Open the plan in the default browser for preview. Use the platform-appropriate command: `start` on Windows, `open` on macOS, `xdg-open` on Linux.
-
-Completion: HTML plan file exists. All sections present. Sequence number is correct. Plan is open in browser.
+Completion: The plan exists, is readable, and contains the information needed for implementation.
 
 ---
 
 # Rules
 
-- One plan per ticket or conversation goal. Do not merge unrelated work.
-- Never violate an existing ADR. If the input requires it, flag the conflict in the plan and stop.
-- Plans are temporary design artifacts. They guide implementation, not archive it. Do not maintain plans after the implementation is complete.
-- Use the HTML template structure. Do not improvise sections or styling.
-- Design principles are in references. SKILL.md controls workflow only.
+- Keep unrelated goals in separate plans; related atomic changes may share one plan.
+- ADRs are constraints with history, not infallible code contracts. Surface conflicts and ask only when authority or irreversibility requires it.
+- Plans are revisable hypotheses. Update the implementation approach when repository evidence invalidates an assumption.
+- Use the template to aid comprehension, not to force empty sections or decorative diagrams.
+- Scale detail to complexity and risk.

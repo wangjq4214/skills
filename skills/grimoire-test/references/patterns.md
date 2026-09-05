@@ -1,62 +1,41 @@
 # Test Patterns
 
-## AAA (Arrange → Act → Assert)
+## Arrange → Act → Assert
 
-Every test body follows this three-part structure:
+AAA is a useful default for scenario tests. Keep phases visible when doing so improves comprehension. Table-driven, property-based, snapshot, state-machine, and concurrency tests may use a different natural structure.
 
 ```typescript
-it('should return user when user exists', () => {
-  // Arrange
-  const mockRepo = { findById: jest.fn().mockResolvedValue({ id: 1, name: 'Alice' }) };
-  const service = new UserService(mockRepo);
+it('returns the user for an existing id', async () => {
+  const repo = stubUserRepo({ id: 1, name: 'Alice' });
+  const service = new UserService(repo);
 
-  // Act
   const result = await service.getUser(1);
 
-  // Assert
   expect(result).toEqual({ id: 1, name: 'Alice' });
 });
 ```
 
-Keep blocks visually separated. If Arrange is more than ~5 lines, extract a factory function.
+Extract setup helpers when they reveal intent, not because setup crosses an arbitrary line count.
 
-## Test naming
+## Naming
 
-Pattern: `should_[behavior]_when_[condition]`
+Follow project conventions. Prefer names that identify the scenario, property, or expected contract so failure output is diagnostic.
 
-Good:
-- `should_return_user_when_id_exists`
-- `should_throw_not_found_when_id_does_not_exist`
-- `should_return_empty_list_when_no_results`
+## Test-double decision
 
-Bad:
-- `testGetUser`
-- `getUser works`
-- `getUser test 1`
+| Boundary | Prefer |
+| --- | --- |
+| Important interaction protocol | Mock |
+| Controlled return or failure | Stub |
+| Stateful reusable behavior | Fake |
+| Fast deterministic collaborator | Real implementation |
 
-The name is read in the failure report. Make it tell what broke.
+Avoid interaction assertions unless the interaction itself is part of the contract.
 
-## Test double decision
+## Scenario scope
 
-| Type | Use when                                    |
-| ---- | ------------------------------------------- |
-| Mock | You need to assert a specific call was made |
-| Stub | You only need controlled return values      |
-| Fake | A simple in-memory implementation is easier |
+A test should have one coherent reason to fail. It may assert multiple related outcomes of that scenario. Split only when failures represent independent behaviors or require substantially different setup.
 
-Prefer Stub over Mock when possible — fewer assertions on implementation details.
+## Testing the SUT
 
-Prefer Fake over Mock when the dependency behavior is complex but easy to simulate (e.g., in-memory repository).
-
-## One behavior per test
-
-Each test exercises exactly one behavior. If a test needs "and" in its name, split it:
-
-Bad: `should_create_user_and_send_email_and_log_event`
-Good: three separate tests.
-
-## Avoiding test doubles for the SUT itself
-
-Never mock or stub the SUT. Test the real SUT with doubled dependencies.
-
-Partial mocks on the SUT (e.g., mocking one method to test another) are a design smell — the class likely has too many responsibilities.
+Prefer the real SUT. Partial mocks can be useful for legacy characterization but signal coupling; document the compromise and avoid treating it as the default design.

@@ -1,130 +1,82 @@
 ---
 name: grimoire-test
-description: Write unit tests that verify module behavior through isolated, well-structured test cases.
+description: Write proportionate tests using the structure and dependency strategy best suited to the behavior.
 ---
 
 # Purpose
 
-Write unit tests that verify module behavior — not implementation — through isolated, predictable test cases.
+Increase confidence in behavior and important invariants with deterministic, maintainable tests. Unit tests are common, but integration, characterization, property, state-machine, snapshot, or concurrency tests may be better for some risks.
 
 # Scope
 
-This skill controls how unit tests are designed, structured, and written.
-
-Outside scope: integration tests, E2E tests, performance tests, test framework selection, CI configuration.
+This skill designs, writes, and runs tests relevant to the requested target. It follows project conventions and may recommend production refactoring without making scope-expanding changes unless authorized.
 
 # Leading words
 
-- **SUT** — System Under Test, the module being tested
-- **AAA** — Arrange → Act → Assert, the required test structure
-- **test double** — Mock, Fake, or Stub that replaces an external dependency
-- **behavior test** — a test that verifies public API outcome, not internal state
-- **isolation** — replacing every external dependency with a test double
+- **SUT** — system under test
+- **test double** — mock, fake, or stub replacing a collaborator
+- **behavior test** — test of an observable outcome or stable invariant
+- **test boundary** — the real or doubled collaborators included in a test
 
 # Workflow
 
 ## 1. Analyze the target
 
-Identify:
-- SUT: what module, class, or function is under test?
-- Public API: what behaviors does it expose to callers?
-- Dependencies: what external resources does it consume (database, network, filesystem, other modules)?
+Identify behavior, stable invariants, dependencies, existing test conventions, and the failure modes that matter.
 
-Output: a brief description covering SUT boundary, public API surface, and dependency list.
+Output: target boundary and risk summary.
 
 ---
 
 ## 2. Check testability
 
-Before designing test cases, evaluate whether the SUT can be tested cleanly.
+Evaluate coupling, controllability, determinism, and observability. High setup cost or hard-coded dependencies are refactoring signals, not automatic stop conditions.
 
-**Stop and suggest refactoring when:**
-- The SUT has more than 3 dependencies → suggest splitting responsibilities
-- A dependency cannot be replaced by a test double (e.g., hard-coded instantiation) → suggest dependency injection
-- The SUT mixes business logic with I/O (e.g., HTTP calls inside domain logic) → suggest separating concerns
-- Testing a behavior requires mocking the SUT itself → suggest extracting the behavior into a separate module
-- Setup would require more than ~5 lines of mock configuration → suggest reducing coupling
+Proceed with the best valuable test that can be written safely. Ask before refactoring only when production changes alter design or exceed scope; otherwise use an appropriate seam and report limitations.
 
-**How to suggest:**
-- Point to the specific code location causing the problem
-- Describe why it makes testing hard (which principle it violates)
-- Give one concrete refactoring direction, not a full rewrite
-- Ask the user whether to proceed with refactoring or force the test anyway
-
-Output: either a clean testability assessment (proceed to step 3) or a list of refactoring suggestions with the question: "Refactor first, or force the test?"
+Output: testability assessment and chosen strategy.
 
 ---
 
-## 3. Design test cases
+## 3. Design cases
 
-For each public behavior, list:
-- **Normal path** — the expected happy-path input and output
-- **Edge cases** — boundary values, empty/null/undefined, maximum/minimum ranges
-- **Error cases** — how the SUT reports failures to the caller
-- **State transitions** — if the SUT is stateful, how it moves between states
+Select normal paths, material boundaries, failures, and state transitions by risk. A test may assert several facets of one coherent scenario when that improves diagnostics. Avoid combinatorial boilerplate with little confidence value.
 
-Output: a test case list. Every public behavior has at least one normal-path case plus edge and error cases where applicable.
+Output: concise cases tied to risks or contracts.
 
 ---
 
-## 4. Plan isolation
+## 4. Choose dependency strategy
 
-For each dependency identified in step 1:
-- **Mock** — use when the test must verify that a specific call was made (behavior verification)
-- **Stub** — use when the test only needs a controlled return value (state verification)
-- **Fake** — use when a lightweight in-memory replacement is simpler than mocking
+Use real collaborators when fast and deterministic. Use stubs for controlled values, mocks for important interactions, and fakes for reusable behavior. Replace process-boundary resources in unit tests, but do not double every in-process dependency by default.
 
-Output: every dependency has an assigned isolation strategy.
+Output: justified real/doubled boundaries.
 
 ---
 
 ## 5. Write tests
 
-Write each test case following these rules:
+Use Arrange → Act → Assert when it clarifies the scenario. Allow table-driven, property-based, state-machine, snapshot, concurrency, or framework-native structures when clearer.
 
-**Structure: AAA**
-```
-// Arrange — build SUT, configure test doubles, prepare input
-// Act — call one public behavior
-// Assert — verify the observable outcome
-```
+Prefer public outcomes. Focused internal assertions are acceptable for characterization, complex invariants, or precise regressions when the coupling is documented and worthwhile. Keep tests deterministic and independently runnable.
 
-**Naming**: `should_[expected behavior]_when_[condition]`
-
-**Rules**:
-- Assert on public API return values, thrown errors, or calls to test doubles — never on internal fields
-- Exactly one behavior per test
-- No shared mutable state between tests
-
-Output: a test file where every planned case has a corresponding AAA test method.
+Output: tests that maximize confidence without unnecessary ceremony.
 
 ---
 
-## 6. Run tests
+## 6. Run and diagnose
 
-Execute the test suite and verify every test passes.
+Run the narrowest useful command during iteration. Fix test defects; report product defects rather than silently changing intended behavior. Finish with the broader affected suite when practical.
 
-**Rules:**
-- Run all tests in the test file, not just the newly written ones
-- If a test fails, diagnose and fix before proceeding — do not leave failing tests behind
-- If the failure is in the test (not the SUT), fix the test
-- If the failure is in the SUT, report it: the test caught a bug
-
-Output: full test run with all tests passing. No skipped or pending tests.
+Output: passing relevant tests, or concrete failure evidence and blocker.
 
 ---
 
 ## 7. Verify
 
-Run the checklist:
-- [ ] Test verifies behavior, not internal state
-- [ ] Test is independent (no shared mutable fixture, no ordering dependency)
-- [ ] Every external dependency is replaced by a test double
-- [ ] Normal, edge, error, and state cases are covered
-- [ ] AAA structure is followed, test name expresses behavior
-- [ ] No test exists solely for coverage
+Confirm meaningful behavior/invariant coverage, useful failure diagnostics, appropriate boundaries, and freedom from accidental ordering or shared mutable state. Treat coverage as evidence, not the objective.
 
-Output: all items pass. If any item fails, fix the test — not the checklist.
+Output: verification result with remaining limitations.
 
 ---
 

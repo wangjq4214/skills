@@ -1,45 +1,54 @@
 # Agent Prompt Templates
 
-Sub-agent prompts for step 4 (Parallel QA). Each prompt tells the agent to invoke a specific skill by name with relevant context injected.
+Use these modules only when the risk assessment selects delegated QA. Inject the smallest context needed for the assigned dimension.
 
 ---
 
-## Check Agent Prompt
+## Check prompt
 
 ```
-Invoke the grimoire-check skill with the following inputs:
+Audit this implementation against the supplied intent and acceptance criteria. Treat plan details as guidance unless they encode an approved constraint.
 
-## Plan
-{plan_content}
+## Intent and criteria
+{intent_and_criteria}
 
-## Git diff of implementation
+## Relevant diff
 {git_diff}
 
-Follow grimoire-check's workflow exactly. Return your structured report.
+Return evidence-backed matches, gaps, deviations, extras, and needs-verification items. Do not modify files.
 ```
 
----
-
-## Review Agent Prompt
+## Review prompt
 
 ```
-Invoke the grimoire-review skill with the following input:
+Review the supplied diff for the assigned risk lenses: {risk_lenses}.
 
-## Git diff of implementation to review
+## Intent
+{intent_summary}
+
+## Relevant diff
 {git_diff}
 
-Follow grimoire-review's workflow exactly. Return your structured review.
+Verify testable concerns when tools are available. Distinguish confirmed blockers from needs-verification and suggestions. Do not modify production files.
 ```
 
----
-
-## Test Agent Prompt
+## Test prompt
 
 ```
-Invoke the grimoire-test skill with the following input:
+Write and run the tests most appropriate to the changed behavior and risks.
 
-## Git diff of implementation — write tests for the modules, classes, and functions added or modified
+## Intent and risks
+{intent_and_risks}
+
+## Relevant diff
 {git_diff}
 
-Follow grimoire-test's workflow exactly. Write and run tests. Return your test results.
+Follow repository conventions. Use unit, integration, characterization, property, state-machine, snapshot, or concurrency tests as appropriate. Report commands and results.
 ```
+
+## Delegation guidance
+
+- Combine dimensions when separate agents would duplicate repository exploration.
+- Split dimensions when independent perspectives materially increase coverage.
+- Do not send the full plan or diff when a bounded excerpt is sufficient.
+- Sequence prompts when one result should shape the next check.

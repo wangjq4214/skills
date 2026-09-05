@@ -26,17 +26,15 @@ Completion: Only CONTEXT.md and adr/ are modified by this skill.
 
 # Trigger Detection
 
-Before every response, scan the current conversation turn for:
+When this skill is active, scan for durable project knowledge:
 
-- New domain terms, entity names, or jargon the user introduces
-- A term used with a meaning specific to the project
-- Synonyms or aliases for an existing term
-- An architectural decision: technology choice, integration pattern, boundary definition, constraint, or rejected alternative
+- domain terms with project-specific meanings;
+- aliases or relationships needed to interpret the codebase;
+- consequential architectural decisions, constraints, and rejected alternatives.
 
-If nothing qualifies, do nothing. Do not force entries.
+Record only when persistence will improve future work. Skip transient implementation details, speculative ideas, and information already clear from code. Batch low-urgency updates so documentation does not interrupt the user's objective.
 
-Completion: Every qualifying item from the current turn is either recorded or intentionally skipped with a reason.
-
+Completion: Durable qualifying knowledge is recorded or intentionally skipped without ceremony.
 ---
 
 # CONTEXT.md Workflow
@@ -176,36 +174,35 @@ See [references/adr-template.md](./references/adr-template.md) for full template
 
 Completion: ADR file exists with correct sequence number and valid frontmatter.
 
-## Updating ADR status
+## Maintaining ADRs
 
-When implementation progresses:
+ADRs preserve decision history while allowing explicit correction:
 
-1. Read the ADR.
-2. Update the `Status` field.
-3. If superseded, add a `Superseded by:` line pointing to the new ADR.
-4. Do NOT delete or rewrite the decision itself — ADRs are immutable history.
+1. Update status as implementation progresses.
+2. When a decision changes, create a superseding ADR and link both records.
+3. Correct factual errors or ambiguous wording in place when the original decision is unchanged; add a dated correction note describing the edit.
+4. Merge duplicate ADRs by choosing one canonical record and marking the others `Superseded` with links.
+5. Delete an ADR only when it was created in error and has no historical decision value. Summarize the deletion in the user-facing result; when future readers need the correction, leave a note in the canonical ADR or context entry.
 
-Completion: Status field reflects current reality. Superseded ADRs point to their replacement.
+Do not silently rewrite history. Material changes to the decision require a new ADR rather than an in-place edit.
+
+Completion: Current guidance is accurate and historical changes remain traceable.
 
 ---
 
 # Pre-Flight Checks
 
-Before writing any file:
+Before writing, verify `.grimoire/` and create missing target files/directories only when the current user request authorizes knowledge-store maintenance. Otherwise explain what initialization is needed.
 
-- Verify `.grimoire/` exists. If not, tell the user to run grimoire-init first. Do NOT create it.
-- Verify `.grimoire/CONTEXT.md` exists. If not, create it from the template in references.
-- Verify `.grimoire/adr/` exists. If not, create the directory.
-
-Completion: Target paths exist. Write operations will succeed.
+Completion: Target paths are available or the limitation is reported.
 
 ---
 
 # Rules
 
-- One sentence per definition. Split before adding a second sentence.
-- Never invent definitions. If the conversation doesn't provide enough information, ask the user.
-- Never remove entries from CONTEXT.md or ADR files. Append and update only.
-- CONTEXT.md is for domain terminology. ADRs are for irreversible decisions with multiple alternatives. Do not cross-contaminate.
-- Do not record library choices with low switching cost as ADRs.
-- Status field is the only mutable field in an ADR after creation. The decision text is immutable.
+- Keep definitions concise, but use additional sentences when needed to prevent ambiguity.
+- Never invent definitions; ask only when repository evidence and context cannot resolve a material conflict.
+- CONTEXT entries may be corrected, merged, moved, deprecated, or removed when obsolete or wrong; update references and summarize destructive changes.
+- ADRs record consequential decisions with real alternatives; low-cost library choices usually do not qualify.
+- Preserve decision history through status, supersession links, and correction notes rather than blanket immutability.
+- Prefer an accurate, maintainable knowledge base over append-only accumulation.

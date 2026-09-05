@@ -1,44 +1,25 @@
-# Six Principles of Unit Testing
+# Testing Principles
 
-## 1. Test behavior, not implementation
+## 1. Test stable behavior and meaningful invariants
 
-Verify what the SUT produces for its caller — return values, thrown errors, observable side effects.
+Prefer caller-visible outcomes. Use focused internal assertions when they are the clearest boundary for characterization, concurrency invariants, or a precise regression, and document the coupling.
 
-Do not assert on internal fields, private methods, or intermediate state. Those are implementation details that change without affecting correctness.
+## 2. Keep tests deterministic and independently runnable
 
-Internal refactoring should not break a behavior test.
+Avoid accidental ordering and shared mutable state. Shared immutable fixtures and controlled lifecycle helpers are acceptable when they improve clarity.
 
-## 2. Keep tests independent, simple, stable
+## 3. Choose the right boundary
 
-Each test sets up its own fixture. No dependency on other tests. No ordering requirement. No shared mutable state.
+Unit tests usually replace process-boundary resources such as network, clock, randomness, and external storage. Keep real in-process collaborators when they are fast, deterministic, and provide stronger confidence.
 
-A test that relies on another test's side effect will fail unpredictably.
+## 4. Cover risks, not a ritual list
 
-## 3. Isolate dependencies
+Select normal, boundary, error, and transition cases that could fail differently. Do not enumerate categories that add no meaningful behavior coverage.
 
-Replace every external resource — database, network, filesystem, clock, random — with a test double.
+## 5. Treat testability as design evidence
 
-The SUT should never reach outside process boundaries in a unit test.
+Difficult testing may reveal coupling. Continue with a useful characterization or integration test when possible, and recommend refactoring in proportion to its production impact.
 
-## 4. Cover key scenarios
+## 6. Optimize test readability and diagnostics
 
-Normal path validates the happy case. But the happy case alone gives false confidence.
-
-Also cover:
-- Boundary values (zero, empty, max, min)
-- Null or undefined inputs
-- Error propagation (what does the caller see on failure?)
-- State transitions (for stateful SUTs)
-
-## 5. Tests reflect design quality
-
-A SUT that is hard to test signals a design problem:
-- Too many dependencies → unclear boundaries
-- Can't isolate → hidden coupling
-- Giant setup → excessive responsibility
-
-Do not work around these symptoms. Flag them.
-
-## 6. Test code is maintainable
-
-Tests are read far more than written. Use AAA structure. Name tests so the failure message tells what broke. Delete tests that exist only to raise coverage — they add maintenance cost without adding confidence.
+Use AAA, table-driven cases, properties, snapshots, state machines, or framework-native forms according to what communicates the behavior best. Names and failure output should reveal what broke.

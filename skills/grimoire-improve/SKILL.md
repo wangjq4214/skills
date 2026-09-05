@@ -1,169 +1,76 @@
 ---
 name: grimoire-improve
-description: Audit codebase structure against 10 quality dimensions and deliver a prioritized top-5 HTML report with before/after diagrams. Iterative — run repeatedly to refine the codebase incrementally.
+description: Audit codebase structure, prioritize evidence-backed improvements, and optionally hand approved findings to implementation.
 disable-model-invocation: true
 ---
 
 # Purpose
 
-Systematic codebase quality audit across 10 structural dimensions. Each run selects up to 5 most impactful issues, produces an HTML report with before/after Mermaid diagrams, priority scores (1–5), and actionable fix strategies. Designed for iterative use — run, fix, run again.
+Audit structural quality across relevant dimensions, retain the strongest evidence-backed findings, and present actionable improvements at a level of detail proportionate to each issue.
 
 # Scope
 
-This skill audits existing code structure and produces a browser-viewable improvement report.
+This skill analyzes code and writes `.grimoire/improve-report.html`. Discovery is not capped; the report may summarize lower-priority findings while emphasizing the most valuable work. Code changes require explicit user selection unless the user already authorized implementation.
 
-This skill does NOT:
-- Implement fixes (use grimoire-implement after reviewing the report)
-- Audit non-structural concerns (performance benchmarks, security scans, style formatting)
-- Write to any code file
-- Generate more than 5 findings per run
-
-Completion: An HTML report exists at `.grimoire/improve-report.html` with up to 5 findings, each scored and diagrammed. The report is opened in the browser.
-
-# Leading words
-
-- **quality dimension** — one of the 10 structural checks applied during audit
-- **finding** — a single discovered issue with score, diagrams, problem description, strategy, and benefit
-- **priority score** — integer 1–5 rating whether this issue is worth fixing now (5 = fix immediately, 1 = cosmetic)
-
----
+Completion: The report distinguishes prioritized findings from the broader discovery set and gives each retained issue enough evidence to act on.
 
 # Workflow
 
-## 1. Survey codebase
+## 1. Survey
 
-Explore the repository structure to understand its shape:
+Map relevant modules, dependency direction, change hotspots, and unusually connected or complex types. Scale breadth to the requested target; do not scan the entire repository for a bounded audit.
 
-- Identify the primary language and framework.
-- List top-level modules, packages, or directories.
-- Find the largest files and most-referenced types (god object candidates).
-- Map the dependency direction between modules.
-
-Use `references/dimensions.md` to understand what each dimension checks.
-
-Completion: A rough module map exists. The 3–5 largest files and most-connected types are identified.
+Completion: The audit surface and its important structural relationships are known.
 
 ---
 
-## 2. Audit against 10 dimensions
+## 2. Audit relevant dimensions
 
-Examine the codebase through each quality dimension. For each dimension, ask the key question and record concrete evidence.
+Use `references/dimensions.md` as a lens set, not a mandatory checklist. Examine dimensions capable of producing material findings for the target: responsibility, encapsulation, method placement, API expression, domain modeling, dependency direction, change isolation, speculative abstraction, concentration of responsibility, and leaked state.
 
-The 10 quality dimensions:
+Record concrete locations, evidence, impact, confidence, and rough remediation cost. A single-implementation abstraction is suspicious only when it lacks present boundary value.
 
-| # | Dimension | Key question |
-|---|-----------|--------------|
-| 1 | Clear responsibility | Does each struct/class have one clear job? |
-| 2 | Hidden implementation | Are internal details concealed behind public APIs? |
-| 3 | Method placement | Does each method belong to the right type? |
-| 4 | Expressive API | Does the public API communicate intent? |
-| 5 | Domain types | Do types express domain concepts directly? |
-| 6 | Dependency direction | Do dependencies flow toward stability? |
-| 7 | Change isolation | Would a requirement change ripple broadly? |
-| 8 | Speculative abstraction | Are there abstractions with only one real implementation? |
-| 9 | God object | Is there a type that knows or does too much? |
-| 10 | Leaked state | Does internal state escape through public interfaces? |
-
-Detailed explanations and examples for each dimension live in [references/dimensions.md](./references/dimensions.md).
-
-For each dimension, note:
-
-- Which files/types triggered the concern.
-- A concrete code snippet or pattern.
-- A rough severity assessment.
-
-Completion: All 10 dimensions have been examined. Evidence is recorded for each.
+Completion: Relevant dimensions have been examined and unsupported observations discarded.
 
 ---
 
-## 3. Select top findings
+## 3. Prioritize
 
-From all evidence collected, pick up to 5 findings with the highest impact-to-effort ratio.
+Rank all retained findings by current impact, confidence, change frequency, blast-radius reduction, and effort. The HTML report should emphasize a manageable top set—five by default—but state how many lower-priority findings were summarized or deferred. Do not silently cap discovery.
 
-Selection criteria:
-
-- Does the issue cause real bugs or confusion today?
-- Would fixing it reduce the blast radius of future changes?
-- Is the fix achievable without rewriting the entire module?
-- Does the issue touch code that changes frequently?
-
-Drop findings that:
-- Are purely cosmetic (rename a variable, reorder a method).
-- Require a full rewrite to address.
-- Have no observable impact on current development.
-
-Rank the selected findings by priority.
-
-Completion: Up to 5 findings selected. Each has a priority score (1–5) and a concrete code location.
+Completion: Priority reflects repository pain rather than abstract preference.
 
 ---
 
-## 4. Generate HTML report
+## 4. Generate report
 
-Write `.grimoire/improve-report.html` using the template structure in [references/report-template.md](./references/report-template.md).
+Use `references/report-template.md` as a presentation default. Each emphasized finding includes location, evidence, concrete impact, confidence, strategy, expected benefit, and important tradeoffs.
 
-For each finding, include:
+Add before/after Mermaid diagrams only when relationships, control flow, or ownership are difficult to explain clearly in prose. Simple local findings do not require diagrams. Keep diagrams minimal and follow `references/mermaid-conventions.md`.
 
-1. **Header** — dimension name, priority score (1–5), file location.
-2. **Problem** — what exists now, why it violates the dimension, concrete evidence (code snippet).
-3. **Before diagram** — Mermaid diagram showing current (problematic) structure.
-4. **After diagram** — Mermaid diagram showing proposed (improved) structure.
-5. **Strategy** — specific, actionable steps to fix the issue.
-6. **Expected benefit** — what changes after the fix (measurable if possible).
+Summarize deferred findings compactly so repeated runs are optional rather than required for disclosure.
 
-Mermaid conventions:
-
-- Use `graph TD` or `graph LR` for structure diagrams. `classDiagram` for type relationships.
-- Keep nodes to 3–7. Simpler diagrams render more reliably.
-- Before diagrams show the problem (e.g., tangled dependencies, fat class). After diagrams show the fix (e.g., split responsibilities, clean boundaries).
-- Use `style` only when highlighting is essential. Avoid complex subgraphs unless necessary.
-- Detailed conventions live in [references/mermaid-conventions.md](./references/mermaid-conventions.md).
-
-Completion: `.grimoire/improve-report.html` exists and contains all findings with diagrams.
+Completion: `.grimoire/improve-report.html` communicates priorities without decorative overhead.
 
 ---
 
-## 5. Open report
+## 5. Present and hand off
 
-Open the report in the default browser:
+Open the report when the environment supports it. Ask which findings to implement unless implementation was already authorized. Related findings may be implemented together when they touch the same invariant or would otherwise cause repeated churn; independent findings may be parallelized safely.
 
-```bash
-start .grimoire/improve-report.html   # Windows
-open .grimoire/improve-report.html    # macOS
-xdg-open .grimoire/improve-report.html # Linux
-```
+After implementation, run verification appropriate to the changed behavior rather than compiling mechanically after every finding.
 
-Completion: Browser window displays the report. User can review findings and decide which to fix.
+Completion: Approved work is implemented or clearly handed off; unapproved findings remain recommendations.
 
 ---
 
-## 6. Hand off to implementation
+# Rules
 
-After the user has reviewed the report, ask:
-
-> Ready to fix these? Reply with the finding numbers to implement (e.g. "fix 1,3,4") or "all". I'll hand each off to grimoire-implement.
-
-For each finding the user selects:
-
-1. Read the finding's problem, strategy, and after-diagram from the report.
-2. Construct a focused implementation prompt that includes: the file location, the problem description, the fix strategy, and the after-diagram as the target design.
-3. Invoke `grimoire-implement` with that prompt.
-
-Rules for implementation hand-off:
-
-- Implement one finding at a time, in priority order (highest score first).
-- After each finding is implemented, verify the changes compile before moving to the next.
-- Do not implement findings the user did not approve.
-
-Completion: All approved findings have been implemented and compile. User is prompted to run `grimoire-improve` again to surface the next priorities.
-
-- Maximum 5 findings per run. Fewer is fine — quality over quantity.
-- Every finding must reference a specific file and line range, or a specific type name.
-- Before/after diagrams are mandatory for every finding. Two diagrams per finding.
-- Priority scores are relative to current codebase pain, not abstract ideals. Score 5 = this is actively hurting development.
-- This skill reads and analyzes code. It never modifies code.
-- Run repeatedly. Each iteration should surface new issues after previous ones are fixed.
-
+- Report how many findings were emphasized, summarized, or deferred; do not imply the display set is the full discovery set.
+- Require diagrams only when they improve understanding.
+- Prioritize concrete impact and confidence over checklist completeness.
+- Combine or parallelize findings according to coupling, not a fixed one-at-a-time rule.
+- Preserve user approval for scope-expanding code changes.
 ---
 
 # References

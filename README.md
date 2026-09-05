@@ -20,26 +20,26 @@ Most agent skill collections are flat prompt libraries: "Here's a prompt for X, 
 - **Surgical scope** — Every skill explicitly defines what it does *and* what it doesn't do. No scope creep.
 - **Observable completion** — Every step ends with a checkable condition. You know when it's done.
 - **Progressive disclosure** — The core workflow fits in one file. Deep knowledge lives in `references/`, loaded only when needed.
-- **Composable pipeline** — Skills chain together into workflows: clarify → record → refine → spec → slice → plan → implement → check → review → test → loop → commit. Each skill hands off to the next.
+- **Risk-scaled composition** — Skills work independently or compose according to task size; the pipeline is a toolbox, not a mandatory ceremony.
 
-The goal: **predictable execution** — the same inputs produce the same quality, every time.
+> The goal is balanced predictability: equivalent constraints should produce equivalent quality without charging simple tasks the cost of a complex workflow.
 
 ---
 
 ## ✨ Features
 
-| Feature                      | What it means                                                                  | Why it matters                                                                              |
-| ---------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| 🎯 **Two invocation modes**   | User-invoked vs model-invoked — the skill declares who triggers it             | No guessing. The agent never misfires a workflow; you never forget a skill exists.          |
-| 🚦 **Observable completion**  | Every workflow step has a checkable condition                                  | You know when it's done. No ambiguous hand-offs, no "I think it's finished."                |
-| 📐 **Surgical scope**         | Every skill defines what it does *and* what it explicitly excludes             | No scope creep. A spec skill writes specs, not code. A plan skill plans, doesn't implement. |
-| 🗺️ **Progressive disclosure** | Core workflow in `SKILL.md`, deep knowledge in `references/`                   | Low context load at startup. Details loaded on demand, when the agent needs them.           |
-| 🌲 **Design tree**            | Round-based Q&A that resolves every assumption before writing code             | Catch misunderstandings early. No "I thought you meant X" after implementation.             |
-| 🔄 **QA loop**                | `grimoire-loop` automates implement → check → review → test → fix              | One command runs the full quality gate. Fix until clean, then format.                       |
-| ✂️ **Vertical-slice slicing** | Tickets cut through every architectural layer, each independently demonstrable | No half-implemented features. Every ticket delivers end-to-end value.                       |
-| 🔨 **Skill Forge**            | Meta-skill to create, review, and refactor new skills                          | Self-documenting. The skill system builds itself.                                           |
-| 📂 **Auto bootstrap**         | One command scaffolds `.grimoire/` knowledge directory                         | Zero friction setup. No reading docs to get started.                                        |
-| 🏷️ **Changeset ready**        | Versioned with `@changesets/cli`, semver for skills                            | Track changes, roll back confidently, publish updates.                                      |
+| Feature | What it means | Why it matters |
+| --- | --- | --- |
+| 🎯 **Two invocation modes** | Users can invoke explicitly; models select skills by risk | Avoids accidental full-workflow activation |
+| 🚦 **Verifiable outcomes** | Important results have checkable evidence | Prevents premature completion without mechanical steps |
+| 📐 **Elastic boundaries** | Skills have a primary responsibility but may perform authorized adjacent work | Reduces unnecessary hand-offs |
+| 🗺️ **On-demand context** | Load only context and references needed for the current decision | Preserves context capacity |
+| 🌲 **Targeted clarification** | Ask only blocking questions that materially change direction | Maintains execution momentum |
+| 🔄 **Adaptive QA** | Verify small changes directly; use full parallel QA for high-risk work | Spends effort where risk exists |
+| ✂️ **Flexible slicing** | Prefer value slices while supporting migration, enabling, and component work | Avoids artificial layers and dependencies |
+| 🔨 **Skill Forge** | Create, review, and prune skills | Improves instruction signal density |
+| 📂 **Auto bootstrap** | Create the `.grimoire/` knowledge directory when useful | Keeps project knowledge optional |
+| 🏷️ **Changeset ready** | Version skills with changesets | Supports audit and rollback |
 
 ---
 
@@ -49,65 +49,35 @@ The goal: **predictable execution** — the same inputs produce the same quality
 pnpx skills@latest add wangjq4214/skills
 ```
 
-> 💡 One command, zero config. Each skill includes a frontmatter block with `name` and `description` fields recognized by Pi.
+> 💡 Every skill can be used independently. You do not need to complete the whole Grimoire pipeline first.
 
 ### How to use
 
-Skills you explicitly request are listed below. Model-invoked skills run automatically — no action needed.
+Describe the outcome directly; invoke a specific skill when you need its artifact or workflow:
 
-**👤 User-invoked skills** — You explicitly tell the agent what to do. Just ask naturally:
+```bash
+# Small change: implement directly and run relevant tests
+Fix duplicate submission on the login button and verify it
 
-```
-# Initialize project knowledge
-Run grimoire-init to set up .grimoire
+# High-risk feature: design first, then run full QA
+Use grimoire-spec to design the account migration
 
-# Write a spec
-Use grimoire-spec to write a spec for the user auth feature
-
-# Generate a plan
-Create a plan with grimoire-plan for implementing the todo list
-
-# Slice into tickets
-Slice the spec with grimoire-slice
-
-# Run QA loop
-Run grimoire-loop to verify the implementation
-
-# Commit
-Stage my changes and run commit
+# Verification only
+Run grimoire-loop and scale checks to risk
 ```
 
-**Model-invoked skills** run automatically when the agent detects they're needed — you don't need to invoke them.
+### Adaptive workflows
 
-### Typical workflow
+Choose the smallest sufficient path:
 
-After discussing your requirements, `grimoire-refine` will recommend either the **complete workflow** or the **simple workflow** depending on scope.
-
-**Complete workflow** (for complex features):
-
-```
-grimoire-init  →  refine  →  spec  →  slice  →  plan  →  loop  →  commit
-```
-
-1. **Bootstrap** with `grimoire-init`
-2. **Refine** project knowledge — model-invoked skills **clarify** and **record** run automatically during discussion
-3. Write a **spec** with `grimoire-spec`
-4. **Slice** the spec into vertical-slice tickets with `grimoire-slice`
-5. **Generate a plan** for each ticket with `grimoire-plan`
-6. Run the QA **loop** (`grimoire-loop`) — internally triggers **implement → check → review → test → fix** until clean, all model-invoked
-7. **Commit** the result with `commit`
-
-**Simple workflow** (for straightforward tasks):
-
-```
-grimoire-init  →  refine  →  plan  →  loop  →  commit
+```text
+Small and reversible       implement → targeted verification
+Clear multi-file change    lightweight plan → implement → targeted verification
+High-risk or cross-system  spec/plan → implement → full QA
+Independent deliverables   spec → optional slice → per-slice implementation
 ```
 
-1. **Bootstrap** with `grimoire-init`
-2. **Refine** project knowledge — **clarify** and **record** run automatically
-3. **Generate a plan** directly with `grimoire-plan`
-4. Run the QA **loop** with `grimoire-loop`
-5. **Commit** the result
+`clarify` resolves only blocking ambiguity, `record` captures only durable knowledge, and `slice` is used when decomposition reduces delivery risk. `grimoire-loop` selects inline checks, focused sub-agents, or full parallel QA according to change risk.
 
 ---
 
@@ -122,33 +92,33 @@ Grimoire Skills are divided into two invocation modes:
 
 ### 👤 User-invoked
 
-These skills must be explicitly requested by the user. They have `disable-model-invocation: true`.
+These skills require explicit user selection. They have `disable-model-invocation: true`.
 
-| Skill                                                      | Description                                                                                          |
-| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**         | Create, review, and refactor agent skills for predictable execution                                  |
-| 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | Bootstrap `.grimoire` project knowledge directory and register with agent configs                    |
-| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | Discuss with the user to update project knowledge and refine requirements                            |
-| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | Synthesize context, repo structure, domain knowledge & ADRs into structured spec documents           |
-| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | Decompose a spec into vertical-slice tickets — each independently demonstrable, context-window sized |
-| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**     | Generate a code-level implementation plan from a ticket, spec, or conversation                       |
-| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | Orchestrate implement → check + review + test → fix loop until clean, then format                    |
-| ✍️ **[commit](./skills/commit/SKILL.md)**                   | Write Conventional Commits messages with gitmoji and execute the commit                              |
+| Skill | Description |
+| --- | --- |
+| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)** | Create, review, and prune agent skills |
+| 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)** | Bootstrap optional `.grimoire` project knowledge |
+| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | Resolve material uncertainty and recommend the smallest useful workflow |
+| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)** | Produce proportionate specs from requirements and relevant context |
+| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)** | Decompose requirements into coherent value or enabling tickets |
+| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | Produce a risk-scaled, revisable implementation plan |
+| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)** | Run adaptive implementation and QA based on change risk |
+| ✍️ **[commit](./skills/commit/SKILL.md)** | Prepare and execute an approved Conventional Commit |
 
 ---
 
 ### 🤖 Model-invoked
 
-These skills are automatically discovered and triggered by the agent based on context.
+These skills are available when their behavior fits the current task; they should not force the rest of the pipeline.
 
-| Skill                                                            | Description                                                                                  |
-| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)**     | Round-based Q&A that builds a design tree — every implicit assumption resolved before action |
-| 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)**       | Watch conversations and record domain terminology, ADRs into `.grimoire` knowledge store     |
-| ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | Implement production code from a plan — lifecycle boundaries, composition, surgical changes  |
-| ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | Audit code against plan — identify every match, gap, deviation, and extra                    |
-| 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)**       | Systematic code review — correctness & maintainability, blocking vs suggestions              |
-| 🧪 **[grimoire-test](./skills/grimoire-test/SKILL.md)**           | Write unit tests that verify module behavior through isolated, well-structured test cases    |
+| Skill | Description |
+| --- | --- |
+| 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)** | Resolve only material blocking ambiguity |
+| 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)** | Maintain durable project terminology and decisions |
+| ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | Implement from a clear plan, ticket, spec, or conversation |
+| ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)** | Audit behavior against intent, criteria, artifacts, and evidence |
+| 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)** | Review with evidence-backed severity and confidence |
+| 🧪 **[grimoire-test](./skills/grimoire-test/SKILL.md)** | Write proportionate tests using appropriate structures and boundaries |
 
 ---
 
@@ -158,7 +128,7 @@ These skills are automatically discovered and triggered by the agent based on co
 | ---------------------------- | ------------------------------------------------------------------------------------- |
 | 🥇 **One source of truth**    | Every rule defined once, referenced everywhere. No duplication, no drift.             |
 | 🚦 **Observable completion**  | Every step ends with a condition the agent can check. Not "done when it feels right." |
-| 📐 **Clear boundaries**       | Scope is always one sentence. If it can't fit in one sentence, split it.              |
+| 📐 **Coherent boundaries**    | Keep work together when it shares intent, risk, and verification; split when separation reduces coupling. |
 | 🧹 **Ruthless pruning**       | If it doesn't shape execution, it doesn't stay. Documentation is not a feature.       |
 | 🗺️ **Progressive disclosure** | Essentials inline, deep dives in `references/`. Loaded on demand, not by default.     |
 | 🎮 **Invocation ownership**   | The skill declares who invokes it — the model or the user. Neither side guesses.      |

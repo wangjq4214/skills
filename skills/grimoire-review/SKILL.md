@@ -1,125 +1,82 @@
 ---
 name: grimoire-review
-description: Systematic code review that prioritizes correctness and maintainability, distinguishes blocking issues from suggestions, and uses objective constructive language.
+description: Review code changes using evidence-backed severity, confidence, and risk-relevant lenses.
 ---
 
 # Purpose
 
-Systematic code review that prioritizes correctness and maintainability, distinguishes blocking issues from suggestions, and uses objective, constructive language.
+Identify concrete correctness, security, maintainability, architecture, and performance risks without turning uncertainty or stylistic preference into blockers.
 
 # Scope
 
-This skill controls how code changes are reviewed and how feedback is structured and delivered.
-
-Outside scope: writing or modifying code, executing tests, merging changes, deployment.
+This skill reviews code and reports findings. It may execute targeted read-only verification when needed; it does not modify production code unless the user separately authorizes fixes.
 
 # Leading words
 
-- **finding** — a single observed issue or observation in the code
-- **blocking** — must be resolved before merge
-- **suggestion** — optional improvement; author decides
-- **severity** — classification of a finding (blocking, suggestion, or praise)
+- **blocking** — evidenced issue that prevents safe acceptance
+- **needs-verification** — plausible concern lacking enough evidence to block
+- **suggestion** — optional improvement
+- **praise** — concrete strength worth preserving
+- **confidence** — high, medium, or low confidence in the evidence
 
 # Workflow
 
 ## 1. Understand context
 
-Read the changes (diff, files, or PR description).
+Infer purpose from the diff, tests, issue, and surrounding code. Ask only when competing interpretations materially change the verdict; otherwise state the working interpretation.
 
-Identify:
-
-- what problem does this change solve?
-- what is the design intent behind the approach?
-- what constraints shape the solution (existing architecture, deadlines, dependencies)?
-
-Completion: a one-sentence summary of the change's purpose. If the purpose is unclear, ask the author before continuing.
+Completion: Purpose and assumptions are explicit.
 
 ---
 
-## 2. Review by category
+## 2. Review relevant risks
 
-Examine the code through each lens in order of priority. For each category: list findings or confirm the category is clean.
+Always consider correctness and security when behavior can change. Examine architecture, maintainability, performance, compatibility, concurrency, or domain-specific risks when the diff can affect them. Skip irrelevant lenses without producing empty confirmations.
 
-| Priority | Category            | Key question                                                                                             |
-| -------- | ------------------- | -------------------------------------------------------------------------------------------------------- |
-| 1        | **Correctness**     | Does the code do what it claims? Are edge cases, nulls, and errors handled? Is there potential for bugs? |
-| 2        | **Architecture**    | Do the components fit the system design? Are boundaries and dependency direction respected?              |
-| 3        | **Maintainability** | Will future developers understand this? Is naming clear? Is complexity justified or accidental?          |
-| 4        | **Security**        | Are inputs validated? Is sensitive data protected? Are there injection, leak, or escalation risks?       |
-| 5        | **Performance**     | Are there unnecessary allocations, blocking calls, N+1 queries, or algorithmic hotspots?                 |
-
-Rules:
-
-- Skip correctness and security only when the change is trivial (typo fix, config value).
-- Skip performance only when the change has no measurable impact (UI text, documentation).
-- Skip formatting entirely if the project has an auto-formatter or established style guide.
-
-Completion: every applicable category has been examined. Findings are listed per category.
+Completion: Material risks introduced or exposed by the change have been examined.
 
 ---
 
-## 3. Classify severity
+## 3. Verify and classify
 
-Assign severity to each finding using the classification guide.
+Use targeted inspection or executable checks to resolve uncertainty when practical. Assign severity and confidence:
 
-Quick reference:
+- **blocking** — reproducible incorrect behavior, security exposure, data loss, violated acceptance criterion, regression, or concrete architectural breakage.
+- **needs-verification** — credible impact requiring unavailable context, authority, or execution evidence.
+- **suggestion** — useful but optional improvement.
+- **praise** — specific good decision worth retaining.
 
-- **blocking** — incorrect behavior, security vulnerability, data loss risk, architectural violation that causes future breakage, regression from existing behavior
-- **suggestion** — alternative approach worth considering, readability improvement, minor optimization, style inconsistency, naming preference
+Never promote uncertainty to blocking merely to be safe. Drop observations without concrete impact. See [references/severity-guide.md](./references/severity-guide.md).
 
-Rules:
-
-- When uncertain between blocking and suggestion, label it blocking and ask the author to decide.
-- Praise good design choices explicitly; label as **praise**.
-- Drop findings that have no concrete impact. Every observation must explain why it matters.
-
-See: [references/severity-guide.md](./references/severity-guide.md)
-
-Completion: every finding has a severity label. No zero-impact observations remain.
+Completion: Every finding has evidence, impact, severity, and confidence.
 
 ---
 
 ## 4. Write review
 
-For each finding, write:
+For each finding provide location, observation, concrete impact, evidence, recommendation, severity, and confidence. Keep one issue per finding. Discuss tradeoffs when several approaches are valid.
 
-1. **Location** — file:line or code snippet
-2. **Observation** — what was found, described objectively
-3. **Impact** — why it matters in concrete terms
-4. **Recommendation** — what to do, actionable and specific
-5. **Severity** — blocking | suggestion | praise
+Describe code rather than the author, and distinguish verified facts from inference.
 
-Language rules:
-
-- Describe code, not author: "This function has a race condition" not "You wrote a race condition."
-- Use objective framing: "This query runs per-row; batching would reduce round-trips" not "This is inefficient."
-- Offer reasoning, not commands: "Consider extracting this to a helper because the same logic appears in three places" not "Extract this to a helper."
-- When multiple valid approaches exist, frame as tradeoff discussion, not correction.
-
-Completion: every finding has all five fields. Language is objective and constructive.
+Completion: Findings are actionable and objectively framed.
 
 ---
 
 ## 5. Summarize
 
-Provide:
+State readiness, confirmed blocker count, needs-verification items, suggestion count, and important themes. Do not imply a clean review when required evidence could not be obtained.
 
-- Overall assessment (1–2 sentences on readiness)
-- Count of blocking issues (with brief list)
-- Count of suggestions
-- Any themes or patterns observed across findings
-
-Completion: summary is delivered. Review is ready for author consumption.
+Completion: The summary accurately reflects both findings and evidence limits.
 
 ---
 
 # Rules
 
-- Never review formatting if the project has an auto-formatter or established style guide — skip to substance.
-- One finding per issue. Do not bundle unrelated observations into one finding.
-- Respect author design choices. When multiple approaches are valid, frame as tradeoff discussion, not correction.
-- If the change's purpose is unclear from context, ask before reviewing. Review without understanding is noise.
-- Severity classification details live in [references/severity-guide.md](./references/severity-guide.md). SKILL.md controls workflow only.
+- Blocking requires concrete evidence or a directly violated contract.
+- Resolve testable uncertainty before reporting; otherwise use needs-verification.
+- Skip formatting when automated tooling owns it.
+- Respect valid design alternatives and explain tradeoffs.
+- Review scope follows change risk, not a mandatory category checklist.
 
 ---
 

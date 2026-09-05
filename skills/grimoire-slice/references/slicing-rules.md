@@ -1,192 +1,55 @@
 # Slicing Rules
 
-How to decompose a requirement into vertical slices — project-type agnostic.
+Choose a decomposition that preserves coherent delivery and exposes real dependencies.
 
 ---
 
-## Vertical Slice Definition
+## Slice shapes
 
-A vertical slice is a narrow but complete path through every architectural layer of the project:
+- **Vertical value slice** — delivers an externally observable scenario across the surfaces it needs.
+- **Enabling slice** — creates a shared capability with independent verification and multiple proven consumers.
+- **Migration slice** — safely changes data, protocol, or infrastructure with rollout/rollback evidence.
+- **Component slice** — changes one bounded component when its contract can be tested independently.
+- **Operational/documentation slice** — delivers an observable operational or user-support outcome.
 
-```
-     ┌──────────────────┐
-     │  layer N         │  ← final observable output (UI, CLI output, API response, physical action)
-     ├──────────────────┤
-     │  ...             │
-     ├──────────────────┤
-     │  layer 2         │
-     ├──────────────────┤
-     │  layer 1         │  ← foundational data/input layer
-     └──────────────────┘
-```
-
-The layers are discovered from the project (see SKILL.md step 3), not assumed.
-
-A horizontal slice (anti-pattern):
-
-```
-     ┌──────────────────┐
-     │  layer N         │  ← all work in one layer, nothing else
-     └──────────────────┘
-     ┌──────────────────┐
-     │  layer N-1       │  ← all work in another layer
-     └──────────────────┘
-```
-
-Horizontal slices cannot be demonstrated until all layers are complete. Vertical slices produce an observable outcome after each slice.
+Vertical value slices are preferred for user-facing behavior, but horizontal work is not inherently an anti-pattern.
 
 ---
 
-## Slicing Procedure
+## Procedure
 
-### Step 1: Extract observable scenarios
+### 1. Extract outcomes
 
-Start from externally observable scenarios:
+Map every user requirement or acceptance criterion to an observable outcome, invariant, migration milestone, or enabling capability.
 
-- If a spec exists: use its E2E tests or acceptance criteria.
-- If from conversation: derive scenarios by asking "What would an external observer see, receive, or measure at each step?" Walk through the user's goal and extract every distinct interaction or outcome.
+### 2. Size coherently
 
-Examples by project type:
+Prefer work that fits one implementation context. Split by value, risk, lifecycle, rollout stage, or independently testable contract. Keep tightly coupled behaviors together when separation would create incomplete states or repeated coordination.
 
-| Project type | Observable scenario source |
-|---|---|
-| Web app | User interactions in the browser |
-| CLI tool | Command invocations and their stdout/stderr/exit codes |
-| Library/SDK | Public API calls and their return values / side effects |
-| Embedded | Physical outputs, sensor readings, communication packets |
-| Data pipeline | Query results, data quality metrics, output artifacts |
-| Mobile app | Screen transitions, user interactions, notifications |
+### 3. Place shared work
 
-### Step 2: Size check
+Put setup/refactoring into the first consumer unless it serves multiple tickets and can be verified independently. Do not create a global pre-refactoring ticket merely because several slices touch similar code.
 
-For each candidate slice, estimate implementation scope:
+### 4. Record affected surfaces
 
-- **Fits one context window**: keep as one slice.
-- **Too large**: split further. Common splits (project-type-agnostic):
-  - Happy path → Error path
-  - Simple input → Complex/edge-case input
-  - Create → Update → Delete
-  - Read → Write
-  - Core behavior → Feedback/polish states
-- **Too small**: merge with a neighboring slice. Test: "Can this be demonstrated meaningfully on its own?" If the demo would be trivial or invisible, merge.
+List only modules, layers, contracts, or operational surfaces the ticket changes. Verify that all necessary surfaces are covered across the ticket set, not inside every ticket.
 
-### Step 3: Identify cross-cutting work
+### 5. Prove dependencies
 
-After all slices are defined, look for work that every slice needs:
-
-- Does every slice need a shared data structure? → pre-refactoring
-- Does every slice need a common entry point or interface skeleton? → pre-refactoring
-- Does every slice need a shared output format or rendering skeleton? → pre-refactoring
-
-Promote cross-cutting work to pre-refactoring. It becomes T0001.
-
-### Step 4: Assign layer coverage
-
-For each slice, list exactly what changes in each confirmed layer.
-
-Test: "If I only implement this slice, can the outcome be observed and verified?"
-
-- If no: the slice is missing a layer. Add it or justify the absence.
-- If yes: the slice is vertically complete.
-
-### Step 5: Verify independence
-
-For each slice, answer: "What must exist before this slice can be demonstrated?"
-
-- Pre-refactoring is the expected answer for most slices.
-- If slice A needs something created by slice B, then B blocks A. This is a dependency, not a slice error.
-- If slice A cannot be demonstrated even after its blockers are resolved, the slice is too thin — merge with an adjacent slice.
+A ticket blocks another only when the consumer cannot be implemented or verified first. Shared files are merge risks; shared contracts can often be coordinated without serializing implementation.
 
 ---
 
-## Slice Quality Checks
+## Quality checks
 
-### Good slice (web app, layers: data store → service → API → UI → tests)
+A good ticket has a coherent outcome, evidence-based dependencies, testable acceptance, manageable scope, and explicit coordination risks.
 
-```
-T0002: OAuth2 Login — Happy Path
-data store: users table
-service: user lookup-or-create
-API: GET /auth/google, GET /auth/google/callback
-UI: LoginPage, DashboardHeader, ProtectedRoute
-tests: E2E full flow, API callback test, UI redirect test
+Warning signs:
 
-Demo after completion: click button → Google consent → dashboard with name
-```
+- A ticket exists only to satisfy a layer checklist.
+- Splitting creates non-compiling or non-verifiable intermediate states.
+- A shared-file conflict is represented as a business dependency.
+- Enabling work blocks tickets that do not actually consume it.
+- A context-window estimate overrides a more coherent atomic change.
 
-Cuts through all layers. One user-visible outcome. Demo is a complete flow.
-
-### Good slice (CLI tool, layers: data model → core → CLI → output → tests)
-
-```
-T0002: Config file validation
-data model: Config struct with validation
-core: validate() method
-CLI: validate subcommand
-output: human-readable errors, --json flag
-tests: unit tests, integration tests against fixtures
-
-Demo after completion: run `tool validate --config bad.yaml` → sees specific errors
-```
-
-### Bad slice (horizontal)
-
-```
-T0002: Create all data models and migrations
-data store: all tables
-service: —
-API: —
-UI: —
-tests: —
-```
-
-No upper layers. Cannot be demonstrated to anyone. This is a horizontal fragment.
-
-### Bad slice (too thin)
-
-```
-T0002: Create users table migration
-data store: users table
-service: —
-API: —
-UI: —
-tests: —
-```
-
-Only one layer. Not demonstrable alone.
-
-### Bad slice (too broad)
-
-```
-T0002: Complete authentication system
-(data store: users, sessions, password_resets; service: all auth logic; API: all endpoints; UI: all pages; tests: everything)
-```
-
-Fits multiple context windows. Split by scenario.
-
----
-
-## Context Window Fit
-
-A ticket fits one context window when:
-
-- An agent can read the ticket, read the relevant codebase portions, and implement the complete slice without truncation.
-- As a heuristic: the ticket should describe no more than 3–5 files of substantial change, plus tests.
-- If the Approach section runs beyond 10 steps, the slice is probably too large.
-
-When uncertain, err on the side of smaller slices. A too-small slice can be merged. A too-large slice causes context overflow and incomplete implementation.
-
----
-
-## Pre-refactoring Boundary
-
-Pre-refactoring stops and vertical slicing begins at this boundary:
-
-| Pre-refactoring (T0001)              | First vertical slice (T0002)       |
-| ------------------------------------ | ---------------------------------- |
-| Define shared data structures/types  | Use them in a specific scenario    |
-| Set up toolchain/library/imports     | Apply them to a specific task      |
-| Create skeleton interfaces/contracts | Implement one concrete path        |
-| Add configuration/error framework    | Handle one specific case           |
-
-Pre-refactoring sets the stage. Vertical slices perform.
+When uncertain, choose the boundary that minimizes incomplete states and coordination overhead.
