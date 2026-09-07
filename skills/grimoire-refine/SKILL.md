@@ -1,12 +1,29 @@
 ---
 name: grimoire-refine
-description: Discuss with the user to update project knowledge and refine requirements.
+description: Resolve requirements and coordinate the appropriate spec, slice, and planning handoffs.
 disable-model-invocation: true
 ---
 
 # Purpose
 
-Discuss with the user to update project knowledge and refine requirements.
+Turn discussion into actionable intent and coordinate the next appropriate specialist. Refine owns clarification and routing, not a parallel spec-writing or ticket-generation method.
+
+# Skill composition
+
+Default delivery route: **refine → spec → slice → plan → loop**. This is a map of responsibilities, not a requirement to create every artifact.
+
+Use skills for work being performed now, not merely because they appear later in the delivery route:
+
+| Current work                               | Skill to use when needed |
+| ------------------------------------------ | ------------------------ |
+| Resolve material ambiguity                 | `grimoire-clarify`       |
+| Capture durable terminology or decisions   | `grimoire-record`        |
+| Produce or revise an authorized spec       | `grimoire-spec`          |
+| Produce or revise an authorized ticket set | `grimoire-slice`         |
+
+Use the selected skill by name when its work begins. Discussing requirements does not require spec or slice, and recommending a next step does not require loading it. `grimoire-plan`, `grimoire-loop`, and `grimoire-implement` are possible follow-up workflows, not dependencies of refinement.
+
+A handoff carries resolved intent, constraints, acceptance criteria, relevant artifact paths, unresolved assumptions, and authorization limits. Discussion-only requests end with a recommendation. If further work is already authorized, continue with the next applicable skill when refinement is complete, within that scope and the host's invocation rules; no repeated approval is needed solely for crossing a skill boundary. If a needed skill is unavailable, disclose the limitation and any fallback.
 
 # Workflow
 
@@ -14,45 +31,57 @@ Discuss with the user to update project knowledge and refine requirements.
 
 Determine the minimum refinement needed for the current request:
 
-- **Ready** — the goal and constraints are sufficient; no supporting skill load is required. Summarize working assumptions and recommend or continue direct execution.
-- **Targeted clarification** — a few material decisions are unresolved; load grimoire-clarify and use only the relevant decision steps. Load grimoire-record only if durable knowledge emerges.
-- **Full refinement** — multiple domains, irreversible decisions, or substantial ambiguity justify loading both grimoire-clarify and grimoire-record.
+- **Ready** — the goal and constraints are sufficient; skip clarification and route to the requested work.
+- **Targeted clarification** — a few material decisions are unresolved; use grimoire-clarify at the relevant depth. Use grimoire-record only if durable knowledge emerges.
+- **Full refinement** — multiple domains, irreversible decisions, or substantial ambiguity justify both clarify and record.
 
-Completion: The refinement depth matches the task's uncertainty and risk.
+Completion: Refinement depth and the boundary of authorized work are explicit.
 
 ---
 
 ## 2. Discuss
 
-Resolve material uncertainties without turning the discussion into a mandatory ceremony. Use direct tools for targeted repository facts; use sub-agents for broad or independent research. Record durable domain knowledge or architectural decisions as they emerge, but do not record transient implementation details.
+Resolve material uncertainties without turning the discussion into a mandatory ceremony. Use direct tools for targeted repository facts; use sub-agents for broad or independent research. Record durable domain knowledge or architectural decisions through grimoire-record as they emerge, but do not record transient implementation details.
 
-When the request becomes actionable, stop refining. If the user asked this skill only for discussion, do not execute the objective; otherwise hand off or continue according to the user's request.
+Stop refining when the request becomes actionable. Capture outcomes, constraints, and observable acceptance criteria compactly enough for the next skill; this handoff summary is not a substitute for a requested spec or ticket set.
 
-Completion: Blocking uncertainty is resolved, assumptions are explicit, and qualifying durable knowledge is recorded.
+Completion: Blocking uncertainty is resolved, assumptions are explicit, and qualifying durable knowledge is recorded within authorized scope.
 
 ---
 
-## 3. Recommend next action
+## 3. Select the delivery route
 
-Choose the smallest workflow that manages the actual risk:
+Start with the default route and omit stages that add no decision or verification value:
 
-| Signal | Recommended path |
-| --- | --- |
-| Small, local, reversible change | implement directly → targeted verification |
-| Well-understood multi-file change | lightweight plan → implement → targeted verification |
-| Multiple interacting components or high-risk behavior | spec or plan → implement → full QA |
-| Multiple independently deliverable outcomes | spec → optional slice → per-slice plan/implement |
+| Signal                                                          | Default path                                                               |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Small, local, reversible change                                 | implement with targeted verification; loop if iterative QA was requested   |
+| Clear single outcome with material design choices               | plan → loop                                                                |
+| Cross-system or high-risk requirement needing a shared contract | spec → plan when useful → loop                                             |
+| Multiple independently deliverable outcomes                     | spec → slice → per-ticket plan when useful → loop                          |
+| Existing adequate spec or tickets                               | enter at the next needed stage; reuse the source rather than regenerate it |
+| Explicit ticket request with clear, bounded requirements        | slice directly; spec only if a requirement contract is missing and useful  |
 
-State the recommendation with a concrete reason. The recommendation is guidance, not a gate: follow the user's requested action when it is safe and feasible.
+The model may combine passes, change order, or return upstream when new evidence changes assumptions. Preserve user-requested artifacts and essential verification; skip ceremony, not responsibilities. Briefly explain material departures, such as omitting a spec because an existing source already captures the contract.
 
-Completion: The user receives an appropriately scaled next action, or execution continues when already requested.
+Completion: The selected route has a concrete reason, avoids redundant artifacts, and covers the requested outcome.
+
+---
+
+## 4. Hand off or continue
+
+Recommend the next useful action and its expected result without loading its skill just to make the recommendation. If the request includes writing a spec or ticket set, use grimoire-spec or grimoire-slice respectively instead of creating a parallel method inside refine.
+
+When refinement is complete, hand off to planning or implementation only if that further work is authorized. Carry forward intent and new evidence; revisit only affected decisions rather than restarting the entire route. Ask before changing approved scope or committing an irreversible decision.
+
+Completion: Refinement is complete with the requested requirement artifacts, if any, and an actionable next step. Any authorized follow-up begins as the next workflow, not as a prerequisite for finishing refine.
 
 ---
 
 # Rules
 
-- Load only the supporting skills needed for the chosen refinement depth.
-- Record durable knowledge as it becomes clear; do not interrupt the user for low-value documentation.
-- Ask the user only about material choices or facts unavailable through tools.
+- Default to specialist composition; adapt depth, order, and artifacts to the task.
+- Load only skills and references needed for current work; a recommended route is not a preload list.
+- Ask only about material choices or facts unavailable through tools.
 - Do not keep refining after the request is actionable.
-- Recommend the smallest workflow that adequately manages risk.
+- A handoff preserves intent and evidence, not a frozen implementation prescription.

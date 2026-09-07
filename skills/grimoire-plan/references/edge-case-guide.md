@@ -6,39 +6,27 @@ Use this guide during step 5 (Identify Edge Cases) to filter meaningful edge cas
 
 # Inclusion Criteria
 
-A condition is worth listing as an edge case when it meets ALL three:
+Use the risk criterion in [grimoire-plan](../SKILL.md) to choose cases. Consider:
 
-1. **Real probability**: The condition can occur in production with non-zero frequency. If it requires an unlikely combination of failures, skip it.
-
-2. **Silent corruption**: Missing this case would produce incorrect results, data corruption, or a crash — not just a generic error message the system already handles.
-
-3. **Not already covered**: The codebase's existing patterns (validation middleware, type system, framework error handling) do not already prevent this condition.
+- **Plausibility and impact**: Identify a concrete production scenario and its consequence. Rare failures can matter when they threaten security, data integrity, or recovery.
+- **Changed behavior**: Focus on boundaries and failure modes the change introduces, depends on, or could invalidate.
+- **Existing protection**: Reuse verified validation, type guarantees, framework behavior, and tests rather than duplicating them. Check that those protections apply to the actual path.
 
 ---
 
-# Exclusion Criteria
+# Common Filtering Decisions
 
-## Skip: Null/undefined at internal boundaries
+## Null/undefined and type guarantees
 
-If the value comes from within the same process and the type system enforces non-null, do not list null checks as edge cases.
+Omit defensive cases that the type system demonstrably prevents on the relevant path. Include nullable internal state or unchecked runtime values when they can actually occur; process location alone does not prove safety.
 
-Only list null/undefined when the value crosses a trust boundary: external API response, user input, database read, message queue payload.
+## Infrastructure failures
 
-## Skip: Infrastructure failures
+Investigate database outages, timeouts, or disk exhaustion when their effect matters to the change: partial writes, retries, duplicate effects, lost work, or recovery. A framework's generic error response is adequate only when it preserves the required behavior. Reuse existing failure coverage when it remains applicable.
 
-Skip "database is down", "network timeout", "disk full" unless:
-- The plan specifically touches connection handling, retry logic, or timeout configuration.
-- The system has a custom failure mode that differs from the framework default.
+## Adversarial interface use
 
-Otherwise, the framework/ORM already handles these with standard error responses.
-
-## Skip: Type-system-prevented conditions
-
-If the language's type system makes a condition impossible (e.g., enum exhaustiveness in Rust, sealed classes in Kotlin), do not list it.
-
-## Skip: "User does X weird"
-
-Do not list edge cases that require the user to willfully bypass the normal interface. If a user manually edits the URL, curl's an internal endpoint, or modifies the DOM, that's a security concern, not an edge case for this plan.
+Direct endpoint requests, edited URLs, and modified DOM state can expose authorization, validation, or trust-boundary failures. Include these when relevant to the feature's security contract, regardless of whether the normal UI permits the action. Skip speculative attack lists unrelated to the changed surface.
 
 ---
 

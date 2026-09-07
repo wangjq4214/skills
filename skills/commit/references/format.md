@@ -28,38 +28,38 @@ No blank line between gitmoji and type. One space between each token.
 
 Pick exactly one emoji. Match the primary intent, not every side effect.
 
-| Gitmoji | Type(s)           | Intent                                 |
-| ------- | ----------------- | -------------------------------------- |
-| ✨       | `feat`            | New feature                            |
-| 🐛       | `fix`             | Bug fix                                |
-| 📝       | `docs`            | Documentation                          |
-| 🎨       | `style`           | Formatting / style                     |
-| ♻️       | `refactor`        | Code restructuring                     |
-| ⚡       | `perf`            | Performance                            |
-| ✅       | `test`            | Tests                                  |
-| 👷       | `build`           | Build system                           |
-| 💚       | `ci`              | CI/CD                                  |
-| 🔧       | `chore`           | Configuration / tooling                |
-| ⏪       | `revert`          | Revert                                 |
-| 🔥       | `chore`, `refactor` | Remove code/files                    |
-| 🚀       | `feat`, `build`   | Deploy / release                       |
-| 🔒       | `fix`, `feat`     | Security                               |
-| 🚨       | `test`, `fix`     | Linting / failing tests                |
-| 🩹       | `fix`             | Simple/hot fix                         |
-| 💡       | `docs`, `refactor` | Add or update comments                |
+| Gitmoji | Type(s)             | Intent                  |
+| ------- | ------------------- | ----------------------- |
+| ✨       | `feat`              | New feature             |
+| 🐛       | `fix`               | Bug fix                 |
+| 📝       | `docs`              | Documentation           |
+| 🎨       | `style`             | Formatting / style      |
+| ♻️       | `refactor`          | Code restructuring      |
+| ⚡       | `perf`              | Performance             |
+| ✅       | `test`              | Tests                   |
+| 👷       | `build`             | Build system            |
+| 💚       | `ci`                | CI/CD                   |
+| 🔧       | `chore`             | Configuration / tooling |
+| ⏪       | `revert`            | Revert                  |
+| 🔥       | `chore`, `refactor` | Remove code/files       |
+| 🚀       | `feat`, `build`     | Deploy / release        |
+| 🔒       | `fix`, `feat`       | Security                |
+| 🚨       | `test`, `fix`       | Linting / failing tests |
+| 🩹       | `fix`               | Simple/hot fix          |
+| 💡       | `docs`, `refactor`  | Add or update comments  |
 
 ## Scope Rules
 
 - Lowercase, hyphenated for multi-word: `token-refresh`, `user-auth`
 - Use the module, package, directory, or component name
 - When changes span multiple scopes, pick the most affected one
-- Omit scope (empty parentheses) only when the change is truly project-wide (`chore` type or monorepo root changes)
+- For truly project-wide changes with no useful scope, omit both scope and parentheses: `<gitmoji> <type>: <summary>`.
 
 ## Summary Rules
 
 - Imperative mood: "add" not "adds" or "added"
 - No trailing period
-- 50–72 characters (ideal ≤ 50, hard max 72)
+- Aim for 50 characters or fewer; maximum 72. There is no minimum length: preserve meaning without padding.
 - Lowercase first letter unless it is a proper noun
 
 ## Body Rules
@@ -74,11 +74,11 @@ Pick exactly one emoji. Match the primary intent, not every side effect.
 
 ### Monorepo with multiple changed packages
 
-Pick the package that has the most meaningful change. If changes are truly independent across packages, commit them separately.
+Pick the package with the most meaningful change. If staged changes are genuinely independent and separate commits would improve clarity, propose that split for the user to arrange; this skill does not repartition the index.
 
 ### Generated files (lockfiles, build artifacts)
 
-Use `chore` or `build`. No body needed unless the diff is unusual.
+For standalone tooling or generated-file maintenance, `chore` or `build` often fits. When generated changes accompany a feature or fix, classify the whole commit by its primary intent rather than the generated file volume.
 
 ### Merge commits
 

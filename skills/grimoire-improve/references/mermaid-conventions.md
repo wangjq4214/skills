@@ -104,17 +104,19 @@ classDiagram
 
 ### Before: Speculative abstraction (problem)
 
+Use this example only when the trait adds cost without current boundary, isolation, test-substitution, or invariant value. One implementation is only a clue, not a reason to remove it.
+
 ```mermaid
 graph TD
-    A[PaymentTrait] --> B[StripeImpl]
-    A -.->|no other impl| C[???]
+    A[Caller] --> B[PaymentTrait]
+    B -->|pass-through only| C[StripeImpl]
 ```
 
 ### After: Speculative abstraction (fix)
 
 ```mermaid
 graph TD
-    B[StripePayment] 
+    A[Caller] --> B[StripePayment]
 ```
 
 ---

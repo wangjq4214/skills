@@ -1,98 +1,44 @@
 # Format Detection
 
-Detection logic for step 5 (Format). Identify and run the project's formatter on modified files.
+Use during loop's Format and report step when the project's formatting approach is unclear. The permission and verification rules in [grimoire-loop](../SKILL.md) govern execution; this reference helps select tooling and scope.
 
----
+## Determine the project's convention
 
-## Detection order
+Inspect package/build scripts, contributor instructions, CI commands, installed tooling, and configuration applicable to the changed files. In a monorepo, inspect the affected package and inherited root settings; root configuration alone may not govern every file.
 
-Check for config files in project root. First match wins per language group.
+Use evidence of the maintained workflow to choose among tools. Coexisting configurations are not a first-match contest: they may apply to different paths or represent a migration. Resolve material conflicts from repository evidence, asking only when the intended convention remains consequentially ambiguous.
 
-### JavaScript / TypeScript / JSX / TSX / Vue / Svelte
+## Candidate tools
 
-| Config file                                                                                                                                                                       | Formatter                                  | Command                            |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ---------------------------------- |
-| `.prettierrc`, `.prettierrc.json`, `.prettierrc.yaml`, `.prettierrc.js`, `.prettierrc.mjs`, `.prettierrc.cjs`, `prettier.config.js`, `prettier.config.mjs`, `prettier.config.cjs` | prettier                                   | `npx prettier --write <files>`     |
-| `.editorconfig` (no prettier config)                                                                                                                                              | (use editorconfig-aware formatter or skip) | —                                  |
-| `deno.json`, `deno.jsonc` (with `"fmt"` config)                                                                                                                                   | deno fmt                                   | `deno fmt <files>`                 |
-| `biome.json`, `biome.jsonc`                                                                                                                                                       | biome                                      | `npx biome format --write <files>` |
-| None found                                                                                                                                                                        | prettier (default for JS/TS)               | `npx prettier --write <files>`     |
+These are discovery hints, not defaults to install or unconditional commands to execute. Prefer the project's pinned tool and runner. Select the installed version's check/write options and file filters after inspecting its invocation.
 
-### Rust
+| Language                           | Evidence to inspect                                                                     | Candidate tooling                                   |
+| ---------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| JS / TS / JSX / TSX / Vue / Svelte | Package scripts, Prettier configuration or package key, `biome.json[c]`, `deno.json[c]` | Prettier, Biome, Deno formatter                     |
+| Rust                               | Cargo scripts/CI, `rustfmt.toml`, `.rustfmt.toml`, toolchain configuration              | cargo fmt / rustfmt                                 |
+| Python                             | Project scripts, `pyproject.toml`, `ruff.toml`, `.ruff.toml`, CI                        | Ruff formatter, Black, project-selected alternative |
+| Go                                 | Project scripts, CI, module/tool dependencies                                           | gofmt, goimports                                    |
+| C / C++                            | Build scripts, `.clang-format`                                                          | clang-format                                        |
+| Java / Kotlin                      | Maven/Gradle tasks and plugins, ktlint configuration                                    | Spotless, ktlint, project-selected formatter        |
+| C# / .NET                          | Project/solution scripts, `.editorconfig`, build properties                             | dotnet format                                       |
+| Dart / Flutter                     | Project scripts, `pubspec.yaml`, SDK version                                            | dart format                                         |
 
-| Config file                     | Formatter         | Command     |
-| ------------------------------- | ----------------- | ----------- |
-| `rustfmt.toml`, `.rustfmt.toml` | rustfmt           | `cargo fmt` |
-| None found (Cargo.toml exists)  | rustfmt (default) | `cargo fmt` |
+`.editorconfig` can supply formatting settings but does not by itself select an executable. If no formatter is established or available, report the limitation rather than adopting a new one solely because the language is recognized. Tool installation is a separate dependency/network action, not implicit formatting permission.
 
-### Python
+## Select an invocation within scope
 
-| Config file                          | Formatter       | Command               |
-| ------------------------------------ | --------------- | --------------------- |
-| `pyproject.toml` with `[tool.black]` | black           | `black <files>`       |
-| `pyproject.toml` with `[tool.ruff]`  | ruff format     | `ruff format <files>` |
-| `.ruff.toml`                         | ruff format     | `ruff format <files>` |
-| `setup.cfg` with `[black]`           | black           | `black <files>`       |
-| None found                           | black (default) | `black <files>`       |
+Build an explicit list of relevant changed files, including new files, and respect ignore/generated-file conventions. Prefer commands with exact file arguments or supported include filters. For example, when established by the project:
 
-### Go
+| Tool     | Non-writing check                                         | Authorized write           |
+| -------- | --------------------------------------------------------- | -------------------------- |
+| Prettier | `prettier --check <files>`                                | `prettier --write <files>` |
+| Ruff     | `ruff format --check <files>`                             | `ruff format <files>`      |
+| Black    | `black --check <files>`                                   | `black <files>`            |
+| gofmt    | `gofmt -l <files>`                                        | `gofmt -w <files>`         |
+| Dart     | `dart format --output=none --set-exit-if-changed <files>` | `dart format <files>`      |
 
-| Config file     | Formatter         | Command                                  |
-| --------------- | ----------------- | ---------------------------------------- |
-| `go.mod` exists | gofmt / goimports | `go fmt ./...` or `goimports -w <files>` |
+Adapt these examples to the project's runner and installed tool version. `gofmt -l` requires inspecting its output, not just its exit code.
 
-### C / C++
+Commands such as `cargo fmt`, `go fmt ./...`, unfiltered `dotnet format`, and build-wide Spotless apply tasks can touch files outside the intended change. Check their actual scope before using them. If a safe write filter is unavailable, use a non-writing check where supported and report the limitation, or obtain authorization for the wider scope. Do not run a broad write and then revert unrelated user changes to hide its effects.
 
-| Config file     | Formatter    | Command                   |
-| --------------- | ------------ | ------------------------- |
-| `.clang-format` | clang-format | `clang-format -i <files>` |
-| None found      | skip         | —                         |
-
-### Java
-
-| Config file                    | Formatter           | Command                |
-| ------------------------------ | ------------------- | ---------------------- |
-| `pom.xml` with spotless plugin | spotless            | `mvn spotless:apply`   |
-| `build.gradle` with spotless   | spotless            | `gradle spotlessApply` |
-| `.editorconfig`                | (use IDE formatter) | —                      |
-| None found                     | skip                | —                      |
-
-### Kotlin
-
-| Config file                            | Formatter        | Command               |
-| -------------------------------------- | ---------------- | --------------------- |
-| `.editorconfig` with `[*.kt]`          | ktlint           | `ktlint -F <files>`   |
-| `pom.xml` / `build.gradle` with ktlint | ktlint via build | depends on build tool |
-
-### C# / .NET
-
-| Config file             | Formatter     | Command         |
-| ----------------------- | ------------- | --------------- |
-| `.editorconfig`         | dotnet format | `dotnet format` |
-| `Directory.Build.props` | dotnet format | `dotnet format` |
-
-### Dart / Flutter
-
-| Config file           | Formatter   | Command               |
-| --------------------- | ----------- | --------------------- |
-| `pubspec.yaml` exists | dart format | `dart format <files>` |
-
----
-
-## Execution rules
-
-1. Detect language(s) from modified files' extensions.
-2. For each language, scan project root for config files in detection order.
-3. Use the first matching formatter.
-4. Run the formatter only on files modified in the current implementation.
-5. If no formatter is detected for a language, skip it and note in the report.
-
-## Multi-language projects
-
-When a project contains multiple languages, run each detected formatter once. Order does not matter — formatting is idempotent.
-
-Example: a project with Rust backend and TypeScript frontend:
-```
-cargo fmt
-npx prettier --write frontend/src/**/*.ts frontend/src/**/*.tsx
-```
+For multiple tools, consider overlapping file ownership and order-sensitive transformations. After authorized formatting, inspect the diff for unexpected changes and follow loop's affected-verification rule; do not assume multiple formatters commute or share the same style.

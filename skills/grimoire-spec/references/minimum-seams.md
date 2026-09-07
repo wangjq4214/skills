@@ -4,13 +4,9 @@ A seam is an integration point where the feature touches another part of the sys
 
 ## Principle
 
-Only document seams that are necessary for the feature to function.
+Apply the inclusion rule in [grimoire-spec](../SKILL.md): document integration points needed for behavior or to preserve a required boundary.
 
-A necessary seam satisfies all of:
-
-1. The feature cannot function without it.
-2. It crosses a trust or deployment boundary (another service, external API, shared database).
-3. It has a contract that another team or module owner must honor.
+Trust or deployment crossings are useful signals, not prerequisites. An in-process module boundary also qualifies when its contract matters to correctness, ownership, or an applicable architectural decision. Describe what the two sides exchange or guarantee; avoid listing incidental call structure.
 
 ## What to exclude
 
@@ -75,4 +71,4 @@ Three seams. All cross boundaries. All necessary. The feature cannot send the ri
 | Health check        | Notification module → Orchestrator | —                              | /health endpoint          |
 ```
 
-Logger, metrics, database connection, HTTP router, config service, health check — these are infrastructure that every module uses. Including them adds noise, not clarity. They are not seams the reader needs to reason about.
+These additional rows are noise when they merely repeat standard infrastructure already covered by the feature's contracts. Include them when they carry a feature-specific requirement, such as audit logging, delivery metrics used for acceptance, or a distinct secret-management contract. Infrastructure is not automatically irrelevant.

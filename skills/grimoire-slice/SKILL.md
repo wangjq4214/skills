@@ -12,6 +12,8 @@ Convert a requirement into a ticket set sized for reliable implementation. Prefe
 
 This skill writes `.grimoire/ticket/NNNN-title/` relationship and ticket files. It does not implement code or invent missing requirements.
 
+`grimoire-plan` and `grimoire-loop` are possible follow-up workflows, not dependencies to preload. Complete the ticket set first; recommend a next step by name, or hand off when further work is already authorized.
+
 Completion: Every requirement is assigned to a coherent ticket, dependencies reflect real execution constraints, and each ticket has observable acceptance criteria.
 
 ---
@@ -20,9 +22,13 @@ Completion: Every requirement is assigned to a coherent ticket, dependencies ref
 
 ## 1. Resolve input
 
-Use a provided spec, recent spec, or conversation requirements. Preserve multiple independent outcomes and derive a folder name. Ask only when requirement boundaries materially affect decomposition.
+Default to an existing, relevant spec as the requirement contract. Use conversation requirements directly when they already make outcomes, constraints, and acceptance clear; do not create a spec merely to satisfy an input dependency. Preserve multiple independent outcomes and derive a folder name.
 
-Completion: Input and target folder are known.
+Reading an existing spec is reading input, not invoking grimoire-spec. Resolve bounded questions from the source and repository; substantial unresolved scope or solution decisions may warrant grimoire-refine, while a needed formal contract belongs to grimoire-spec. Use those skills by name only when that work is actually needed and authorized, not as routine prerequisites. Slice may summarize its source in the ticket README, but does not generate a separate spec using its own method.
+
+Carry source paths or a concise conversation contract into the ticket set so downstream plan, implement, and check can trace acceptance to intent.
+
+Completion: Input, material requirement decisions, and target folder are known; missing contracts are routed rather than invented.
 
 ---
 

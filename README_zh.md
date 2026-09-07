@@ -28,18 +28,18 @@
 
 ## ✨ 特性
 
-| 特性 | 说明 | 作用 |
-| --- | --- | --- |
-| 🎯 **两种调用方式** | 用户可显式调用，模型也可按风险选择适用技能 | 避免误触发完整工作流 |
-| 🚦 **可验证的结果** | 对关键结果定义可检查条件 | 防止提前完成，而非制造机械步骤 |
-| 📐 **弹性职责边界** | 技能有明确主责，同时允许用户授权安全的相邻工作 | 减少不必要的来回交接 |
-| 🗺️ **按需加载** | 只读取当前决策需要的上下文和 references | 降低上下文负担 |
-| 🌲 **定点澄清** | 只询问会显著改变方向的阻塞性问题 | 保持执行动量 |
-| 🔄 **自适应 QA** | 小改动直接验证，高风险改动再并行运行完整检查 | 把成本投入真正的风险 |
-| ✂️ **弹性拆分** | 优先垂直价值切片，也支持迁移、基础设施和组件切片 | 避免人为跨层和伪依赖 |
-| 🔨 **Skill Forge** | 用于创建、审查和精简技能 | 持续提升规则信号密度 |
-| 📂 **自动初始化** | 创建 `.grimoire/` 项目知识目录 | 按需采用项目知识库 |
-| 🏷️ **版本管理就绪** | 使用 changesets 管理版本 | 支持审计与回退 |
+| 特性               | 说明                                             | 作用                           |
+| ------------------ | ------------------------------------------------ | ------------------------------ |
+| 🎯 **两种调用方式** | 用户可显式调用，模型也可按风险选择适用技能       | 避免误触发完整工作流           |
+| 🚦 **可验证的结果** | 对关键结果定义可检查条件                         | 防止提前完成，而非制造机械步骤 |
+| 📐 **弹性职责边界** | 技能有明确主责，同时允许用户授权安全的相邻工作   | 减少不必要的来回交接           |
+| 🗺️ **按需加载**     | 只读取当前决策需要的上下文和 references          | 降低上下文负担                 |
+| 🌲 **定点澄清**     | 只询问会显著改变方向的阻塞性问题                 | 保持执行动量                   |
+| 🔄 **自适应 QA**    | 小改动直接验证，高风险改动再并行运行完整检查     | 把成本投入真正的风险           |
+| ✂️ **弹性拆分**     | 优先垂直价值切片，也支持迁移、基础设施和组件切片 | 避免人为跨层和伪依赖           |
+| 🔨 **Skill Forge**  | 用于创建、审查和精简技能                         | 持续提升规则信号密度           |
+| 📂 **自动初始化**   | 创建 `.grimoire/` 项目知识目录                   | 按需采用项目知识库             |
+| 🏷️ **版本管理就绪** | 使用 changesets 管理版本                         | 支持审计与回退                 |
 
 ---
 
@@ -71,13 +71,17 @@ pnpx skills@latest add wangjq4214/skills
 根据任务选择最小充分流程：
 
 ```text
-小型、可回滚       直接实现 → 定向验证
-明确的多文件改动   轻量计划 → 实现 → 定向验证
-高风险或跨系统     规格/计划 → 实现 → 完整 QA
-多个独立交付目标   规格 → 可选拆分 → 分工单实现
+默认交付路线       refine → spec → slice → plan → loop
+loop 内部循环      implement → test → review + check → 评估 ↺
+小型、可回滚       implement → 定向验证
+已有规格或工单     从下一个有价值的阶段进入
 ```
 
-`clarify` 只解决阻塞性歧义，`record` 只记录持久知识，`slice` 仅在分解确实降低交付风险时使用。`grimoire-loop` 会根据改动风险选择 inline 检查、定向 sub-agent 或完整并行 QA。
+这是一条默认路线，不是必经步骤。[refine](./skills/grimoire-refine/SKILL.md) 负责交付路径，[loop](./skills/grimoire-loop/SKILL.md) 负责实现与 QA 循环。进入选定阶段时，加载并应用对应 skill，而不是用泛化指令替代专业方法。允许同一 agent 内联执行、合并检查，不强制独立 agent 或重复报告。
+
+`clarify` 解决关键歧义，`record` 记录持久知识，`spec` 负责需求契约，`slice` 负责工单，不另写一套 spec。需求清晰时可直接 slice，已有充分产物时应复用。loop 内由 implement 负责生产改动、test 负责测试工作、review 评估代码风险、check 核对需求满足情况。
+
+模型可以按证据与风险调整深度、顺序和产物，对重要偏离简述原因；不能省略用户要求的交付物和必要验证。用户选择的工作流只能在授权范围和宿主调用规则内组合下游技能；讨论不等于授权实现。
 
 ---
 
@@ -94,16 +98,16 @@ Grimoire Skills 分为两种调用方式：
 
 这类技能设置了 `disable-model-invocation: true`，需要用户明确选择。
 
-| 技能 | 描述 |
-| --- | --- |
-| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)** | 创建、审查和精简 Agent 技能 |
-| 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)** | 按需初始化 `.grimoire` 项目知识库 |
-| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 解决关键不确定性并推荐最小充分流程 |
-| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)** | 根据需求和相关上下文生成适量规格 |
-| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)** | 将需求拆成连贯的价值或使能工单 |
-| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | 生成按风险缩放、可修订的实现计划 |
-| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)** | 根据改动风险运行自适应实现和 QA |
-| ✍️ **[commit](./skills/commit/SKILL.md)** | 准备并执行经确认的 Conventional Commit |
+| 技能                                                       | 描述                                   |
+| ---------------------------------------------------------- | -------------------------------------- |
+| 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**         | 创建、审查和精简 Agent 技能            |
+| 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | 按需初始化 `.grimoire` 项目知识库      |
+| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 解决关键不确定性并推荐最小充分流程     |
+| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | 根据需求和相关上下文生成适量规格       |
+| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | 将需求拆成连贯的价值或使能工单         |
+| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**     | 生成按风险缩放、可修订的实现计划       |
+| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | 根据改动风险运行自适应实现和 QA        |
+| ✍️ **[commit](./skills/commit/SKILL.md)**                   | 准备并执行经确认的 Conventional Commit |
 
 ---
 
@@ -111,27 +115,27 @@ Grimoire Skills 分为两种调用方式：
 
 这些技能在适合当前任务时可由模型使用，但不应强制触发整条流水线。
 
-| 技能 | 描述 |
-| --- | --- |
-| 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)** | 只解决会阻塞行动的关键歧义 |
-| 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)** | 维护持久的项目术语和架构决策 |
-| ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | 根据明确的计划、工单、规格或对话实现代码 |
-| ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)** | 对照意图、验收标准、相关产物和证据审计实现 |
-| 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)** | 使用证据、严重度和置信度审查代码 |
-| 🧪 **[grimoire-test](./skills/grimoire-test/SKILL.md)** | 选择合适结构和边界编写适量测试 |
+| 技能                                                             | 描述                                       |
+| ---------------------------------------------------------------- | ------------------------------------------ |
+| 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)**     | 只解决会阻塞行动的关键歧义                 |
+| 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)**       | 维护持久的项目术语和架构决策               |
+| ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | 根据明确的计划、工单、规格或对话实现代码   |
+| ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | 对照意图、验收标准、相关产物和证据审计实现 |
+| 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)**       | 使用证据、严重度和置信度审查代码           |
+| 🧪 **[grimoire-test](./skills/grimoire-test/SKILL.md)**           | 选择合适结构和边界编写适量测试             |
 
 ---
 
 ## 🎨 设计理念
 
-| 原则                   | 含义                                                           |
-| ---------------------- | -------------------------------------------------------------- |
-| 🥇 **单一事实来源**     | 每条规则只定义一次，在其他地方引用，避免重复与漂移。           |
-| 🚦 **可验证的完成状态** | 每一步都以 Agent 能检查的条件结束，而不是凭感觉判断。          |
+| 原则                   | 含义                                                             |
+| ---------------------- | ---------------------------------------------------------------- |
+| 🥇 **单一事实来源**     | 每条规则只定义一次，在其他地方引用，避免重复与漂移。             |
+| 🚦 **可验证的完成状态** | 每一步都以 Agent 能检查的条件结束，而不是凭感觉判断。            |
 | 📐 **连贯边界**         | 共享意图、风险和验证方式的工作保持在一起；拆分应当真正降低耦合。 |
-| 🧹 **及时删减**         | 不影响执行的内容不保留。文档本身不是目标。                     |
-| 🗺️ **渐进式展开**       | 必要内容直接写在流程中，深入资料放在 `references/`，按需读取。 |
-| 🎮 **明确调用责任**     | 技能自行声明由模型还是用户调用，双方都不需要猜测。             |
+| 🧹 **及时删减**         | 不影响执行的内容不保留。文档本身不是目标。                       |
+| 🗺️ **渐进式展开**       | 必要内容直接写在流程中，深入资料放在 `references/`，按需读取。   |
+| 🎮 **明确调用责任**     | 技能自行声明由模型还是用户调用，双方都不需要猜测。               |
 
 ---
 

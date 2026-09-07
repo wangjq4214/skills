@@ -2,7 +2,7 @@
 
 ## Behavior vs implementation
 
-Bad — asserts internal state:
+Bad — couples to an internal flag when the public outcome suffices:
 ```typescript
 it('should set the internal flag', () => {
   const processor = new PaymentProcessor();
@@ -23,9 +23,13 @@ it('should emit PaymentCompleted event when payment is valid', () => {
 });
 ```
 
-## Isolation
+Focused internal assertions remain appropriate for characterization, complex invariants, or precise regressions when the coupling is documented and worthwhile.
 
-Bad — reaches the database:
+## Isolation in unit tests
+
+These examples target isolated unit tests. Deterministic real-database integration tests remain valuable for verifying queries, schemas, and database behavior that doubles cannot prove.
+
+Bad for this boundary — reaches the database:
 ```typescript
 it('should return user', async () => {
   const repo = new UserRepository(dbConnection); // real database
@@ -34,7 +38,7 @@ it('should return user', async () => {
 });
 ```
 
-Good — uses a test double:
+Good for this boundary — doubles the database to test repository result handling:
 ```typescript
 it('should return user when user exists', async () => {
   const rows = [{ id: 1, name: 'Alice' }];

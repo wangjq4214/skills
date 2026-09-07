@@ -1,56 +1,56 @@
 # Check Patterns
 
-Detailed classification guide with concrete examples for step 4 of the workflow.
+Examples for step 4, governed by the main skill's classification rule. Treat plan details as requirements only when supported by intent, acceptance criteria, or applicable constraints.
 
 ---
 
 ## Match
 
-A planned item is a **match** when the code exists and fulfills the plan's design intent.
+An outcome is a **match** when code and relevant verification evidence establish the required behavior and constraints.
 
-Behavior match is sufficient — the code does not need to be textually identical to pseudo-code.
+Behavior match is sufficient — the code need not be textually identical to pseudo-code.
 
 ### Examples
 
-Plan says: "Add method `validate` to type `Order` that checks status is not null."
-Code has: `Order.validate(): boolean { return this.status != null; }`
+Intent requires order validation to reject a null status.
+Code checks that status is non-null, and relevant checks confirm the caller handles validation failure as required.
 
-→ **match**. The behavior matches, even if the return type is boolean instead of void.
+→ **match**. A different return type is acceptable only when it preserves the required contract and behavior.
 
 Plan says: "Create class `PaymentGateway` implementing `IPaymentProcessor`."
-Code has: `class PaymentGateway implements IPaymentProcessor { ... }`
+Code has: `class PaymentGateway implements IPaymentProcessor { ... }`.
 
-→ **match**. Exact structural match.
+→ Structural evidence for the planned boundary, not proof of completion by itself. Inspect the implementation and relevant checks before classifying the required processing behavior.
 
 ### Edge case: partial match
 
 Plan says: "Add method `process` with validation, transformation, and persistence steps."
 Code has: method `process` with only validation and persistence steps, no transformation.
 
-→ This is a **deviation**, not a match. The method exists but is missing a planned step.
+→ If the required transformation is absent across the relevant path, record a **gap** for that behavior. If it occurs through an equivalent mechanism, assess that mechanism; omitting a planned intermediate step alone does not establish missing behavior.
 
 ---
 
 ## Gap
 
-A planned item is a **gap** when no corresponding code exists. The plan requires it; it is absent.
+A required outcome is a **gap** when available evidence shows its behavior or binding contract is missing. A planned filename, field, or helper is not itself a requirement unless the source makes it one.
 
 ### Examples
 
 Plan says: "Create file `src/services/notifier.ts`."
 File does not exist on disk.
 
-→ **gap**. File is missing.
+→ Inspect where notification behavior lives. Missing required notifications are a **gap**; equivalent behavior elsewhere is a defensible design deviation unless the path itself is a binding contract.
 
 Plan says: "Add field `retryCount: number` to type `ConnectionConfig`."
-Code has `ConnectionConfig` but no `retryCount` field.
+Code has no `retryCount` field.
 
-→ **gap**. Field is missing.
+→ **gap** if this field is a required public configuration contract. If retry behavior is configured through an equivalent permitted mechanism, assess that evidence rather than the field name alone.
 
 Plan says: "Add error handling for timeout in `fetchData`."
-Code has `fetchData` but no timeout logic.
+Neither `fetchData` nor its callers/middleware provide the required timeout behavior.
 
-→ **gap**. Logic is missing.
+→ **gap**. Required error handling is absent, not merely located elsewhere.
 
 ### Not a gap
 
@@ -67,16 +67,16 @@ A planned item is a **deviation** when code exists that addresses the same inten
 
 ### Blocking deviations
 
-These change behavior, architecture, or responsibility boundaries:
+A deviation is blocking only when it violates user intent, acceptance criteria, an applicable constraint, or creates concrete risk:
 
-- Different type boundary: plan said extract to a new type, code inlined into existing type.
-- Different responsibility split: plan said one type owns validation, code split it across two.
-- Different algorithm: plan said use a Map for lookup, code uses array iteration.
-- Missing planned constraint: plan said "no circular dependencies," code has one.
+- Different type boundary: inlining violates a required isolation boundary.
+- Different responsibility split: splitting validation allows a documented invariant to be bypassed.
+- Different algorithm: array iteration instead of a Map demonstrably violates the lookup performance requirement.
+- Missing applicable constraint: "no circular dependencies" is binding, and code has one.
 
 ### Advisory deviations
 
-These are defensible alternatives that achieve the same outcome:
+These are defensible alternatives when required outcomes and constraints are met without concrete risk:
 
 - Different naming: plan said `UserService`, code has `UserManager` (same responsibility).
 - Different language idiom: plan described a class, code used a function + closure (in a functional language).
@@ -87,12 +87,12 @@ These are defensible alternatives that achieve the same outcome:
 Plan says: "Add `PaymentValidator` as a separate type in `src/validation/`."
 Code has validation logic inlined in `PaymentService.process()`.
 
-→ **deviation (blocking)**. The plan explicitly called for a separate type boundary.
+→ **deviation (advisory)** when required behavior and constraints are satisfied without concrete risk; the planned type boundary alone does not make it blocking.
 
 Plan says: "Store cache in Redis."
 Code stores cache in an in-memory Map with a TODO comment.
 
-→ **deviation (blocking)**. Different technology choice with different behavior characteristics.
+→ **deviation (blocking)** if Redis is an applicable constraint or shared cache behavior is required and the Map cannot provide it. Otherwise assess the alternative on requirements and concrete risk, not technology choice alone.
 
 Plan says: "Method `calculateTotal` iterates items and sums price * quantity."
 Code has `calculateTotal` that delegates to `items.reduce(...)`.
@@ -101,10 +101,11 @@ Code has `calculateTotal` that delegates to `items.reduce(...)`.
 
 ### How to assess
 
-For each deviation, ask: "Does this difference change observable behavior, type boundaries, or architectural constraints?"
+For each deviation, ask: "Does it violate user intent, acceptance criteria, an applicable constraint, or create concrete risk?"
 
-- Yes → blocking.
-- No → advisory.
+- Yes, with evidence → blocking.
+- No, with sufficient evidence → advisory.
+- Insufficient evidence → needs-verification, not an assumed blocker.
 
 ---
 
@@ -150,15 +151,18 @@ For each extra, ask: "Does this support the planned change, or does it expand th
 ## Classification decision tree
 
 ```
-Is there code that addresses this planned item?
-├── No → gap
+Is there sufficient evidence to classify this item?
+├── No → needs-verification
 └── Yes
-    └── Does the code match the plan's design intent?
-        ├── Yes → match
-        └── No → deviation
-            └── Does the difference change behavior, boundaries, or architecture?
-                ├── Yes → blocking deviation
-                └── No → advisory deviation
+    └── Is there code addressing the required intent?
+        ├── No → gap
+        └── Yes
+            └── Does implementation materially differ from guidance?
+                ├── No → match
+                └── Yes → deviation
+                    └── Violates intent, criteria, an applicable constraint, or creates concrete risk?
+                        ├── Yes → blocking deviation
+                        └── No → advisory deviation
 ```
 
 For code not in the plan:

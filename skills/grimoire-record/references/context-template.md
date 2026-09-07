@@ -81,18 +81,20 @@ Use only these verbs for consistency:
 
 ## Anti-patterns
 
-### Overlong definition
+### Mixing definition and lifecycle detail
 
-Bad:
+When lifecycle vocabulary is independently useful, separating it can improve navigation. This is a domain-modeling choice, not a sentence limit; preserve the original meaning.
+
+Before:
 ```markdown
 ### Order
-- **Definition:** An Order represents a customer's intent to purchase one or more products from the catalog. It goes through several lifecycle stages: pending, confirmed, shipped, delivered, and cancelled. Each order has a unique identifier...
+- **Definition:** A customer's purchase request containing one or more line items. Its lifecycle stages are Pending, Confirmed, Shipped, Delivered, and Cancelled.
 ```
 
-Good — split into sub-concepts:
+After — with independently referenced OrderStatus:
 ```markdown
 ### Order
-- **Definition:** A confirmed purchase request containing one or more line items.
+- **Definition:** A customer's purchase request containing one or more line items.
 - **Synonyms:**
 - **Relationships:**
   - contains LineItem

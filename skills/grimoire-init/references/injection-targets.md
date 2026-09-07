@@ -15,7 +15,7 @@ If none exist, offer to create `AGENTS.md`.
 
 ## Injection Block
 
-Append this block to each target file:
+After approval, append this block only to targets without a grimoire block. For existing blocks, follow Detection below:
 
 ```markdown
 <!-- GRIMOIRE:START -->
@@ -40,10 +40,10 @@ If a target already contains a grimoire block:
 
 - Capture the existing block content during Explore.
 - In the Plan step, show the existing block alongside the canonical block. Let the user choose: keep existing, replace with canonical, or merge.
-- Never inject a duplicate block.
+- Never inject a duplicate block. If multiple blocks already exist, include consolidation to one block in the plan for approval.
 
 ## Rules
 
-- Append only. Never delete or reorder existing content.
-- If the target file ends without a trailing newline, add one before the block.
-- Inject at most one block per target file.
+- Preserve unrelated content outside the registration markers; do not delete or reorder it. Within the block, apply only the approved keep, replace, or merge action.
+- Append only if no block exists. If the target file ends without a trailing newline, add one before appending the block.
+- Leave at most one registration block per target file.

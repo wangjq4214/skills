@@ -30,7 +30,7 @@ Present the user with:
 - The canonical directory structure (see [directory-structure](./references/directory-structure.md))
 - What already exists vs. what will be created — show a diff
 - Which injection targets will be modified and what will be injected (see [injection-targets](./references/injection-targets.md))
-- If a target already has a grimoire block, show the existing block alongside the proposed replacement
+- If a target already has a grimoire block, show the existing block alongside the proposed result (keep, replace, or merge)
 
 Do not write anything yet.
 
@@ -50,17 +50,17 @@ Completion: User approves the plan.
 
 ## 4. Execute
 
-Create the directory structure. Inject configuration into every target.
+Apply the approved directory and injection changes to each planned target.
 
-Verify every planned file exists and every injection target contains the registration block.
+Verify every planned file exists and every injection target contains exactly one registration block, with unrelated content outside the markers preserved.
 
-Completion: Every planned file exists. Every injection target contains the grimoire registration.
+Completion: Every planned file exists. Every injection target contains exactly one grimoire registration block reflecting the approved keep, replace, merge, or append action; unrelated content is preserved.
 
 ---
 
 # Rules
 
 - Never write before user approval.
-- Never remove existing content from injection targets. Append only.
+- Preserve unrelated content outside registration markers. Allow approved replacement or merging within the block; append only if no block exists, and leave at most one block per target.
 - If `.grimoire` already exists, present a modification plan showing what will be added alongside what already exists. Do not treat existing content as an error.
 - Use the directory structure defined in references. Do not improvise.

@@ -1,6 +1,6 @@
 # Status Transitions
 
-Detailed rules for step 7 — determining and writing artifact status updates.
+Examples for step 7 — determining and writing artifact status updates under the main skill's evidence rule. Leave status unchanged when evidence cannot justify a transition; report needs-verification.
 
 ---
 
@@ -12,12 +12,12 @@ Todo → In Progress → Done
 
 ### Determination rules
 
-| Condition                                  | Status        |
-| ------------------------------------------ | ------------- |
-| All acceptance criteria have matching code | `Done`        |
-| At least one criterion satisfied, not all  | `In Progress` |
-| No criteria satisfied                      | `Todo`        |
-| Ticket has no acceptance criteria          | Do not update |
+| Condition                                      | Status        |
+| ---------------------------------------------- | ------------- |
+| All acceptance criteria are verified satisfied | `Done`        |
+| At least one criterion satisfied, not all      | `In Progress` |
+| No criteria satisfied                          | `Todo`        |
+| Ticket has no acceptance criteria              | Do not update |
 
 ### Partial satisfaction
 
@@ -44,29 +44,33 @@ Draft → In Progress → Implemented
 
 ### Determination rules
 
-| Condition                          | Status        |
-| ---------------------------------- | ------------- |
-| All seams match                    | `Implemented` |
-| At least one seam matches, not all | `In Progress` |
-| No seams match                     | `Draft`       |
-| Spec has no seams defined          | Do not update |
+Assess all spec requirements, including necessary seams, not seams alone.
 
-### Seam classification mapping
+| Verified condition                                  | Status        |
+| --------------------------------------------------- | ------------- |
+| All requirements satisfied                          | `Implemented` |
+| At least one requirement satisfied, others unmet    | `In Progress` |
+| No requirements satisfied                           | `Draft`       |
+| No assessable requirements or insufficient evidence | Do not update |
+
+### Requirement classification mapping
 
 From step 5 cross-check:
-- "Seam matches" → that seam counts as satisfied.
-- "Seam missing" → that seam counts as unsatisfied (gap).
-- "Spec-level deviation" → the seam is unsatisfied for status purposes.
+- Match → requirement satisfied.
+- Missing required behavior or necessary seam → unsatisfied (gap).
+- Defensible alternative meeting requirements and constraints without concrete risk → satisfied, despite design deviation.
+- Blocking deviation → unsatisfied.
+- Needs-verification → leave status unchanged.
 
 ### Example
 
-Spec 0001 has four seams:
+Spec 0001 has four requirements, including necessary seams:
 - OAuth2 handshake: match
 - Token issuance: match
-- Token validation: deviation (different algorithm)
-- User storage: gap (no user table yet)
+- Token validation: advisory deviation (different algorithm; required behavior and constraints verified, no concrete risk)
+- User storage: gap (required persistence absent)
 
-→ Status: `In Progress`. Two seams satisfied, two not.
+→ Status: `In Progress`. Three requirements satisfied, one unmet.
 
 ---
 
@@ -80,13 +84,13 @@ Proposed → Implementing → Testing → Completed
 
 ### Determination rules
 
-| Condition                                           | Status         |
-| --------------------------------------------------- | -------------- |
-| Decision fully realized in code                     | `Completed`    |
-| Decision partially realized                         | `Implementing` |
-| Decision not yet acted on                           | `Proposed`     |
-| Decision no longer relevant (code removed approach) | `Deprecated`   |
-| Decision replaced by newer ADR                      | `Superseded`   |
+| Condition                                         | Status         |
+| ------------------------------------------------- | -------------- |
+| Decision fully realized in code                   | `Completed`    |
+| Decision partially realized                       | `Implementing` |
+| Decision not yet acted on                         | `Proposed`     |
+| Explicit approved evidence retires the decision   | `Deprecated`   |
+| Referenced newer ADR explicitly replaces this one | `Superseded`   |
 
 ### How to assess ADR realization
 
@@ -99,8 +103,9 @@ Proposed → Implementing → Testing → Completed
 - **Fully realized**: The decision is consistently applied across all relevant modules. No counterexamples found.
 - **Partially realized**: The decision is applied in some places but not others, or the implementation is incomplete.
 - **Not yet acted on**: No code evidence that the decision has been implemented.
-- **Deprecated**: Code no longer uses this approach; the decision is irrelevant.
+- **Deprecated**: Explicit approved retirement evidence establishes that the decision no longer applies; removed code alone is insufficient.
 - **Superseded**: A newer ADR exists that explicitly replaces this one. Only set if the superseding ADR is referenced.
+- Without retirement or supersession evidence, removed code indicates an implementation gap or needs-verification, not retirement. Leave status unchanged when evidence is insufficient.
 
 ### Edge case: constraint ADRs
 
@@ -108,7 +113,7 @@ Some ADRs define constraints (what NOT to do) rather than approaches (what TO do
 
 Example: "AWS Cannot Be Used Due to Compliance."
 
-Assessment: search for any AWS imports, SDK usage, or configuration. If none found → `Completed`. If AWS usage found → note as a deviation in the report AND set ADR status to `Implementing` or `Proposed`.
+Assessment: inspect relevant implementation, dependencies, deployment configuration, and available operational evidence. A verified compliant implementation can support `Completed`; an empty keyword search alone cannot. Confirmed prohibited usage is a constraint violation to report, not evidence that the ADR was retired. Update implementation status only when the evidence supports it; otherwise retain the current status and report the gap or uncertainty.
 
 ---
 

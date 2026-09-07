@@ -187,23 +187,25 @@ impl TaxCalculator {
 
 ## 8. Speculative Abstraction
 
-**Key question:** Are there abstractions with only one real implementation?
+**Key question:** Does the abstraction add cost without current boundary, isolation, test-substitution, or invariant value?
 
-**Indicators of a problem:**
-- Interfaces/traits with a single implementor (excluding test mocks).
+**Clues to investigate, not findings by themselves:**
+- Interfaces/traits with a single implementor; useful test substitution counts as present value.
 - "Plugin systems" for features that were never plugged in.
 - Generic code that is only instantiated with one concrete type.
 - Abstract base classes with one subclass.
 
+Implementation count alone does not justify removal; show both the lack of present value and concrete cost.
+
 **Good example:**
 ```rust
-// No trait needed — just a concrete type
+// No boundary, isolation, test-substitution, or invariant value from a trait
 struct PaymentProcessor { ... }
 ```
 
 **Bad example:**
 ```rust
-// Only Stripe exists and has for 2 years
+// Pass-through trait adds maintenance cost, with none of the present value above
 trait PaymentGateway { ... }
 struct StripeGateway { ... }  // sole implementation
 ```

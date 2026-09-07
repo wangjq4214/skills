@@ -18,7 +18,7 @@ This skill writes commit messages and commits staged changes. It does NOT stage 
 
 - **header** — the first line: `<gitmoji> <type>(<scope>): <summary>`
 - **body** — the optional paragraph(s) after the blank line, explaining why and what
-- **summary** — the imperative, one-line description in the header (50–72 chars)
+- **summary** — the imperative, one-line description in the header
 - **scope** — the module, component, or area affected (lowercase, hyphenated when multi-word)
 
 ---
@@ -35,9 +35,9 @@ git diff --cached --stat
 
 If staged changes exist, proceed to step 2.
 
-If no staged changes exist, run `git status` and report which files are modified/untracked. Ask: "Which files should I stage for this commit?" Do not proceed until the user answers.
+If no staged changes exist, run `git status`, report modified/untracked files, and ask the user to stage the intended changes or authorize a separate staging task. This skill does not stage files; resume by checking the index again once staging is complete.
 
-Completion: Staged changes are confirmed and ready for analysis.
+Completion: Staged changes are confirmed and ready for analysis, or execution is paused with the staging prerequisite explained.
 
 ---
 
@@ -57,9 +57,9 @@ Determine from the diff content, not the file names alone:
 
 Decision rules:
 
-- When changes span multiple types, pick the dominant one (the change with the most lines or highest impact).
+- When changes span multiple types, pick the primary intent by semantic impact; generated churn or line count need not dominate.
 - When scope is ambiguous, use the directory or package name of the affected files.
-- When the diff is too large to categorize (>500 lines), ask the user: "This is a large change. What is the primary intent — feat, fix, refactor, or something else?"
+- For a large diff, inspect coherent file/package groups and distinguish generated changes from behavioral changes. Ask about primary intent only when material ambiguity remains after inspection, not because the diff crosses a line-count threshold.
 
 Completion: type, scope, and gitmoji are selected. Every selection has a reason traceable to the diff.
 
@@ -67,23 +67,7 @@ Completion: type, scope, and gitmoji are selected. Every selection has a reason 
 
 ## 3. Draft message
 
-Construct the commit message in two parts:
-
-**Header**: `<gitmoji> <type>(<scope>): <summary>`
-
-- Summary is imperative, present tense ("add" not "adds" or "added").
-- Summary does not exceed 72 characters.
-- Summary is lowercase unless proper nouns.
-- No trailing period.
-
-**Body** (when the change needs explanation):
-
-- Start after one blank line.
-- Explain **why** the change was made and **what** it does (not how — the diff shows how).
-- Wrap lines at 72 characters.
-- Reference related tickets or issues when available.
-
-When the change is trivial (e.g., typo fix, formatting only, single-line change), omit the body. Do not add filler.
+Apply [references/format.md](./references/format.md) for message syntax. Write a concise header expressing the primary intent and add a body when rationale, impact, or issue references need explanation. Omit a body that would only repeat the header or diff.
 
 Draft the full message and present it to the user as a code block:
 
@@ -102,7 +86,7 @@ Completion: A draft message is displayed. The user has not yet approved.
 
 Ask the user: "Commit with this message?"
 
-Wait for explicit approval. Do not commit on "looks good," "sure," or similar vague affirmations — treat those as approval only if the message was displayed in the same turn.
+Wait for approval that clearly refers to committing the displayed message and staged changes. A brief affirmation can suffice in that context; ask again if its referent is ambiguous or the message or staged content materially changes.
 
 If the user asks for changes, return to step 3 and revise.
 
@@ -134,7 +118,6 @@ Completion: Commit is created. Short hash is reported. Execution ends.
 - Never push. Commits stay local.
 - Never amend or force-push without an explicit user request.
 - Never generate a message without reading the diff. Guessing from file names is not sufficient.
-- The summary must fit in 72 characters. Shorten or split scope before truncating meaning.
 - Format details live in [references/format.md](./references/format.md). SKILL.md controls workflow only.
 
 ---

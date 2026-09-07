@@ -10,7 +10,9 @@ Write specifications that preserve all requested outcomes, expose material decis
 
 # Scope
 
-This skill writes to `.grimoire/spec/`. It may ask about irreversible or scope-changing decisions, but it does not implement production code unless separately authorized.
+This skill writes to `.grimoire/spec/`, not production code. It may ask about irreversible or scope-changing decisions.
+
+Existing context and ADRs are inputs, not reasons to invoke their authoring skills. `grimoire-slice`, `grimoire-plan`, and `grimoire-loop` are possible next steps, not dependencies to preload; after the spec is complete, recommend the next useful action or hand off if further work is already authorized.
 
 Completion: Every independent requirement is represented in an appropriate spec file, with meaningful decisions and verification guidance.
 
