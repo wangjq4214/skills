@@ -14,6 +14,8 @@ This skill writes to `.grimoire/spec/`, not production code. It may ask about ir
 
 Existing context and ADRs are inputs, not reasons to invoke their authoring skills. `grimoire-slice`, `grimoire-plan`, and `grimoire-loop` are possible next steps, not dependencies to preload; after the spec is complete, recommend the next useful action or hand off if further work is already authorized.
 
+When coordinated by `grimoire-refine`, apply the knowledge boundary and selected endpoint supplied in its coordination contract instead of standalone decision and handoff permissions. If that contract is missing, pause and request it from the coordinator; do not guess its installation path. Return knowledge gaps and stage results to the coordinator.
+
 Completion: Every independent requirement is represented in an appropriate spec file, with meaningful decisions and verification guidance.
 
 ---

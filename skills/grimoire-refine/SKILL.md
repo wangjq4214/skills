@@ -1,87 +1,88 @@
 ---
 name: grimoire-refine
-description: Resolve requirements and coordinate the appropriate spec, slice, and planning handoffs.
+description: Coordinate clarification with live knowledge recording, then recommend spec/slice by complexity or route simple work directly to a plan; finish at slice or plan.
 disable-model-invocation: true
 ---
 
 # Purpose
 
-Turn discussion into actionable intent and coordinate the next appropriate specialist. Refine owns clarification and routing, not a parallel spec-writing or ticket-generation method.
+Coordinate specialist-led discussion with synchronous knowledge recording, then route settled requirements to proportionate artifacts, ending at a completed ticket set or implementation plan.
 
-# Skill composition
+Refine owns scheduling, route recommendations, handoffs, and verification. It does not conduct its own requirements interview, author specialist artifacts, or execute implementation.
 
-Default delivery route: **refine → spec → slice → plan → loop**. This is a map of responsibilities, not a requirement to create every artifact.
+# Specialist execution
 
-Use skills for work being performed now, not merely because they appear later in the delivery route:
+Refine is user-invoked because the user intentionally selects a coordinated refinement workflow. Explicit discussion-only, read-only, or narrower artifact requests take precedence.
 
-| Current work                               | Skill to use when needed |
-| ------------------------------------------ | ------------------------ |
-| Resolve material ambiguity                 | `grimoire-clarify`       |
-| Capture durable terminology or decisions   | `grimoire-record`        |
-| Produce or revise an authorized spec       | `grimoire-spec`          |
-| Produce or revise an authorized ticket set | `grimoire-slice`         |
+**Execute a specialist** means resolve the skill by its exact name through the host's available skill registry or discovery mechanism, then use the host's supported invocation mechanism. When execution requires reading instructions, load the full `SKILL.md` from the actual path reported by the host and follow its workflow and required references with the supplied input. Resolve that skill's own references relative to its discovered directory. Never infer another skill's location from a sibling directory or a hard-coded installation root.
 
-Use the selected skill by name when its work begins. Discussing requirements does not require spec or slice, and recommending a next step does not require loading it. `grimoire-plan`, `grimoire-loop`, and `grimoire-implement` are possible follow-up workflows, not dependencies of refinement.
+Naming a skill, reading a repository navigation link, or using a generic equivalent is not execution. Inline execution is sufficient; separate agents are not required. If a specialist cannot be resolved or host invocation rules require user action, report the blocked stage and required action instead of guessing a path or substituting refine's own method.
 
-A handoff carries resolved intent, constraints, acceptance criteria, relevant artifact paths, unresolved assumptions, and authorization limits. Discussion-only requests end with a recommendation. If further work is already authorized, continue with the next applicable skill when refinement is complete, within that scope and the host's invocation rules; no repeated approval is needed solely for crossing a skill boundary. If a needed skill is unavailable, disclose the limitation and any fallback.
+Load clarify and record together when discussion begins; load an artifact specialist only when its selected stage begins. Each specialist returns control to refine rather than choosing another downstream workflow itself.
 
 # Workflow
 
-## 1. Assess
+## 1. Prepare discussion
 
-Determine the minimum refinement needed for the current request:
+Identify the request, existing sources, write permissions, and `.grimoire/` availability. Refinement includes automatic knowledge recording unless the user restricts writes. If initialization is missing, report that grimoire-init is required; discussion may proceed, but required persistence and dependent artifact generation remain blocked.
 
-- **Ready** — the goal and constraints are sufficient; skip clarification and route to the requested work.
-- **Targeted clarification** — a few material decisions are unresolved; use grimoire-clarify at the relevant depth. Use grimoire-record only if durable knowledge emerges.
-- **Full refinement** — multiple domains, irreversible decisions, or substantial ambiguity justify both clarify and record.
+Maintain a compact **handoff**: settled intent, constraints, acceptance criteria, decisions, source paths, record results, unresolved questions, permissions, and the selected route once known. This is coordination state, not a substitute for persisted knowledge.
 
-Completion: Refinement depth and the boundary of authorized work are explicit.
+Completion: Discussion inputs and permissions are known, and persistence prerequisites are available or explicitly blocked.
 
----
+## 2. Run clarify with live record
 
-## 2. Discuss
+Execute `grimoire-clarify` to manage the discussion, with `grimoire-record` active throughout the same discussion. Clarify owns questions and resolution; record owns knowledge qualification, deduplication, context updates, and ADR maintenance.
 
-Resolve material uncertainties without turning the discussion into a mandatory ceremony. Use direct tools for targeted repository facts; use sub-agents for broad or independent research. Record durable domain knowledge or architectural decisions through grimoire-record as they emerge, but do not record transient implementation details.
+After each resolved answer or decision, pass the discussion delta to record and execute any qualifying update before advancing to the next discussion round. Do this automatically within write permissions, without a separate recording request. Record is a companion to clarify, not a stage deferred until the entire discussion ends or a detached task whose writes may lag behind the handoff. Speculative or unresolved statements remain questions, not settled knowledge.
 
-Stop refining when the request becomes actionable. Capture outcomes, constraints, and observable acceptance criteria compactly enough for the next skill; this handoff summary is not a substitute for a requested spec or ticket set.
+Verify each record result by reading changed entries or inspecting diffs: context/domain files and their index, or ADR paths as applicable. When no write is needed, retain record's concrete reason, including existing source paths for already-recorded knowledge. When writing is blocked, retain the pending item and report the blocker; a chat summary is not persistence.
 
-Completion: Blocking uncertainty is resolved, assumptions are explicit, and qualifying durable knowledge is recorded within authorized scope.
+On a user-turn pause, keep clarify and record active and resume with the next answer. Before leaving discussion, reconcile the last discussion delta with record and pass verified current context/ADR paths into the handoff.
 
----
+Completion: Clarify has no blocking frontier, all qualifying settled knowledge is persisted and verified, and no record update remains pending. In explicitly read-only discussion, report unpersisted knowledge and stop without entering artifact generation.
 
-## 3. Select the delivery route
+## 3. Recommend the artifact route
 
-Start with the default route and omit stages that add no decision or verification value:
+Assess the settled task's complexity: number of independently deliverable outcomes, cross-system contracts, coordination needs, risk, and adequacy of existing artifacts. Explain whether spec and slice add value and recommend the smallest useful route to the user.
 
-| Signal                                                          | Default path                                                               |
-| --------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| Small, local, reversible change                                 | implement with targeted verification; loop if iterative QA was requested   |
-| Clear single outcome with material design choices               | plan → loop                                                                |
-| Cross-system or high-risk requirement needing a shared contract | spec → plan when useful → loop                                             |
-| Multiple independently deliverable outcomes                     | spec → slice → per-ticket plan when useful → loop                          |
-| Existing adequate spec or tickets                               | enter at the next needed stage; reuse the source rather than regenerate it |
-| Explicit ticket request with clear, bounded requirements        | slice directly; spec only if a requirement contract is missing and useful  |
+| Signal                                                                        | Recommendation                                                                | Endpoint |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | -------- |
+| Simple, bounded task with one clear implementation outcome                    | Skip spec and slice; execute plan directly                                    | Plan     |
+| Shared requirement contract is useful, but delivery remains one coherent task | Spec, then plan                                                               | Plan     |
+| Multiple independently deliverable outcomes need a ticket set                 | Spec, then slice; reuse an adequate existing contract instead of rewriting it | Slice    |
+| Clear bounded contract already exists and decomposition is useful             | Slice directly                                                                | Slice    |
 
-The model may combine passes, change order, or return upstream when new evidence changes assumptions. Preserve user-requested artifacts and essential verification; skip ceremony, not responsibilities. Briefly explain material departures, such as omitting a spec because an existing source already captures the contract.
+For a simple task, state why spec/slice are unnecessary and proceed directly to plan within the user's scope. Before adding spec or slice, obtain the user's route selection unless their request already selected it. A recommendation alone does not authorize those extra artifacts. Respect an explicit discussion-only or spec-only endpoint.
 
-Completion: The selected route has a concrete reason, avoids redundant artifacts, and covers the requested outcome.
+Completion: The complexity-based recommendation, selected route, omitted stages with reasons, and endpoint are explicit; any required user selection has been received.
 
----
+## 4. Execute the selected artifacts
 
-## 4. Hand off or continue
+Pass the settled handoff, verified source paths, selected endpoint, and the full [knowledge boundary](#knowledge-boundary) instructions to each selected specialist as its coordination contract, including when delegating execution. Pass the instructions themselves, not just a link or an assumed coordinator file path. Existing artifacts can be reused only after checking that they represent current settled intent.
 
-Recommend the next useful action and its expected result without loading its skill just to make the recommendation. If the request includes writing a spec or ticket set, use grimoire-spec or grimoire-slice respectively instead of creating a parallel method inside refine.
+| Stage | Owner            | Verified output                                                                      |
+| ----- | ---------------- | ------------------------------------------------------------------------------------ |
+| Spec  | `grimoire-spec`  | Requirement files in `.grimoire/spec/` traceable to settled inputs                   |
+| Slice | `grimoire-slice` | Relationship README and tickets in `.grimoire/ticket/` covering the settled contract |
+| Plan  | `grimoire-plan`  | Readable HTML plan in `.grimoire/plans/` covering the settled task                   |
 
-When refinement is complete, hand off to planning or implementation only if that further work is authorized. Carry forward intent and new evidence; revisit only affected decisions rather than restarting the entire route. Ask before changing approved scope or committing an irreversible decision.
+After each stage, read its outputs, apply its completion checks, and verify compliance with the knowledge boundary. Spec returns to the selected next stage; slice and plan return directly to closure. Never automatically plan the tickets after slice, or start implementation after plan.
 
-Completion: Refinement is complete with the requested requirement artifacts, if any, and an actionable next step. Any authorized follow-up begins as the next workflow, not as a prerequisite for finishing refine.
+Completion: Selected artifacts satisfy their owners' checks and stay within the settled inputs, or the stage is explicitly suspended for a knowledge gap.
 
----
+## 5. Close
 
-# Rules
+End the entire refine workflow when slice or plan completes, or at an explicitly narrower endpoint. Report the selected route, verified context/ADR updates or no-change reason, and artifact paths. If blocked, report the missing input or permission and the resumption point instead of claiming completion.
 
-- Default to specialist composition; adapt depth, order, and artifacts to the task.
-- Load only skills and references needed for current work; a recommended route is not a preload list.
-- Ask only about material choices or facts unavailable through tools.
-- Do not keep refining after the request is actionable.
-- A handoff preserves intent and evidence, not a frozen implementation prescription.
+Completion: The selected endpoint has verified evidence; no further artifact, implementation, or QA workflow has been started as part of refine.
+
+# Knowledge boundary
+
+Within a refine route, **spec, slice, and plan consume settled knowledge; they do not produce new knowledge**. This boundary takes precedence over their standalone permission to resolve decisions or make assumptions.
+
+They may organize, express, decompose, and sequence the supplied requirements and established solution, but must not introduce or revise domain facts, definitions, requirements, constraints, acceptance semantics, architectural decisions, or unconfirmed assumptions. Their meaningful assertions and choices must be traceable to the settled handoff and verified sources. Artifact formatting and execution ordering do not authorize filling semantic gaps.
+
+If an artifact stage needs a new fact or decision, suspend it and report the gap to refine. Return to **clarify with live record** to resolve and persist the knowledge before resuming; never generate the knowledge downstream and send it directly to record for retrospective approval. Recheck the route and affected artifacts against the updated settled inputs.
+
+Verification: Check artifact claims against their sources; unsupported knowledge keeps the stage incomplete and returns to discussion rather than being accepted as an artifact-stage decision.

@@ -12,6 +12,8 @@ Create a temporary implementation hypothesis with enough design, sequencing, ris
 
 This skill writes HTML plans to `.grimoire/plans/`. It does not implement production code unless the user separately authorizes execution.
 
+When coordinated by `grimoire-refine`, apply the knowledge boundary and selected endpoint supplied in its coordination contract instead of standalone design, assumption, or execution permissions. If that contract is missing, pause and request it from the coordinator; do not guess its installation path. Return knowledge gaps and stage results to the coordinator.
+
 Completion: A readable plan exists with actionable steps, material design choices, affected areas, risks, and verification appropriate to the task.
 
 ---

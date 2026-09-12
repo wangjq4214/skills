@@ -14,6 +14,8 @@ This skill writes `.grimoire/ticket/NNNN-title/` relationship and ticket files. 
 
 `grimoire-plan` and `grimoire-loop` are possible follow-up workflows, not dependencies to preload. Complete the ticket set first; recommend a next step by name, or hand off when further work is already authorized.
 
+When coordinated by `grimoire-refine`, apply the knowledge boundary and selected endpoint supplied in its coordination contract instead of standalone decision and handoff permissions. If that contract is missing, pause and request it from the coordinator; do not guess its installation path. Return knowledge gaps and stage results to the coordinator.
+
 Completion: Every requirement is assigned to a coherent ticket, dependencies reflect real execution constraints, and each ticket has observable acceptance criteria.
 
 ---

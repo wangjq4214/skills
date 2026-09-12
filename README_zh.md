@@ -71,17 +71,20 @@ pnpx skills@latest add wangjq4214/skills
 根据任务选择最小充分流程：
 
 ```text
-默认交付路线       refine → spec → slice → plan → loop
+refine 讨论阶段    clarify + 同步 record
+简单任务          → plan → 结束
+需契约／拆分      → 用户选择 spec → plan → 结束
+                  → 用户选择 [spec →] slice → 结束
 loop 内部循环      implement → test → review + check → 评估 ↺
 小型、可回滚       implement → 定向验证
 已有规格或工单     从下一个有价值的阶段进入
 ```
 
-这是一条默认路线，不是必经步骤。[refine](./skills/grimoire-refine/SKILL.md) 负责交付路径，[loop](./skills/grimoire-loop/SKILL.md) 负责实现与 QA 循环。进入选定阶段时，加载并应用对应 skill，而不是用泛化指令替代专业方法。允许同一 agent 内联执行、合并检查，不强制独立 agent 或重复报告。
+[refine](./skills/grimoire-refine/SKILL.md) 协调 clarify，并在讨论期间同步调度 record 自动记录知识；再按任务复杂度推荐是否进行 spec／slice，简单任务直接 plan。slice 或 plan 完成即结束本轮 refine。路由选择、知识边界和验证以其工作流为准：产物阶段只消费已澄清知识，发现缺口交回讨论，不能自行产生新知识。[loop](./skills/grimoire-loop/SKILL.md) 是另行选择的实现与 QA 工作流。每个阶段实际加载并应用对应 skill，允许同一 agent 内联执行。
 
-`clarify` 解决关键歧义，`record` 记录持久知识，`spec` 负责需求契约，`slice` 负责工单，不另写一套 spec。需求清晰时可直接 slice，已有充分产物时应复用。loop 内由 implement 负责生产改动、test 负责测试工作、review 评估代码风险、check 核对需求满足情况。
+`clarify` 负责需求讨论，`record` 持久化领域上下文与决策，`spec` 负责需求契约，`slice` 负责工单，`plan` 负责实现计划。loop 内由 implement 负责生产改动、test 负责测试工作、review 评估代码风险、check 核对需求满足情况。
 
-模型可以按证据与风险调整深度、顺序和产物，对重要偏离简述原因；不能省略用户要求的交付物和必要验证。用户选择的工作流只能在授权范围和宿主调用规则内组合下游技能；讨论不等于授权实现。
+较窄的请求仍可直接选择专业技能。按风险调整深度，但保留选定交付物和必要验证。技能组合须遵守授权范围和宿主调用规则；讨论不等于授权实现。
 
 ---
 
@@ -102,7 +105,7 @@ Grimoire Skills 分为两种调用方式：
 | ---------------------------------------------------------- | -------------------------------------- |
 | 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**         | 创建、审查和精简 Agent 技能            |
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | 按需初始化 `.grimoire` 项目知识库      |
-| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 解决关键不确定性并推荐最小充分流程     |
+| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 协调澄清、上下文落盘、规格、工单与计划 |
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | 根据需求和相关上下文生成适量规格       |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | 将需求拆成连贯的价值或使能工单         |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**     | 生成按风险缩放、可修订的实现计划       |
