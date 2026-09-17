@@ -25,10 +25,12 @@ Prefer a concise addition to an existing durable document over a new file. If pr
 
 ## Retirement examples
 
-- **Finished ticket, active spec:** the ticket's slice is independently verified, useful details already survive, and remaining work does not rely on its plan. Retire the ticket after reference and recoverability checks; retain the spec.
-- **Completed spec with an undocumented exception:** ordinary cases have passing tests, but a billing exception exists only in the spec. Retain it until the exception is adequately preserved; green tests alone do not justify deletion.
-- **Completed artifacts fully represented elsewhere:** tests encode the behavior, a maintained feature document explains the constraints, and an ADR preserves the consequential rationale. Remove eligible spec/ticket files rather than creating an archive copy.
-- **Stale completion label:** a ticket says Completed, but a linked requirement remains unimplemented or verification results no longer apply. Retain it and report the discrepancy; tidying must not rewrite status to resolve it.
-- **Untracked finished ticket:** implementation is verified, but its current content has no recoverable copy. Ask for explicit deletion or backup approval instead of assuming Git can restore it.
-- **Duplicate ADRs:** use the canonical-record and supersession rules in grimoire-record; do not delete decision history as though it were a completed task list.
+- **Finished ticket, active knowledge:** preserve any unique requirement or constraint in the canonical domain source, retarget meaningful references, and retire the ticket. Keep the broader spec only if it remains the sole active execution contract or durable behavior source.
+- **Completed spec with an undocumented exception:** compress the billing exception into maintained feature/domain documentation before deleting the spec. Green tests alone do not prove that business intent survives.
+- **Completed artifacts fully represented elsewhere:** tests encode the behavior, a maintained feature document explains the constraints, and an ADR preserves the consequential rationale. Remove the redundant spec/ticket files rather than creating an archive copy.
+- **Inactive unfinished spec:** preserve unresolved requirements that still matter, discard obsolete execution detail, and delete the spec when no active work depends on it. Its unfinished label alone is not a retention reason.
+- **Active ticket used as the only work contract:** retain it until the active dependency ends or its necessary execution contract is moved and references are retargeted.
+- **Untracked spec or ticket:** exclude it entirely. Do not read it for knowledge, merge it, edit it, delete it, or use it to influence tracked-file cleanup.
+- **Tracked file with uncommitted edits:** it is in scope for analysis, but do not delete unrecoverable working-tree content without explicit authorization.
+- **Duplicate ADRs:** use the canonical-record and supersession rules in grimoire-record; do not erase decision history as though it were an execution artifact.
 - **Second run with no new facts:** return no changes, not a new index format or another cleanup report file.
