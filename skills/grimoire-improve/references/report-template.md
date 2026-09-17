@@ -72,3 +72,8 @@ Use raw Mermaid source inside `.mermaid`; do not wrap it in another code fence.
 - Priorities reflect current impact, confidence, and effort—not cosmetic preference.
 - Omit empty snippets, diagrams, and deferred sections.
 - Keep enough evidence that another agent can verify the finding without repeating the entire audit.
+- For broad work, show source snapshot, mode, inspected/total coverage, unread or blocked regions, and links to the full finding ledger. Separate report emphasis from implementation scope.
+- For implementation reports, include each finding's disposition, actual changes, validation commands/results, remaining work, and measured acceptance status. Do not present proposed after-diagrams as already implemented.
+- Include a compact module/connection summary when architecture changed, plus before/after metrics when requested. File splitting alone is not net LOC reduction.
+- Escape repository text inserted into HTML and diagram labels; do not embed secrets, executable repository content, or untrusted scripts.
+- Under orchestration, workers return finding data to the coordinator instead of racing to overwrite the shared report.

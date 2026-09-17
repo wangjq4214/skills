@@ -1,139 +1,84 @@
 ---
 name: grimoire-simplify
-description: Make existing code easier to understand while preserving behavior, using deletion, flattening, consolidation, or bounded rewrites as appropriate.
-disable-model-invocation: true
+description: Simplify existing code from one function to a repository through deletion, flattening, consolidation, and coherent internal rewrites while preserving behavior.
 ---
 
 # Purpose
 
-Make existing logic easier to understand by reducing concepts, states, branches, indirections, and dependencies while preserving its behavior contract.
+Reduce the concepts, states, branches, indirections, dependencies, and maintained code required to understand existing behavior. Favor real subtraction over cosmetic movement.
 
-# Scope
+# Scope and authorization
 
-This skill controls behavior-preserving simplification, including coherent rewrites within the target's established responsibility and public boundary.
+Works independently: establish the baseline, discover candidates, implement, and verify without requiring a map, report, or another skill. Accept optional orchestration context or a persisted map, but verify it against current source.
 
-Outside scope: changing observable behavior or public APIs, moving responsibilities across architectural boundaries, introducing a new system architecture, or broadly reversing dependency direction. Internal structure is not a constraint: control flow, helpers, private types, representations, and file organization may be rewritten when the result is materially easier to understand. Use `grimoire-improve` when module responsibilities or system structure itself should be questioned.
-
-Invocation: user-invoked because simplification intentionally modifies existing code and should begin only on explicit request.
+Explicit simplification requests authorize behavior-preserving internal changes, including coherent rewrites and file reorganization within established responsibility boundaries. Do not pause for per-rewrite approval when that work is already authorized. Analyze-only or discussion requests produce candidates without code changes. Ask before changing observable behavior/public contracts, moving responsibilities across architectural boundaries beyond authorization, or irreversible actions. Structural redesign belongs to `grimoire-improve` when selected; otherwise report it as outside this skill's boundary and continue safe in-scope work.
 
 # Leading words
 
-- **behavior contract** — observable behavior, public API, error semantics, concurrency semantics, ownership or lifetime guarantees, and important characteristics of performance-sensitive paths
-- **understanding path** — concepts, states, branches, representations, types, files, and calls required to explain the target logic
-- **transformation scale** — the smallest scale that produces a coherent, materially clearer implementation: local edit, section rewrite, or bounded module rewrite
-- **approval-required rewrite** — a section or bounded module rewrite that replaces the organizing shape of a coherent implementation path; local deletion, inlining, merging, renaming, and equivalent expression-level replacement do not qualify
-- **justified abstraction** — an abstraction that hides real complexity, enforces an invariant, provides actual substitutability, or forms a necessary boundary
+- **behavior contract** — observable behavior, public API, error and concurrency semantics, ownership/lifetime, and important performance guarantees.
+- **understanding path** — concepts, states, branches, representations, files, and calls needed to explain the logic.
+- **work unit** — the smallest coherent change including affected callers and verification, not necessarily one file.
 
 # Workflow
 
-## 1. Establish the contract
+## 1. Establish baseline and coverage
 
-Read the target code, its callers, and relevant tests. Record the behavior contract and the architectural boundaries containing the change. Run the narrowest relevant validation to capture the baseline; record pre-existing failures.
+Read target code, callers, registration/configuration, and relevant tests. Record contracts, boundaries, source revision/dirty state, validation commands, and baseline results. In implementation mode, add characterization coverage for high-risk poorly tested paths before rewriting them; in analyze-only mode, record missing coverage without changing tests or production code.
 
-Completion: The behavior contract, in-scope boundaries, validation command, and baseline result are explicit.
+For broad requests, inventory all in-scope first-party modules and maintain `.grimoire/simplify-state.json` with baseline, coverage, candidate evidence/dispositions, work-unit dependencies, results, and next action. Analyze both module-local and cross-module opportunities. Track unread/blocked regions explicitly; search hits do not equal inspected code. Under orchestration, use the supplied scope and return ledger updates rather than write shared state.
 
----
+For comprehensive simplification, default to a net production LOC reduction target of at least 30% unless the user specifies otherwise. Bounded tasks use their stated goal. Fix the counter/version, command, formatting, filters, and baseline inventory before edits: nonblank/noncomment first-party production LOC; report tests/config/docs/generated/vendor separately. Count all new and moved implementations in the final scope. Compute `100 * (baseline - final) / baseline` on the integrated tree; zero baseline is not applicable. Never reset the denominator mid-run or count minification, comment removal, deleted useful tests, or complexity transferred to configuration/dependencies as simplification.
 
-## 2. Trace the understanding path
+Under orchestration, use the coordinator's shared baseline and assigned unit criteria; the global reduction target is not a per-module or per-worker quota. Report unit deltas without claiming global acceptance.
 
-Trace the target logic end to end. Identify:
+Completion: Behavior, coverage, baseline evidence, and any quantitative acceptance target are explicit and reproducible.
 
-- concepts and temporary representations
-- mutable or duplicated states
-- branches and special cases
-- wrappers, helpers, interfaces, and conversion chains
-- dependencies and file or call-chain hops
+## 2. Discover and choose transformations
 
-Prioritize candidates that remove forwarding wrappers, one-use helpers, single-implementation traits or interfaces, wrappers without invariants, redundant conversions, or duplicated state. See [references/candidate-guide.md](./references/candidate-guide.md) when a candidate's value is uncertain.
+Trace entry points through policy, state, and effects. Find dead/duplicate code, repeated policies, redundant state/conversions, deep routing, forwarding chains, and confusing private decomposition. Apply [references/candidate-guide.md](./references/candidate-guide.md) for retention and hidden contracts, and [references/examples.md](./references/examples.md) for comparisons.
 
-Completion: Each candidate names the complexity it removes and the behavior or boundary it must preserve.
+Prefer deletion, inlining valueless indirection, merging equivalent behavior/state, and clearer names. Compare with a section or bounded module rewrite when incremental edits would preserve a confusing implementation shape. Introduce helpers only when they shorten the understanding path or enforce a real boundary; do not inline meaningful domain operations merely because they have one caller.
 
----
+For broad refactoring, apply [references/large-scale-patterns.md](./references/large-scale-patterns.md): split god files cohesively, consolidate semantic duplicates under one owner, and flatten control flow without changing decision order. Establish shared contracts before independent consumer migrations. Deduplicate candidates by root cause and group coupled changes with their callers/tests.
 
-## 3. Choose the clearest transformation
+Completion: Each selected unit has an explicit complexity reduction, owned scope, preserved contract, dependencies, and verification plan. No display limit truncates the backlog.
 
-First consider subtractive operations:
+In analyze-only mode, return the candidate ledger, inspected coverage, evidence, proposed units, and verification needs here; do not enter implementation or claim the proposed reduction was achieved. Analysis completion is distinct from implementation acceptance.
 
-1. Delete unused or redundant code.
-2. Inline indirection that hides no useful complexity.
-3. Merge duplicated state, branches, or representations.
-4. Rename when naming is the remaining source of confusion.
+## 3. Implement coherent units
 
-Then compare those edits with a section or bounded module rewrite. Prefer the rewrite when incremental edits would preserve a confusing decomposition, require compatibility scaffolding for private details, or produce less direct control flow. A rewrite may replace private helpers, types, representations, and internal file organization; it need not preserve the old implementation shape.
+Proceed within authorization, replacing obsolete private paths completely rather than layering the new design alongside the old. Remove newly unreachable helpers, state, adapters, registrations, imports, and dependencies. Preserve public compatibility where required; do not leave unnecessary private compatibility shims.
 
-Extract or introduce an abstraction only when it shortens the understanding path and is justified. Rank outcomes by: directness of control flow, fewer concepts, fewer states, fewer branches, fewer indirections, fewer dependencies, then fewer lines. Prefer familiar language constructs over custom machinery. Consult [references/examples.md](./references/examples.md) when comparing transformations.
+Execute dependency-ready units in small verifiable waves. Independent workers may use isolated worktrees when permitted; overlapping files and shared helpers need one owner or serial changes. Preserve user work, inspect actual returned diffs, and validate the combined tree after integration. Serial execution is a full alternative, not a reduced-quality mode.
 
-Choose the transformation scale by clarity, not diff size. Reject a candidate when it changes the behavior contract, moves responsibility across an architectural boundary, or merely exchanges one abstraction for an equally complex one.
+Completion: Each unit is complete end to end, with no unexplained migration residue or unauthorized contract change.
 
-Completion: The selected local edit or rewrite has an explicit before/after understanding path and is the clearest coherent option considered.
+## 4. Verify preservation and actual simplification
 
----
+Run baseline and changed-risk checks, including affected consumers and integration paths. Inspect guarantees tests may miss: authorization, error precedence, ordering, cleanup, transactions, concurrency, ownership, and sensitive performance. Repair or selectively undo regressions without discarding unrelated user edits. Unavailable checks remain unresolved evidence, not passes.
 
-## 4. Obtain rewrite approval
+Explain each transformed path and compare it to the original. Keep changes only when they reduce understanding cost without hiding complexity. Measure LOC and relevant before/after structural signals: duplicate implementations, nesting, responsibility concentration, cycles, and call/file hops. A file split alone is not LOC reduction; fewer lines alone do not prove readability.
 
-If the selected work contains any approval-required rewrite, make no code changes yet. Output a short approval checklist containing only the rewrites. For each rewrite, state:
+Completion: Retained changes have behavior evidence and a materially clearer understanding path; actual net metrics include additions and integrated effects.
 
-- **target** — section or module to replace
-- **reason** — confusion the rewrite removes
-- **shape** — one-sentence description of the intended implementation
-- **preserves** — behavior and public boundary that remain unchanged
+## 5. Rescan and close
 
-Do not include local deletion, inlining, merging, renaming, import cleanup, or other incidental edits. Ask the user to approve, reject, or adjust the listed rewrites and stop until they respond. Approval of one checklist applies only to the listed targets and shapes; list newly discovered or materially expanded rewrites for separate approval.
+Repeat discovery and implementation while actionable in-scope candidates remain. For comprehensive requests, revisit all modules and cross-module seams after integration; do not stop at the largest files, an arbitrary count, or merely reaching 30%. Reuse only hash-validated inspection evidence and recheck affected relationships.
 
-If no approval-required rewrite is selected, do not emit a checklist and continue directly.
+Retain code when further changes are only stylistic, equivalent-complexity swaps, speculative generalization, hidden complexity, or contract violations. Record a concrete reason per remaining material candidate. Update affected navigation/docs and refresh an existing map or flag changed shards stale.
 
-Completion: Every approval-required rewrite has explicit user approval, or the selected work contains only local edits.
+Completion requires full requested coverage, no unresolved actionable in-scope candidates, preserved behavior with required validation, and all requested numeric/structural gates. If safe candidates are exhausted below the LOC target, report the actual shortfall as an unmet criterion with evidence; never delete necessary behavior or declare success. On blocked checks or interrupted execution, persist the next action and report incomplete.
 
----
+# Final response and handoff
 
-## 5. Apply the transformation
-
-Implement the approved simplification at its chosen transformation scale. Preserve the behavior contract, established responsibility, public surfaces, and system-level dependency direction—not the old private structure. When rewriting, replace the old path completely rather than layering the new path beside it. Remove code made unreachable or redundant by the change.
-
-Completion: The target logic remains complete, the new path can be read without understanding the replaced design, and no obsolete helper, state, conversion, import, compatibility shim, or dependency remains.
-
----
-
-## 6. Verify preservation
-
-Run the baseline validation and any focused checks needed for the behavior contract. Compare results with the baseline. Inspect guarantees that tests may not prove directly, especially errors, concurrency, ownership or lifetime, and performance-sensitive behavior.
-
-Completion: Validation has no new failures, and every behavior-contract item is confirmed preserved or the change is reverted.
-
----
-
-## 7. Verify simplification and stop
-
-Explain the result using the concepts required after the change and compare it with the original understanding path. Keep the change only when the explanation requires fewer concepts without hiding complexity. Repeat steps 3–6 while another in-scope candidate passes this test.
-
-Stop when the next change would be:
-
-- a stylistic preference
-- an equally complex abstraction swap
-- preparation for a hypothetical future need
-- line-count reduction without concept reduction
-- a rewrite that only changes style or vocabulary
-- movement of responsibility across architectural boundaries
-
-Completion: The retained implementation has a shorter understanding path, and every remaining candidate meets a stop condition or lies outside scope.
-
----
-
-# Final response
-
-Report:
-
-- what was deleted, flattened, collapsed, clarified, or rewritten
-- which approved rewrite checklist was implemented, when applicable
-- which behavior and boundaries were preserved
-- validation commands and results
-- why further simplification stopped
+Report deleted/flattened/consolidated/rewritten code, contracts preserved, source snapshot, actual changed paths, commands/results, before/after metrics, coverage, and remaining work or reasons for retention. Under orchestration, include the unit ID and actual base/head or fingerprints; do not overwrite shared maps, reports, or acceptance status. Standalone responses may be concise and need no orchestration artifacts for small tasks.
 
 # Rule
 
-**Delete when possible. Rewrite when clearer. Preserve behavior.**
+**Delete when possible. Rewrite when clearer. Preserve behavior. Finish the scope, not just the easy findings.**
 
 # References
 
-- [candidate-guide.md](./references/candidate-guide.md) — retention tests, common candidates, and hidden-contract checks
-- [examples.md](./references/examples.md) — before/after transformations and stop decisions
+- [candidate-guide.md](./references/candidate-guide.md) — retention tests and hidden contracts
+- [examples.md](./references/examples.md) — before/after transformations
+- [large-scale-patterns.md](./references/large-scale-patterns.md) — god files, helper ownership, routing, and dead-code evidence

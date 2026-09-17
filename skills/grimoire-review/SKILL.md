@@ -80,6 +80,16 @@ Completion: The summary accurately reflects both findings and evidence limits.
 
 ---
 
+# Optional refactoring and batch context
+
+Keep the existing standalone workflow and severity categories. For a batch or integrated refactoring, record the actual base/current revision or fingerprints, changed paths, preserved contracts, and relevant consumers. Use map shards only for navigation and revalidate source claims. Review actual diffs, including deletions and neighboring behavior, rather than worker summaries.
+
+Partition large reviews by risk and subsystem with explicit inspected/partial/unread coverage; independent lenses may overlap. Deduplicate root causes before reporting and verify concrete findings. Examine cross-unit seams after integration: shared-helper semantics, error/route precedence, registration reachability, state ownership, dependency cycles, and required public compatibility.
+
+Do not treat a smaller file, LOC reduction, or successful merge as evidence of improved architecture. Check whether the new understanding path is shorter rather than hidden behind wrappers, flags, or a universal context. Preserve valid alternative designs and the existing evidence threshold for blockers.
+
+Return findings with source locations, evidence, impact, severity/confidence, reviewed snapshot, executed checks, coverage gaps, and unresolved verification. A branch review is scoped to that branch; reassess affected findings after integration or conflict resolution. If a coordinator owns shared status, return recommendations rather than mutate it. No findings in inspected code is not a clean review of unread code.
+
 # References
 
 - [severity-guide.md](./references/severity-guide.md) — detailed severity classification with concrete examples

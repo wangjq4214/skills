@@ -88,6 +88,22 @@ loop 内部循环      implement → test → review + check → 评估 ↺
 
 ---
 
+## 大型代码库改造
+
+`map`、`improve`、`simplify` 均可独立使用。需要编排时选择 `refactor`：持久化地图 → 多切面发现 → 统一依赖计划 → 分批实施 → 集成后 test/review/check → 复扫与验收。授权后可让独立修改单元使用 subagent/worktree，也支持按同一标准串行执行。
+
+地图保存在 `.grimoire/map/index.json` 和按模块划分的快照中，记录源文件哈希、新鲜度、覆盖率与证据；它是导航缓存，不是行为正确的证明。改造进度保存在 `.grimoire/refactor/<run-id>/`。全面简化默认以生产代码净 LOC 至少减少 30% 为目标，同时验收行为与可读性；局部任务不强加该比例。未达标如实报告，禁止靠搬代码或压行凑数。
+
+```text
+用 grimoire-map 梳理这个仓库，并持久化结果。
+用 grimoire-simplify 压平这个函数，保持行为不变。
+用 grimoire-refactor 全面简化这个仓库，使用并行 subagent 和 worktree。
+```
+
+维护验证：`pnpm run test:skills`（或 `node --test tests/refactoring-skills.test.mjs`）检查技能元数据、本地引用、注册项、JSON 示例和保留的 QA 阶段。这是静态检查，不等于真实 agent 执行的端到端验证。
+
+---
+
 ## 🗂️ 技能列表
 
 Grimoire Skills 分为两种调用方式：
@@ -110,6 +126,10 @@ Grimoire Skills 分为两种调用方式：
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | 将需求拆成连贯的价值或使能工单         |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**     | 生成按风险缩放、可修订的实现计划       |
 | 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | 根据改动风险运行自适应实现和 QA        |
+| 🧭 **[grimoire-map](./skills/grimoire-map/SKILL.md)** | 持久化代码库地图，并按源文件变化增量刷新 |
+| 🏗️ **[grimoire-improve](./skills/grimoire-improve/SKILL.md)** | 审查整体结构，实施已授权的职责与依赖改进 |
+| 🧹 **[grimoire-simplify](./skills/grimoire-simplify/SKILL.md)** | 保持行为，从单函数到全仓简化与减量 |
+| 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | 按依赖分批编排大规模改造，并在集成后验收 |
 | ✍️ **[commit](./skills/commit/SKILL.md)**                   | 准备并执行经确认的 Conventional Commit |
 
 ---

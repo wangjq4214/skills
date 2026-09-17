@@ -8,7 +8,7 @@ Common review scenarios and how to handle them.
 
 When the change is too large for a single review session:
 
-1. Ask the author if they want the review split by directory, by feature, or by commit.
+1. Use the supplied batch scope or choose coherent portions by feature, dependency, directory, or commit. Ask only when the partition would materially change requested coverage; do not pause an already authorized full review to request a slicing preference.
 2. Review one portion at a time, completing the full workflow per portion.
 3. In the summary, note which portions were reviewed and which remain.
 

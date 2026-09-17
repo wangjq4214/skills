@@ -270,3 +270,13 @@ impl Cache {
     }
 }
 ```
+
+---
+
+## 11. Cross-module Reuse and Control Flow
+
+**Questions:** Is the same policy implemented in several modules? Can a reader follow routing without reconstructing deeply nested conditions?
+
+Inspect semantic duplicates, error/normalization helpers, repeated routing bodies, state conversions, and inconsistent shared ownership. Preserve intentional domain differences and decision precedence. A common helper should have one stable owner and fewer concepts than its copies; a global utils bucket or flag-heavy universal router is not an improvement.
+
+For every proposed god-file split or helper consolidation, trace entry points, state ownership, affected consumers, and test boundaries. Compare the before/after explanation and dependencies. Smaller files alone do not prove simpler architecture.

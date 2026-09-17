@@ -1,80 +1,70 @@
 ---
 name: grimoire-improve
-description: Audit codebase structure, prioritize evidence-backed improvements, and optionally hand approved findings to implementation.
-disable-model-invocation: true
+description: Audit codebase structure with explicit coverage and evidence, then implement authorized responsibility and dependency improvements in coherent units.
 ---
 
 # Purpose
 
-Audit structural quality across relevant dimensions, retain the strongest evidence-backed findings, and present actionable improvements at a level of detail proportionate to each issue.
+Improve structural quality, responsibility boundaries, and the ability to explain how a codebase works. Scale from one module to a whole repository without capping discovery at a short report.
 
 # Scope
 
-This skill analyzes code and writes `.grimoire/improve-report.html`. Discovery is not capped; the report may summarize lower-priority findings while emphasizing the most valuable work. Code changes require explicit user selection unless the user already authorized implementation.
+Default to audit mode and write `.grimoire/improve-report.html`. Implement when explicitly authorized; a comprehensive implementation request already authorizes in-scope internal restructuring, without repeated finding-selection prompts. Preserve observable behavior and public contracts unless their change is approved. Discussion alone is not implementation authorization.
 
-Completion: The report distinguishes prioritized findings from the broader discovery set and gives each retained issue enough evidence to act on.
+Works independently with its own survey and validation. A fresh `grimoire-map` artifact or orchestration handoff may accelerate discovery but is never required. Revalidate source evidence before relying on it. This skill owns structural decisions; it does not require a separate skill to complete authorized work.
 
 # Workflow
 
-## 1. Survey
+## 1. Establish scope and coverage
 
-Map relevant modules, dependency direction, change hotspots, and unusually connected or complex types. Scale breadth to the requested target; do not scan the entire repository for a bounded audit.
+Record target, mode, contracts, source revision/dirty state, and baseline checks when implementing. For a bounded audit, inspect the target and relevant callers/dependencies. For a comprehensive request, inventory all first-party modules and maintain `.grimoire/improve-state.json` with scope, per-module/file coverage, findings, dependencies, dispositions, checks, and next action. Under orchestration, return this information to its ledger instead of creating competing shared state.
 
-Completion: The audit surface and its important structural relationships are known.
+Map entry points, state ownership, dependency direction, tests, hotspots, and unusually connected or complex types. Load only relevant map shards; stale or partial map coverage does not establish an inspected module. Read source beyond search excerpts. Explicitly account for unread, excluded, and blocked regions.
 
----
+Completion: The audit surface, structural relationships, baseline, and coverage gaps are known.
 
-## 2. Audit relevant dimensions
+## 2. Audit within and across modules
 
-Use `references/dimensions.md` as a lens set, not a mandatory checklist. Examine dimensions capable of producing material findings for the target: responsibility, encapsulation, method placement, API expression, domain modeling, dependency direction, change isolation, speculative abstraction, concentration of responsibility, and leaked state.
+Use [references/dimensions.md](./references/dimensions.md) as evidence lenses. For broad simplification, include god files/objects, shared-helper ownership, repeated policies, routing complexity, unnecessary abstraction, state duplication, and dependency cycles. Examine cross-module connections as well as isolated files.
 
-Record concrete locations, evidence, impact, confidence, and rough remediation cost. A single-implementation abstraction is suspicious only when it lacks present boundary value.
+Record stable finding ID, concrete locations, evidence, affected contract, impact, confidence, remediation cost, and likely consumers. Size, names, or a single implementation are clues, not sufficient findings. Read-only reviewers may overlap; deduplicate root causes before assigning modifications.
 
-Completion: Relevant dimensions have been examined and unsupported observations discarded.
+Completion: Relevant dimensions have concrete findings or an inspected no-finding disposition; unsupported observations are discarded with reasons where useful for repeat scans.
 
----
+## 3. Design coherent improvement units
 
-## 3. Prioritize
+Rank retained findings by impact, confidence, change frequency, blast-radius reduction, and effort. Group coupled files and callers into independently verifiable units. Establish prerequisites, write ownership, preserved contracts, and checks. Set common-helper semantics and ownership before parallel consumer migrations.
 
-Rank all retained findings by current impact, confidence, change frequency, blast-radius reduction, and effort. The HTML report should emphasize a manageable top set—five by default—but state how many lower-priority findings were summarized or deferred. Do not silently cap discovery.
+Split god files along cohesive responsibilities, independent state lifecycles, or change drivers. Keep a clear entry/coordinator only where necessary. Avoid mechanical line-count splits, universal context objects, new dependency cycles, or forwarding layers that merely move complexity. Explain ownership and dependency changes with a short before/after path; use diagrams when they clarify relationships.
 
-Completion: Priority reflects repository pain rather than abstract preference.
+Completion: Every retained finding has an actionable unit or evidence-backed disposition, including those outside the report's emphasized set.
 
----
+## 4. Report or implement
 
-## 4. Generate report
+Generate the HTML report using [references/report-template.md](./references/report-template.md). Emphasize five findings by default for readability, but expose the full discovery and disposition counts. This is a presentation limit, never a work limit. Follow [references/mermaid-conventions.md](./references/mermaid-conventions.md) when diagrams help.
 
-Use `references/report-template.md` as a presentation default. Each emphasized finding includes location, evidence, concrete impact, confidence, strategy, expected benefit, and important tradeoffs.
+In audit mode, present recommendations and stop without modifying production code. In implementation mode, execute all authorized units in dependency order. Independent writers may use isolated worktrees when permitted; shared contracts and overlapping write paths must be serialized. Inspect actual diffs and verify after integration, not only on worker branches. Serial execution is equally valid.
 
-Add before/after Mermaid diagrams only when relationships, control flow, or ownership are difficult to explain clearly in prose. Simple local findings do not require diagrams. Keep diagrams minimal and follow `references/mermaid-conventions.md`.
+Remove obsolete internal paths, duplicate helpers, registrations, imports, and dependencies made unnecessary by the change. Update affected navigation/docs; do not leave a new design alongside an unused old one. Ask only for new public-contract changes, material scope expansion, or irreversible decisions.
 
-Summarize deferred findings compactly so repeated runs are optional rather than required for disclosure.
+Completion: Audit findings are disclosed, or authorized units are implemented with no unexplained migration residue.
 
-Completion: `.grimoire/improve-report.html` communicates priorities without decorative overhead.
+## 5. Verify, refresh, and finish
 
----
+Run appropriate build/type/test/lint checks and inspect changed contracts, state lifecycle, error paths, dependencies, and consumer behavior. Record baseline versus new failures. Verify god-file decomposition reduced responsibility concentration and that shared helpers shortened understanding rather than centralizing unrelated policy.
 
-## 5. Present and hand off
+For comprehensive implementation, rescan all in-scope modules and cross-module seams after changes; continue while actionable structural findings remain. Give each remaining candidate a reasoned retained/out-of-scope/blocked disposition. Refresh affected map data if maintaining it, or flag it stale. On interruption, persist next actions and report incomplete rather than claiming the entire repository was covered.
 
-Open the report when the environment supports it. Ask which findings to implement unless implementation was already authorized. Related findings may be implemented together when they touch the same invariant or would otherwise cause repeated churn; independent findings may be parallelized safely.
+Update the report with actual outcomes, source snapshot, coverage, validation commands/results, remaining findings, and acceptance status. When a LOC target is supplied, preserve its fixed scope/counter, count additions and moved implementations, and report actual net reduction; file splitting is not reduction, and an unmet target remains unmet.
 
-After implementation, run verification appropriate to the changed behavior rather than compiling mechanically after every finding.
+Completion: Authorized work has integrated evidence and a full disposition ledger; audit-only completion is clearly distinguished from implementation completion.
 
-Completion: Approved work is implemented or clearly handed off; unapproved findings remain recommendations.
+# Standalone and orchestration handoff
 
----
-
-# Rules
-
-- Report how many findings were emphasized, summarized, or deferred; do not imply the display set is the full discovery set.
-- Require diagrams only when they improve understanding.
-- Prioritize concrete impact and confidence over checklist completeness.
-- Combine or parallelize findings according to coupling, not a fixed one-at-a-time rule.
-- Preserve user approval for scope-expanding code changes.
----
+Accept scope, mode, base snapshot, contracts, optional owned paths/map shards, and checks. Return evidence-backed findings or actual changed paths, source snapshot, contract/dependency changes, checks/results, and remaining work. Reconstruct missing essentials locally for standalone use. Workers return results rather than overwrite coordinator reports, maps, or acceptance state.
 
 # References
 
-- [dimensions.md](./references/dimensions.md) — detailed explanation of each quality dimension with concrete examples
-- [mermaid-conventions.md](./references/mermaid-conventions.md) — diagram types, node naming, and simplicity rules
-- [report-template.md](./references/report-template.md) — full HTML template structure with placeholder slots
+- [dimensions.md](./references/dimensions.md) — structural lenses and interpretation
+- [mermaid-conventions.md](./references/mermaid-conventions.md) — relationship diagrams
+- [report-template.md](./references/report-template.md) — report presentation and coverage

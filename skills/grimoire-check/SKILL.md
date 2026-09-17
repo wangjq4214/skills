@@ -97,6 +97,18 @@ Completion: Loaded artifact statuses reflect verified implementation reality.
 - Report and update statuses; fix code only when the user also requested implementation.
 ---
 
+# Optional refactoring and batch context
+
+Standalone intent comparison and classifications remain unchanged; no map, ledger, or formal plan becomes mandatory. When supplied, use batch scope, actual base/current revision or fingerprints, preserved contracts, acceptance criteria, and integrated validation evidence. Read source behind map/worker claims and distinguish branch-local evidence from the final combined tree.
+
+For quantitative or comprehensive simplification requests, evaluate each criterion separately: behavior preservation, requested coverage, god-file responsibility separation, semantic reuse, control-flow/readability improvement, obsolete-code removal, and any LOC target. Reproduce baseline/final counts with the same scope, counter, filters, and formatting; include new/moved implementations and inspect transfers to config/generated code/dependencies. A smaller largest file does not establish net code reduction.
+
+A measured missed target is a gap; unavailable or incomparable measurements are needs-verification. Neither becomes match because tests pass or a plan was followed. Do not impose 30% or any new criterion when the user's scope did not require it. Keep defensible design deviations distinct from unmet requirements.
+
+Return a criterion-to-evidence result with counts, source snapshot, exact shortfalls, commands/results, coverage gaps, and status recommendations. Under orchestration, only the coordinator updates shared run/map status: return justified transitions rather than writing shared artifacts. Outside that ownership restriction, retain step 7's status-update behavior and preserve non-status content. Do not mark global completion from a local work-unit result.
+
+Explicit read-only requests override status-writing steps in any mode: report proposed transitions without changing artifacts. This does not remove normal standalone status updates when writes are permitted.
+
 # References
 
 - [check-patterns.md](./references/check-patterns.md) — detailed classification patterns with concrete examples

@@ -80,6 +80,16 @@ Output: verification result with remaining limitations.
 
 ---
 
+# Optional refactoring and batch context
+
+Standalone behavior and test selection remain unchanged. When a batch handoff exists, accept its target, preserved contracts, owned test paths, base/current revision or fingerprints, baseline failures, and relevant map/test links. Verify current source; the map identifies candidate tests but does not prove coverage or passing execution.
+
+Before risky rewrites, characterize public outcomes and material edge cases on the baseline. After changes, reuse the same cases against the new implementation; differential/property tests are useful when appropriate. Cover routing precedence, failure/cleanup, shared-helper consumers, and state transitions according to risk. Do not lock tests to obsolete private decomposition or delete useful behavior tests for a LOC target.
+
+Run branch-local checks during iteration, then affected consumer/integration suites against the integrated tree. Shared-state, port, database, or build-output collisions must not invalidate parallel results. Evidence from an older or different tree cannot establish current success.
+
+Return test paths and covered contracts, source snapshot, commands and working directories, exit statuses/log locations, baseline versus new failures, and skipped/unavailable checks. A command that found zero relevant tests is not a passing behavior check. Report unresolved required evidence explicitly; do not mark the whole refactoring accepted or modify shared orchestration status.
+
 # References
 
 - [principles.md](./references/principles.md) — the six testing principles explained

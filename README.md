@@ -88,6 +88,22 @@ Direct specialist entry remains available for narrower requests. Scale depth to 
 
 ---
 
+## Repository-scale refactoring
+
+`map`, `improve`, and `simplify` each work independently. Select `refactor` for coordination: persistent map → multi-lens discovery → one dependency-ordered plan → implementation waves → test/review/check on the integrated tree → rescan and acceptance. Independent writers may use subagents/worktrees when authorized; serial execution remains supported.
+
+Maps live in `.grimoire/map/index.json` and per-module snapshot shards, with source hashes, freshness, coverage, and evidence. They are navigation caches, not proof of behavior. Refactoring progress lives under `.grimoire/refactor/<run-id>/`. Comprehensive simplification defaults to at least 30% net production LOC reduction, alongside behavior/readability gates; bounded work does not inherit that quota. Unmet targets are reported, never disguised by moving or compressing code.
+
+```text
+Use grimoire-map to map this repository and persist the results.
+Use grimoire-simplify to flatten this function without changing behavior.
+Use grimoire-refactor to comprehensively simplify this repository; use parallel subagents and worktrees.
+```
+
+Maintainers: `pnpm run test:skills` (or `node --test tests/refactoring-skills.test.mjs`) checks skill metadata, local references, registry entries, JSON examples, and retained QA phases. These are static authoring checks, not an end-to-end proof of agent execution.
+
+---
+
 ## 🗂️ Skills
 
 Grimoire Skills are divided into two invocation modes:
@@ -110,6 +126,10 @@ These skills require explicit user selection. They have `disable-model-invocatio
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | Decompose requirements into coherent value or enabling tickets          |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**     | Produce a risk-scaled, revisable implementation plan                    |
 | 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | Run adaptive implementation and QA based on change risk                 |
+| 🧭 **[grimoire-map](./skills/grimoire-map/SKILL.md)** | Persist and incrementally refresh an evidence-backed codebase map |
+| 🏗️ **[grimoire-improve](./skills/grimoire-improve/SKILL.md)** | Audit structure and implement authorized responsibility improvements |
+| 🧹 **[grimoire-simplify](./skills/grimoire-simplify/SKILL.md)** | Simplify behavior-preserving code from one function to a repository |
+| 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | Coordinate large refactoring through dependency-ordered batches and integrated acceptance |
 | ✍️ **[commit](./skills/commit/SKILL.md)**                   | Prepare and execute an approved Conventional Commit                     |
 
 ---
