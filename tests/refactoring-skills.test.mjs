@@ -25,7 +25,7 @@ test('skill names and invocation modes remain explicit', () => {
     assert.ok(metadata, `${name}: frontmatter missing`);
     assert.match(metadata[1], new RegExp(`^name: grimoire-${name}$`, 'm'));
     assert.match(metadata[1], /^description: .+/m);
-    const userInvoked = ['map', 'refactor', 'improve', 'simplify'].includes(name);
+    const userInvoked = name === 'refactor';
     assert.equal(/^disable-model-invocation: true$/m.test(metadata[1]), userInvoked, name);
   }
 });
@@ -98,4 +98,39 @@ test('map wire example resolves its inventory and reproduces its snapshot finger
     assert.equal(index.coverage[status], entries.filter(entry => entry.coverage === status).length);
   }
   assert.equal(index.coverage.unclassified, entries.filter(entry => entry.moduleId === null).length);
+});
+
+test('README invocation tables match all registered skill metadata', () => {
+  const names = JSON.parse(read('skills.sh.json')).groupings.flatMap(group => group.skills);
+  for (const [doc, userHeading, modelHeading] of [
+    ['README.md', '### 👤 User-invoked', '### 🤖 Model-invoked'],
+    ['README_zh.md', '### 👤 用户调用', '### 🤖 模型调用'],
+  ]) {
+    const source = read(doc);
+    const section = heading => {
+      assert.ok(source.includes(heading), `${doc}: ${heading}`);
+      return source.split(heading)[1].split(/^#{2,3} /m)[0];
+    };
+    const userSection = section(userHeading);
+    const modelSection = section(modelHeading);
+    for (const name of names) {
+      const path = `skills/${name}/SKILL.md`;
+      const metadata = read(path).match(/^---\n([\s\S]*?)\n---/)[1];
+      const userOnly = /^disable-model-invocation: true$/m.test(metadata);
+      const link = `](./${path})`;
+      assert.equal(userSection.split(link).length - 1, userOnly ? 1 : 0, `${doc}: ${name} user table`);
+      assert.equal(modelSection.split(link).length - 1, userOnly ? 0 : 1, `${doc}: ${name} model table`);
+    }
+  }
+});
+
+test('refactoring guidance is nested under Quick Start', () => {
+  for (const [doc, quickStart, refactoring] of [
+    ['README.md', '## 🚀 Quick Start', '### Repository-scale refactoring'],
+    ['README_zh.md', '## 🚀 快速开始', '### 大型代码库改造'],
+  ]) {
+    const source = read(doc);
+    assert.ok(source.includes(quickStart), doc);
+    assert.ok(source.split(quickStart)[1].split(/^## /m)[0].includes(refactoring), doc);
+  }
 });

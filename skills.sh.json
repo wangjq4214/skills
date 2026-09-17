@@ -5,6 +5,7 @@
       "title": "Grimoire",
       "skills": [
         "grimoire-init",
+        "grimoire-tidy",
         "grimoire-clarify",
         "grimoire-record",
         "grimoire-refine",

@@ -86,9 +86,7 @@ loop 内部循环      implement → test → review + check → 评估 ↺
 
 较窄的请求仍可直接选择专业技能。按风险调整深度，但保留选定交付物和必要验证。技能组合须遵守授权范围和宿主调用规则；讨论不等于授权实现。
 
----
-
-## 大型代码库改造
+### 大型代码库改造
 
 `map`、`improve`、`simplify` 均可独立使用。需要编排时选择 `refactor`：持久化地图 → 多切面发现 → 统一依赖计划 → 分批实施 → 集成后 test/review/check → 复扫与验收。授权后可让独立修改单元使用 subagent/worktree，也支持按同一标准串行执行。
 
@@ -121,14 +119,12 @@ Grimoire Skills 分为两种调用方式：
 | ---------------------------------------------------------- | -------------------------------------- |
 | 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**         | 创建、审查和精简 Agent 技能            |
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | 按需初始化 `.grimoire` 项目知识库      |
+| 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | 整理知识库，保留长期信息并清理已完成、已验证的 spec 和 ticket |
 | 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 协调澄清、上下文落盘、规格、工单与计划 |
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | 根据需求和相关上下文生成适量规格       |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | 将需求拆成连贯的价值或使能工单         |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**     | 生成按风险缩放、可修订的实现计划       |
 | 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | 根据改动风险运行自适应实现和 QA        |
-| 🧭 **[grimoire-map](./skills/grimoire-map/SKILL.md)** | 持久化代码库地图，并按源文件变化增量刷新 |
-| 🏗️ **[grimoire-improve](./skills/grimoire-improve/SKILL.md)** | 审查整体结构，实施已授权的职责与依赖改进 |
-| 🧹 **[grimoire-simplify](./skills/grimoire-simplify/SKILL.md)** | 保持行为，从单函数到全仓简化与减量 |
 | 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | 按依赖分批编排大规模改造，并在集成后验收 |
 | ✍️ **[commit](./skills/commit/SKILL.md)**                   | 准备并执行经确认的 Conventional Commit |
 
@@ -136,7 +132,7 @@ Grimoire Skills 分为两种调用方式：
 
 ### 🤖 模型调用
 
-这些技能在适合当前任务时可由模型使用，但不应强制触发整条流水线。
+这些技能可由模型按任务选择，也可由用户显式调用。自动选择不代表允许超出用户请求修改内容，也不应强制触发整条流水线。
 
 | 技能                                                             | 描述                                       |
 | ---------------------------------------------------------------- | ------------------------------------------ |
@@ -146,6 +142,9 @@ Grimoire Skills 分为两种调用方式：
 | ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | 对照意图、验收标准、相关产物和证据审计实现 |
 | 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)**       | 使用证据、严重度和置信度审查代码           |
 | 🧪 **[grimoire-test](./skills/grimoire-test/SKILL.md)**           | 选择合适结构和边界编写适量测试             |
+| 🧭 **[grimoire-map](./skills/grimoire-map/SKILL.md)** | 持久化代码库地图，并按源文件变化增量刷新 |
+| 🏗️ **[grimoire-improve](./skills/grimoire-improve/SKILL.md)** | 审查整体结构，实施已授权的职责与依赖改进 |
+| 🧹 **[grimoire-simplify](./skills/grimoire-simplify/SKILL.md)** | 保持行为，从单函数到全仓简化与减量 |
 
 ---
 

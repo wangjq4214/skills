@@ -86,9 +86,7 @@ Existing spec/tickets    enter at the next useful stage
 
 Direct specialist entry remains available for narrower requests. Scale depth to risk while preserving selected deliverables and verification. Composition respects authorized scope and host invocation rules; discussion does not authorize implementation.
 
----
-
-## Repository-scale refactoring
+### Repository-scale refactoring
 
 `map`, `improve`, and `simplify` each work independently. Select `refactor` for coordination: persistent map → multi-lens discovery → one dependency-ordered plan → implementation waves → test/review/check on the integrated tree → rescan and acceptance. Independent writers may use subagents/worktrees when authorized; serial execution remains supported.
 
@@ -121,14 +119,12 @@ These skills require explicit user selection. They have `disable-model-invocatio
 | ---------------------------------------------------------- | ----------------------------------------------------------------------- |
 | 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**         | Create, review, and prune agent skills                                  |
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | Bootstrap optional `.grimoire` project knowledge                        |
+| 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | Organize knowledge and retire verified, completed specs and tickets     |
 | 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | Coordinate clarification, context persistence, specs, tickets, and plans |
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | Produce proportionate specs from requirements and relevant context      |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | Decompose requirements into coherent value or enabling tickets          |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**     | Produce a risk-scaled, revisable implementation plan                    |
 | 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | Run adaptive implementation and QA based on change risk                 |
-| 🧭 **[grimoire-map](./skills/grimoire-map/SKILL.md)** | Persist and incrementally refresh an evidence-backed codebase map |
-| 🏗️ **[grimoire-improve](./skills/grimoire-improve/SKILL.md)** | Audit structure and implement authorized responsibility improvements |
-| 🧹 **[grimoire-simplify](./skills/grimoire-simplify/SKILL.md)** | Simplify behavior-preserving code from one function to a repository |
 | 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | Coordinate large refactoring through dependency-ordered batches and integrated acceptance |
 | ✍️ **[commit](./skills/commit/SKILL.md)**                   | Prepare and execute an approved Conventional Commit                     |
 
@@ -136,7 +132,7 @@ These skills require explicit user selection. They have `disable-model-invocatio
 
 ### 🤖 Model-invoked
 
-These skills are available when their behavior fits the current task; they should not force the rest of the pipeline.
+These skills may be selected by the model when relevant, or invoked explicitly by the user. Automatic selection does not authorize changes outside the user's request or force the rest of the pipeline.
 
 | Skill                                                            | Description                                                           |
 | ---------------------------------------------------------------- | --------------------------------------------------------------------- |
@@ -146,6 +142,9 @@ These skills are available when their behavior fits the current task; they shoul
 | ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | Audit behavior against intent, criteria, artifacts, and evidence      |
 | 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)**       | Review with evidence-backed severity and confidence                   |
 | 🧪 **[grimoire-test](./skills/grimoire-test/SKILL.md)**           | Write proportionate tests using appropriate structures and boundaries |
+| 🧭 **[grimoire-map](./skills/grimoire-map/SKILL.md)** | Persist and incrementally refresh an evidence-backed codebase map |
+| 🏗️ **[grimoire-improve](./skills/grimoire-improve/SKILL.md)** | Audit structure and implement authorized responsibility improvements |
+| 🧹 **[grimoire-simplify](./skills/grimoire-simplify/SKILL.md)** | Simplify behavior-preserving code from one function to a repository |
 
 ---
 
