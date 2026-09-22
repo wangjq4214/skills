@@ -65,7 +65,7 @@ Pass the settled handoff, verified source paths, selected endpoint, and the full
 | ----- | ---------------- | ------------------------------------------------------------------------------------ |
 | Spec  | `grimoire-spec`  | Requirement files in `.grimoire/spec/` traceable to settled inputs                   |
 | Slice | `grimoire-slice` | Relationship README and tickets in `.grimoire/ticket/` covering the settled contract |
-| Plan  | `grimoire-plan`  | Readable HTML plan in `.grimoire/plans/` covering the settled task                   |
+| Plan  | `grimoire-plan`  | Readable Markdown plan plus browser viewer in `.grimoire/plans/` covering the settled task |
 
 After each stage, read its outputs, apply its completion checks, and verify compliance with the knowledge boundary. Spec returns to the selected next stage; slice and plan return directly to closure. Never automatically plan the tickets after slice, or start implementation after plan.
 

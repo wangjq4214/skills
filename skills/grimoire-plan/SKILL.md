@@ -1,6 +1,6 @@
 ---
 name: grimoire-plan
-description: Generate a risk-scaled, revisable implementation plan from a ticket, spec, or conversation.
+description: Generate a risk-scaled, revisable Markdown implementation plan with browser preview from a ticket, spec, or conversation.
 disable-model-invocation: true
 ---
 
@@ -10,7 +10,7 @@ Create a temporary implementation hypothesis with enough design, sequencing, ris
 
 # Scope
 
-This skill writes HTML plans to `.grimoire/plans/`. It does not implement production code unless the user separately authorizes execution.
+This skill writes Markdown plans to `.grimoire/plans/` and maintains a reusable browser viewer for rendering them. It does not implement production code unless the user separately authorizes execution.
 
 When coordinated by `grimoire-refine`, apply the knowledge boundary and selected endpoint supplied in its coordination contract instead of standalone design, assumption, or execution permissions. If that contract is missing, pause and request it from the coordinator; do not guess its installation path. Return knowledge gaps and stage results to the coordinator.
 
@@ -32,7 +32,7 @@ Determine the input source:
 - If the user provided a spec path (e.g., `.grimoire/spec/0001-xxx.md`), use that spec.
 - If neither, treat the conversation as the input. Derive a short kebab-case title from the user's goal. Do not ask.
 
-Assign the next available sequence number from `.grimoire/plans/`. Naming: `NNNN-title.html` (zero-padded).
+Assign the next available sequence number from `.grimoire/plans/`. Count numbered plan Markdown files; ignore `viewer.html`. Naming: `NNNN-title.md` (zero-padded).
 
 Completion: `.grimoire/plans/` exists. Input source determined. Plan path known.
 
@@ -97,13 +97,21 @@ Completion: Every material behavior has an appropriate verification method.
 
 ---
 
-## 7. Assemble and write
+## 7. Assemble, write, and preview
 
-Use [references/html-template.md](./references/html-template.md) as the default presentation. Adapt or omit sections that do not apply, while preserving clear implementation steps, affected areas, risks, and verification.
+Use [references/markdown-template.md](./references/markdown-template.md) as the default plan structure. Adapt or omit sections that do not apply, while preserving clear implementation steps, affected areas, risks, and verification.
 
-Write to `.grimoire/plans/NNNN-title.html`, verify valid HTML, and open it for preview when the environment supports doing so without disruption.
+Write the plan to `.grimoire/plans/NNNN-title.md` as Markdown. Keep Mermaid diagrams in fenced `mermaid` blocks.
 
-Completion: The plan exists, is readable, and contains the information needed for implementation.
+Ensure `.grimoire/plans/viewer.html` matches [assets/plan-viewer.html](./assets/plan-viewer.html). Then prepare the preview:
+
+1. Detect Python by trying `python` and then `py`.
+2. When Python is available, reuse a confirmed server already serving `.grimoire/plans/`, or start `-m http.server` as a non-blocking background process bound to `127.0.0.1`. Start at port `8000` and choose another available port if needed.
+3. Verify the HTTP endpoint responds, then open `http://127.0.0.1:PORT/viewer.html?plan=NNNN-title.md` when the environment supports opening a browser.
+4. Report the preview URL and the server PID or exact stop command so the user can terminate it.
+5. When Python is unavailable or the server cannot start, open `viewer.html` directly; the viewer's file picker and drag-and-drop are the fallback.
+
+Completion: The Markdown plan is readable as source and contains the information needed for implementation. With Python available, a verified loopback preview URL renders it; otherwise the direct viewer fallback is available.
 
 ---
 

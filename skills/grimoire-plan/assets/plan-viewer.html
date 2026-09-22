@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grimoire Plan Viewer</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f7f9;
+      --surface: #fff;
+      --text: #20242b;
+      --muted: #667085;
+      --border: #d9dee7;
+      --accent: #315efb;
+      --code: #f0f2f5;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #101318; --surface: #181c23; --text: #e7eaf0; --muted: #a0a8b8; --border: #343b47; --accent: #8da2ff; --code: #222833; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 system-ui, sans-serif; }
+    .toolbar { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; padding: .75rem max(1rem, calc((100vw - 980px) / 2)); background: color-mix(in srgb, var(--surface) 92%, transparent); border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
+    .toolbar strong { margin-right: auto; }
+    button, .file-button { border: 1px solid var(--border); border-radius: .45rem; padding: .45rem .75rem; background: var(--surface); color: var(--text); cursor: pointer; }
+    .file-button input { display: none; }
+    #status { width: 100%; color: var(--muted); font-size: .85rem; }
+    main { max-width: 980px; min-height: 70vh; margin: 2rem auto; padding: clamp(1.25rem, 4vw, 3rem); background: var(--surface); border: 1px solid var(--border); border-radius: .75rem; box-shadow: 0 10px 35px rgb(0 0 0 / .07); }
+    main.dragging { outline: 3px dashed var(--accent); outline-offset: -10px; }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { padding-bottom: .6rem; border-bottom: 2px solid var(--accent); }
+    h2 { margin-top: 2rem; padding-bottom: .35rem; border-bottom: 1px solid var(--border); }
+    a { color: var(--accent); }
+    table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+    th, td { padding: .55rem .7rem; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { background: var(--code); }
+    code { padding: .12rem .3rem; background: var(--code); border-radius: .25rem; }
+    pre { overflow-x: auto; padding: 1rem; background: var(--code); border-radius: .5rem; }
+    pre code { padding: 0; }
+    blockquote { margin-left: 0; padding-left: 1rem; color: var(--muted); border-left: 4px solid var(--border); }
+    .mermaid { margin: 1.5rem 0; overflow-x: auto; text-align: center; }
+    .empty { color: var(--muted); text-align: center; padding: 4rem 1rem; }
+    @media print { .toolbar { display: none; } body { background: #fff; } main { max-width: none; margin: 0; padding: 0; border: 0; box-shadow: none; } }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <strong>Grimoire Plan Viewer</strong>
+    <label class="file-button">Open Markdown<input id="file" type="file" accept=".md,text/markdown,text/plain"></label>
+    <button id="print" type="button">Print</button>
+    <span id="status">Choose a plan or drop a Markdown file below.</span>
+  </header>
+  <main id="content"><p class="empty">Drop a <code>.md</code> plan here to render it.</p></main>
+  <script>
+    const content = document.querySelector('#content');
+    const status = document.querySelector('#status');
+    const fileInput = document.querySelector('#file');
+
+    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'default' });
+    marked.setOptions({ gfm: true, breaks: false });
+
+    async function renderMarkdown(source, name) {
+      const html = marked.parse(source);
+      content.innerHTML = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+      const diagrams = [...content.querySelectorAll('pre > code.language-mermaid')];
+      for (const code of diagrams) {
+        const diagram = document.createElement('div');
+        diagram.className = 'mermaid';
+        diagram.textContent = code.textContent;
+        code.parentElement.replaceWith(diagram);
+      }
+      status.textContent = `Rendered ${name}`;
+      document.title = `${name} — Grimoire Plan`;
+      try {
+        if (diagrams.length) await mermaid.run({ nodes: content.querySelectorAll('.mermaid') });
+      } catch (error) {
+        status.textContent = `Rendered ${name}; a Mermaid diagram failed: ${error.message}`;
+      }
+    }
+
+    async function loadFile(file) {
+      if (!file) return;
+      await renderMarkdown(await file.text(), file.name);
+    }
+
+    fileInput.addEventListener('change', event => loadFile(event.target.files[0]));
+    document.querySelector('#print').addEventListener('click', () => window.print());
+
+    for (const type of ['dragenter', 'dragover']) {
+      content.addEventListener(type, event => { event.preventDefault(); content.classList.add('dragging'); });
+    }
+    for (const type of ['dragleave', 'drop']) {
+      content.addEventListener(type, event => { event.preventDefault(); content.classList.remove('dragging'); });
+    }
+    content.addEventListener('drop', event => loadFile(event.dataTransfer.files[0]));
+
+    const plan = new URLSearchParams(location.search).get('plan');
+    if (plan) {
+      fetch(plan)
+        .then(response => {
+          if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+          return response.text();
+        })
+        .then(source => renderMarkdown(source, plan.split('/').pop()))
+        .catch(() => {
+          status.textContent = `Select or drop ${plan.split('/').pop()} (the browser blocked automatic local-file loading).`;
+        });
+    }
+  </script>
+</body>
+</html>
