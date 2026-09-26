@@ -9,7 +9,7 @@ Implement production code from the best available source of intent. Preserve use
 
 # Scope
 
-This skill writes code to the repository. A formal plan is optional: a clear conversation, ticket, or spec can be sufficient for bounded work.
+This skill writes code to the repository. In standalone use, a formal plan is optional: a clear conversation, ticket, or spec can be sufficient for bounded work. When coordinated by grimoire-loop, consume the persisted plan and original source supplied by loop; return material deviations so loop can maintain the audit trail.
 
 Completion: Requested behavior is implemented and verified at an appropriate scope, with assumptions and material deviations reported.
 

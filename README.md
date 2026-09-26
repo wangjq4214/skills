@@ -72,17 +72,17 @@ Choose the smallest sufficient path:
 
 ```text
 Refine discussion        clarify + live record
-Simple task              → plan → end
-Contract / decomposition → user-selected spec → plan → end
-                         → user-selected [spec →] slice → end
-Inside loop              implement → test → review + check → assess ↺
+Simple task              → settled handoff → recommend loop → end
+Contract / decomposition → user-selected spec → recommend loop → end
+                         → user-selected [spec →] slice → recommend loop → end
+Inside loop              plan → implement → test → review + check → assess ↺
 Small and reversible     implement → targeted verification
 Existing spec/tickets    enter at the next useful stage
 ```
 
-[Refine](./skills/grimoire-refine/SKILL.md) coordinates clarify with automatic recording during discussion, then recommends spec/slice according to task complexity or routes simple work directly to plan. Slice or plan completion ends refinement. Its workflow defines route selection, knowledge boundaries, and verification: artifact stages consume settled knowledge and return gaps to discussion rather than inventing knowledge. [Loop](./skills/grimoire-loop/SKILL.md) is a separately selected implementation/QA workflow. Load and apply each responsible skill; inline execution is valid.
+[Refine](./skills/grimoire-refine/SKILL.md) coordinates clarify with automatic recording during discussion, then recommends spec/slice according to task complexity. Simple tasks end with a settled handoff and a recommendation to use loop, not a generated plan. Artifact stages consume settled knowledge and return gaps to discussion rather than inventing knowledge. [Loop](./skills/grimoire-loop/SKILL.md) accepts conversation, spec, tickets, or an existing plan; it saves or updates a plan in `.grimoire/plans/` and proceeds to implementation/QA without routine approval gates. Load and apply each responsible skill; inline execution is valid.
 
-`clarify` owns requirements discussion; `record` persists durable context and decisions; `spec` owns requirement contracts; `slice` owns tickets; `plan` owns implementation plans. Loop uses implement for production changes, test for test work, review for code risks, and check for intent alignment.
+`clarify` owns requirements discussion; `record` persists durable context and decisions; `spec` owns requirement contracts; `slice` owns tickets. Loop uses plan for an auditable implementation approach shared with subagents, implement for production changes, test for test work, review for code risks, and check for intent alignment. Plan remains directly invocable for plan-only work. Browser preview and its server are prepared only on user request.
 
 Direct specialist entry remains available for narrower requests. Scale depth to risk while preserving selected deliverables and verification. Composition respects authorized scope and host invocation rules; discussion does not authorize implementation.
 
@@ -120,11 +120,10 @@ These skills require explicit user selection. They have `disable-model-invocatio
 | 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**         | Create, review, and prune agent skills                                  |
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | Bootstrap optional `.grimoire` project knowledge                        |
 | 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | Organize knowledge and retire verified, completed specs and tickets     |
-| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | Coordinate clarification, context persistence, specs, tickets, and plans |
+| 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | Coordinate clarification, context persistence, specs, tickets, and execution handoff |
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | Produce proportionate specs from requirements and relevant context      |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | Decompose requirements into coherent value or enabling tickets          |
-| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)**     | Produce a risk-scaled, revisable implementation plan                    |
-| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | Run adaptive implementation and QA based on change risk                 |
+| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | Persist a plan, then run adaptive implementation and QA |
 | 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | Coordinate large refactoring through dependency-ordered batches and integrated acceptance |
 | ✍️ **[commit](./skills/commit/SKILL.md)**                   | Prepare and execute an approved Conventional Commit                     |
 
@@ -138,6 +137,7 @@ These skills may be selected by the model when relevant, or invoked explicitly b
 | ---------------------------------------------------------------- | --------------------------------------------------------------------- |
 | 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)**     | Resolve only material blocking ambiguity                              |
 | 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)**       | Maintain durable project terminology and decisions                    |
+| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | Persist revisable plans for loop; also available for standalone planning |
 | ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | Implement from a clear plan, ticket, spec, or conversation            |
 | ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | Audit behavior against intent, criteria, artifacts, and evidence      |
 | 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)**       | Review with evidence-backed severity and confidence                   |

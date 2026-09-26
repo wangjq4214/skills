@@ -1,12 +1,12 @@
 ---
 name: grimoire-refine
-description: Coordinate clarification with live knowledge recording, then recommend spec/slice by complexity or route simple work directly to a plan; finish at slice or plan.
+description: Coordinate clarification with live knowledge recording, recommend spec/slice by complexity, and hand settled work off to grimoire-loop.
 disable-model-invocation: true
 ---
 
 # Purpose
 
-Coordinate specialist-led discussion with synchronous knowledge recording, then route settled requirements to proportionate artifacts, ending at a completed ticket set or implementation plan.
+Coordinate specialist-led discussion with synchronous knowledge recording, then route settled requirements to proportionate artifacts. End with a settled handoff, spec, or ticket set and recommend grimoire-loop for execution; refine does not generate implementation plans.
 
 Refine owns scheduling, route recommendations, handoffs, and verification. It does not conduct its own requirements interview, author specialist artifacts, or execute implementation.
 
@@ -46,14 +46,14 @@ Completion: Clarify has no blocking frontier, all qualifying settled knowledge i
 
 Assess the settled task's complexity: number of independently deliverable outcomes, cross-system contracts, coordination needs, risk, and adequacy of existing artifacts. Explain whether spec and slice add value and recommend the smallest useful route to the user.
 
-| Signal                                                                        | Recommendation                                                                | Endpoint |
-| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | -------- |
-| Simple, bounded task with one clear implementation outcome                    | Skip spec and slice; execute plan directly                                    | Plan     |
-| Shared requirement contract is useful, but delivery remains one coherent task | Spec, then plan                                                               | Plan     |
-| Multiple independently deliverable outcomes need a ticket set                 | Spec, then slice; reuse an adequate existing contract instead of rewriting it | Slice    |
-| Clear bounded contract already exists and decomposition is useful             | Slice directly                                                                | Slice    |
+| Signal | Recommendation | Endpoint |
+| --- | --- | --- |
+| Simple, bounded task with one clear implementation outcome | Skip spec and slice; recommend grimoire-loop to the user | Settled handoff |
+| Shared requirement contract is useful, but delivery remains one coherent task | Spec, then recommend grimoire-loop | Spec |
+| Multiple independently deliverable outcomes need a ticket set | Spec, then slice; reuse an adequate existing contract instead of rewriting it | Slice |
+| Clear bounded contract already exists and decomposition is useful | Slice directly | Slice |
 
-For a simple task, state why spec/slice are unnecessary and proceed directly to plan within the user's scope. Before adding spec or slice, obtain the user's route selection unless their request already selected it. A recommendation alone does not authorize those extra artifacts. Respect an explicit discussion-only or spec-only endpoint.
+For a simple task, state why spec/slice are unnecessary and close with the settled handoff and a recommendation to use grimoire-loop. Before adding spec or slice, obtain the user's route selection unless their request already selected it. A recommendation alone does not authorize those extra artifacts. Respect an explicit discussion-only or spec-only endpoint.
 
 Completion: The complexity-based recommendation, selected route, omitted stages with reasons, and endpoint are explicit; any required user selection has been received.
 
@@ -65,21 +65,20 @@ Pass the settled handoff, verified source paths, selected endpoint, and the full
 | ----- | ---------------- | ------------------------------------------------------------------------------------ |
 | Spec  | `grimoire-spec`  | Requirement files in `.grimoire/spec/` traceable to settled inputs                   |
 | Slice | `grimoire-slice` | Relationship README and tickets in `.grimoire/ticket/` covering the settled contract |
-| Plan  | `grimoire-plan`  | Readable Markdown plan plus browser viewer in `.grimoire/plans/` covering the settled task |
 
-After each stage, read its outputs, apply its completion checks, and verify compliance with the knowledge boundary. Spec returns to the selected next stage; slice and plan return directly to closure. Never automatically plan the tickets after slice, or start implementation after plan.
+After each stage, read its outputs, apply its completion checks, and verify compliance with the knowledge boundary. Spec returns to slice only when that route was selected; otherwise spec and slice return directly to closure. Skip artifact execution for the settled-handoff endpoint.
 
 Completion: Selected artifacts satisfy their owners' checks and stay within the settled inputs, or the stage is explicitly suspended for a knowledge gap.
 
 ## 5. Close
 
-End the entire refine workflow when slice or plan completes, or at an explicitly narrower endpoint. Report the selected route, verified context/ADR updates or no-change reason, and artifact paths. If blocked, report the missing input or permission and the resumption point instead of claiming completion.
+End refine at the selected endpoint. Report the selected route, verified context/ADR updates or no-change reason, artifact paths, and a settled handoff usable directly by grimoire-loop. For execution-ready work, recommend that the user invoke loop; do not start it as part of refine. No separate plan invocation is needed. If blocked, report the missing input or permission and the resumption point instead of claiming completion.
 
 Completion: The selected endpoint has verified evidence; no further artifact, implementation, or QA workflow has been started as part of refine.
 
 # Knowledge boundary
 
-Within a refine route, **spec, slice, and plan consume settled knowledge; they do not produce new knowledge**. This boundary takes precedence over their standalone permission to resolve decisions or make assumptions.
+Within a refine route, **spec and slice consume settled knowledge; they do not produce new knowledge**. This boundary takes precedence over their standalone permission to resolve decisions or make assumptions.
 
 They may organize, express, decompose, and sequence the supplied requirements and established solution, but must not introduce or revise domain facts, definitions, requirements, constraints, acceptance semantics, architectural decisions, or unconfirmed assumptions. Their meaningful assertions and choices must be traceable to the settled handoff and verified sources. Artifact formatting and execution ordering do not authorize filling semantic gaps.
 

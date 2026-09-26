@@ -12,7 +12,7 @@ Write specifications that preserve all requested outcomes, expose material decis
 
 This skill writes to `.grimoire/spec/`, not production code. It may ask about irreversible or scope-changing decisions.
 
-Existing context and ADRs are inputs, not reasons to invoke their authoring skills. `grimoire-slice`, `grimoire-plan`, and `grimoire-loop` are possible next steps, not dependencies to preload; after the spec is complete, recommend the next useful action or hand off if further work is already authorized.
+Existing context and ADRs are inputs, not reasons to invoke their authoring skills. After the spec is complete, recommend `grimoire-slice` when decomposition is useful, otherwise `grimoire-loop` for execution; hand off only when further work is already authorized. Loop handles persisted planning automatically; `grimoire-plan` remains available for an explicit plan-only request. These are next steps, not dependencies to preload.
 
 When coordinated by `grimoire-refine`, apply the knowledge boundary and selected endpoint supplied in its coordination contract instead of standalone decision and handoff permissions. If that contract is missing, pause and request it from the coordinator; do not guess its installation path. Return knowledge gaps and stage results to the coordinator.
 

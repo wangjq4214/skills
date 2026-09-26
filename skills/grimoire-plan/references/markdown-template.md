@@ -15,6 +15,10 @@ Adapt or omit sections that do not apply. Do not emit empty headings or placehol
 
 State the intended outcome, scope, and central implementation approach.
 
+## Source intent and acceptance
+
+Link source artifacts or summarize the conversation contract. State scope, constraints, and material acceptance criteria, with each criterion mapped to an implementation step or verification check.
+
 ## Design impact
 
 ### Boundary or symbol name
@@ -72,6 +76,14 @@ Add pseudocode in a fenced language block only when non-trivial logic benefits f
 
 - **Risk:** Mitigation or verification.
 - **Open question:** Discovery point or authority needed to resolve it.
+
+## Revision log
+
+Include only when materially revising the approach; preserve prior entries.
+
+| Revision | Changed approach | Reason and evidence |
+| --- | --- | --- |
+| 1 | Previous approach → current approach | Repository finding or verification result |
 ````
 
 ## Formatting rules

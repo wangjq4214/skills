@@ -31,8 +31,10 @@ test('tidy local references resolve', () => {
 });
 
 test('tidy retains retirement gates and completion criteria', () => {
-  for (const gate of ['Completion evidence', 'Durable information', 'Dependencies and references', 'Recoverability and authority']) {
-    assert.ok(source.includes(`**${gate}:**`), gate);
+  const retirement = source.split(/^## 3\. /m)[1]?.split(/^## 4\. /m)[0];
+  assert.ok(retirement, 'retirement gate section exists');
+  for (const gate of ['Knowledge preservation', 'Active-work continuity', 'Tracked recoverability and authority']) {
+    assert.ok(retirement.includes(`**${gate}:**`), gate);
   }
   const steps = source.split(/^## \d+\. /m).slice(1);
   assert.equal(steps.length, 5);

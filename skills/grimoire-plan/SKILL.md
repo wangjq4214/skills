@@ -1,7 +1,6 @@
 ---
 name: grimoire-plan
-description: Generate a risk-scaled, revisable Markdown implementation plan with browser preview from a ticket, spec, or conversation.
-disable-model-invocation: true
+description: Create or revise a persisted implementation plan for grimoire-loop, or generate a standalone plan on request.
 ---
 
 # Purpose
@@ -10,9 +9,7 @@ Create a temporary implementation hypothesis with enough design, sequencing, ris
 
 # Scope
 
-This skill writes Markdown plans to `.grimoire/plans/` and maintains a reusable browser viewer for rendering them. It does not implement production code unless the user separately authorizes execution.
-
-When coordinated by `grimoire-refine`, apply the knowledge boundary and selected endpoint supplied in its coordination contract instead of standalone design, assumption, or execution permissions. If that contract is missing, pause and request it from the coordinator; do not guess its installation path. Return knowledge gaps and stage results to the coordinator.
+This skill writes revisable Markdown plans to `.grimoire/plans/` for execution and audit. It is model-invoked so `grimoire-loop` can use it automatically; users may also invoke it to generate a standalone plan. It does not implement production code. Standalone use ends with the saved plan; loop-coordinated use returns the plan to loop without a human approval gate.
 
 Completion: A readable plan exists with actionable steps, material design choices, affected areas, risks, and verification appropriate to the task.
 
@@ -28,11 +25,9 @@ Verify `.grimoire/plans/` exists. If not, create it.
 
 Determine the input source:
 
-- If the user provided a ticket path (e.g., `.grimoire/ticket/0001-xxx/T0001-xxx.md`), use that ticket.
-- If the user provided a spec path (e.g., `.grimoire/spec/0001-xxx.md`), use that spec.
-- If neither, treat the conversation as the input. Derive a short kebab-case title from the user's goal. Do not ask.
-
-Assign the next available sequence number from `.grimoire/plans/`. Count numbered plan Markdown files; ignore `viewer.html`. Naming: `NNNN-title.md` (zero-padded).
+- Use the supplied conversation, spec, ticket, or selected slice ticket set and its relationship README. Preserve source paths or a concise conversation contract with intent, acceptance criteria, and constraints.
+- When supplied an existing plan, compare it with current intent and repository evidence. Reuse it if adequate; revise the same file for the same goal when needed. Do not treat the plan itself as implementation authorization.
+- For a new plan, derive a short kebab-case title from the goal without asking. Assign one more than the highest existing numbered plan (or `0001` if none), ignoring `viewer.html`. Naming: `NNNN-title.md` (zero-padded).
 
 Completion: `.grimoire/plans/` exists. Input source determined. Plan path known.
 
@@ -97,21 +92,17 @@ Completion: Every material behavior has an appropriate verification method.
 
 ---
 
-## 7. Assemble, write, and preview
+## 7. Persist and hand off
 
-Use [references/markdown-template.md](./references/markdown-template.md) as the default plan structure. Adapt or omit sections that do not apply, while preserving clear implementation steps, affected areas, risks, and verification.
+Use [references/markdown-template.md](./references/markdown-template.md) as the default plan structure. Adapt or omit sections that do not apply, while preserving source intent, implementation steps, affected areas, risks, and verification.
 
-Write the plan to `.grimoire/plans/NNNN-title.md` as Markdown. Keep Mermaid diagrams in fenced `mermaid` blocks.
+Write or revise `.grimoire/plans/NNNN-title.md`. Keep Mermaid diagrams in fenced `mermaid` blocks. Record material revisions with the changed approach, reason, and supporting evidence; retain earlier decisions in a concise revision log rather than silently overwriting the audit trail.
 
-Ensure `.grimoire/plans/viewer.html` matches [assets/plan-viewer.html](./assets/plan-viewer.html). Then prepare the preview:
+Read back the plan and verify that each material acceptance criterion has an owning step or check. Return its path, assumptions, and unresolved blockers to the caller. A saved plan is not a claim that implementation or verification has passed.
 
-1. Detect Python by trying `python` and then `py`.
-2. When Python is available, reuse a confirmed server already serving `.grimoire/plans/`, or start `-m http.server` as a non-blocking background process bound to `127.0.0.1`. Start at port `8000` and choose another available port if needed.
-3. Verify the HTTP endpoint responds, then open `http://127.0.0.1:PORT/viewer.html?plan=NNNN-title.md` when the environment supports opening a browser.
-4. Report the preview URL and the server PID or exact stop command so the user can terminate it.
-5. When Python is unavailable or the server cannot start, open `viewer.html` directly; the viewer's file picker and drag-and-drop are the fallback.
+Only when the user asks for preview, follow [references/preview.md](./references/preview.md). Otherwise do not prepare the viewer, start a preview server, or open a browser.
 
-Completion: The Markdown plan is readable as source and contains the information needed for implementation. With Python available, a verified loopback preview URL renders it; otherwise the direct viewer fallback is available.
+Completion: The persisted plan is readable, traceable to intent, actionable, and available to the caller; any material revisions have a recorded rationale.
 
 ---
 

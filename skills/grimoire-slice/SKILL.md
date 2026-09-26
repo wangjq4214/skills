@@ -12,7 +12,7 @@ Convert a requirement into a ticket set sized for reliable implementation. Prefe
 
 This skill writes `.grimoire/ticket/NNNN-title/` relationship and ticket files. It does not implement code or invent missing requirements.
 
-`grimoire-plan` and `grimoire-loop` are possible follow-up workflows, not dependencies to preload. Complete the ticket set first; recommend a next step by name, or hand off when further work is already authorized.
+Complete the ticket set first, then recommend `grimoire-loop` for execution or hand off when execution is already authorized. Loop handles persisted planning automatically; `grimoire-plan` remains available for an explicit plan-only request. These are follow-up workflows, not dependencies to preload.
 
 When coordinated by `grimoire-refine`, apply the knowledge boundary and selected endpoint supplied in its coordination contract instead of standalone decision and handoff permissions. If that contract is missing, pause and request it from the coordinator; do not guess its installation path. Return knowledge gaps and stage results to the coordinator.
 

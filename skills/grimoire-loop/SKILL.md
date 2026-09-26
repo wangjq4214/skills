@@ -1,12 +1,12 @@
 ---
 name: grimoire-loop
-description: Coordinate implement, test, review, and check in an adaptive loop scaled to change risk.
+description: Persist an implementation plan, then coordinate implement, test, review, and check in an adaptive loop without routine approval gates.
 disable-model-invocation: true
 ---
 
 # Purpose
 
-Own the implement-and-verify cycle: route work to specialist skills, assess their evidence, fix confirmed blockers, and finish with integrated verification. Loop coordinates the work; it does not replace the specialists' methods.
+Own the plan-and-execute cycle: persist an auditable plan, route work to specialist skills, assess their evidence, fix confirmed blockers, and finish with integrated verification. Loop coordinates the work; it does not replace the specialists' methods.
 
 # Leading words
 
@@ -16,10 +16,11 @@ Own the implement-and-verify cycle: route work to specialist skills, assess thei
 
 # Skill composition
 
-Default cycle: **implement → test → review + check → assess → affected fixes/checks**.
+Default cycle: **plan → implement → test → review + check → assess → affected fixes/checks**.
 
 | Responsibility | Skill to use |
 | --- | --- |
+| Persisted implementation approach and material revisions | `grimoire-plan` |
 | Production changes and confirmed fixes | `grimoire-implement` |
 | Test strategy, missing regression tests, and test diagnosis | `grimoire-test` |
 | Code-level risks and regressions | `grimoire-review` |
@@ -33,7 +34,7 @@ This is a default, not a fixed sequence: tests may precede implementation, revie
 
 ## 1. Resolve source and scope
 
-Accept a plan, ticket, spec, diff, or clear conversation goal. If implementation is already complete, begin from the current diff. Honor verification-only requests: do not infer permission to fix production code. Ask only when the target cannot be identified safely.
+Accept a plan, ticket, spec, slice ticket set, diff, or clear conversation goal directly; a separately invoked planning stage is not required. For a ticket set, read its relationship README and identify the authorized tickets and dependency order. If implementation is already complete, begin from the current diff. Honor verification-only requests: do not infer permission to fix production code or write a plan. Ask only when the target cannot be identified safely.
 
 Classify risk:
 
@@ -45,15 +46,25 @@ Completion: Target, authority, current state, and risk level are known.
 
 ---
 
-## 2. Implement if needed
+## 2. Persist the execution plan
 
-Load and apply grimoire-implement using the available source. Capture the resulting diff, including untracked files. Reuse its verification evidence in subsequent QA rather than running identical commands again against unchanged code.
+For authorized implementation, load and apply grimoire-plan before changing production code. Supply the original source, current repository evidence, selected scope, and risk level. Reuse or revise an adequate existing plan through that skill rather than generating a duplicate. Keep small tasks' plans proportionate. Follow its persistence prerequisites; if saving the required plan is blocked, report the blocker instead of executing without it.
+
+Verify the saved plan covers the selected intent and acceptance criteria, then proceed directly to implementation. No routine plan approval, preview, or separate user confirmation is required. Stop only for material ambiguity, missing authority, or unsafe/irreversible decisions that cannot be resolved within the request. For assessment of an existing diff, use any relevant plan without retroactively requiring one; return here before authorized production fixes if no suitable plan exists.
+
+Completion: An applicable plan is persisted with its source intent and path, or planning is explicitly inapplicable to the assessment-only work.
+
+---
+
+## 3. Implement if needed
+
+Load and apply grimoire-implement with the persisted plan and its original source. Capture the resulting diff, including untracked files. Reuse its verification evidence in subsequent QA rather than running identical commands again against unchanged code.
 
 Completion: The intended change exists and the complete diff is available, or the request is explicitly assessment-only.
 
 ---
 
-## 3. Select and perform QA
+## 4. Select and perform QA
 
 Use the skill composition above to select methods and scale their depth:
 
@@ -61,13 +72,13 @@ Use the skill composition above to select methods and scale their depth:
 - **Medium risk** — apply review, check, and relevant test work; delegate independent dimensions when this improves coverage or protects context.
 - **High risk** — assess intent alignment, code risks, and test evidence distinctly using check, review, and test. Use independent assessment where practical; high risk alone does not authorize multi-agent orchestration.
 
-Keep checks inline when delegation overhead exceeds its value. When delegating, use [references/agent-prompts.md](./references/agent-prompts.md) and supply the selected skill's name, source of intent, scope, and write permissions. Sequence checks when one result should inform the next. Test authors change files: finish those changes before final review/check, or isolate writes and recheck the combined result.
+Keep checks inline when delegation overhead exceeds its value. For every delegated assignment, supply the current plan path and relevant steps/revisions alongside the original intent, selected skill, scope, and write permissions. For QA, use [references/agent-prompts.md](./references/agent-prompts.md). Sequence checks when one result should inform the next. Test authors change files: finish those changes before final review/check, or isolate writes and recheck the combined result.
 
 Completion: Selected skills have been applied, every gate has a risk-based reason and evidence, and material omissions are explained.
 
 ---
 
-## 4. Assess findings
+## 5. Assess findings
 
 Classify findings as confirmed blocking, advisory, praise, or needs-verification. A finding blocks only when supported by code evidence, a failing command, a violated acceptance criterion, or a credible concrete impact. Deduplicate issues shared by review, test, and check without discarding evidence.
 
@@ -77,9 +88,9 @@ Completion: Every finding has an evidence-backed disposition and unresolved work
 
 ---
 
-## 5. Iterate adaptively
+## 6. Iterate adaptively
 
-Fix confirmed blockers and rerun the specialist checks affected by the fix. Do not rerun clean, unrelated gates on every iteration. Run a final integrated verification of the resulting change when all blockers are resolved.
+Fix confirmed blockers and rerun the specialist checks affected by the fix. Do not rerun clean, unrelated gates on every iteration. When evidence changes the implementation approach materially, use grimoire-plan's revision rules to update the persisted plan before subsequent delegation. Keep original acceptance criteria authoritative; a plan revision cannot erase an unmet requirement. Run a final integrated verification of the resulting change when all blockers are resolved.
 
 Use progress rather than a fixed count: continue while each iteration removes blockers and the next fix is safe. Stop when blocked by missing authority/information, failures do not converge, or additional work exceeds the requested scope. Missing required verification prevents a clean result even when no defect is confirmed.
 
@@ -87,9 +98,9 @@ Completion: Selected gates are clean, or the stopping reason and remaining evide
 
 ---
 
-## 6. Format and report
+## 7. Format and report
 
-When edits are authorized and a project formatter exists, format files within the permitted write scope after behavioral QA is stable; use [references/format-detection.md](./references/format-detection.md) when detection is not obvious. For verification-only requests, use non-writing format checks or report formatting findings without applying them. If formatting changes files, rerun affected verification before reporting. Report risk level, skills/checks used, material workflow adaptations, iterations, confirmed blockers fixed, advisory findings, and final status in one concise summary.
+When edits are authorized and a project formatter exists, format files within the permitted write scope after behavioral QA is stable; use [references/format-detection.md](./references/format-detection.md) when detection is not obvious. For verification-only requests, use non-writing format checks or report formatting findings without applying them. If formatting changes files, rerun affected verification before reporting. Report plan path (or why inapplicable), material plan revisions, risk level, skills/checks used, material workflow adaptations, iterations, confirmed blockers fixed, advisory findings, and final status in one concise summary.
 
 Completion: Final status is **clean**, **blocked**, or **issues remaining**, with supporting evidence.
 

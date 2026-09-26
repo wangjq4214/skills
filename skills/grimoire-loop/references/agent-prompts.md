@@ -11,6 +11,7 @@ Use {skill_name} for the assigned responsibility at {risk_level} depth. Load onl
 
 Intent, acceptance criteria, and constraints: {intent_and_criteria}
 Source artifacts or conversation contract: {sources}
+Persisted plan path and relevant steps, including material revision notes (or why no plan applies): {plan_context}
 Changed files and relevant diff, including untracked files: {change_context}
 Assigned scope and verification already performed: {scope_and_prior_evidence}
 Write permissions: {write_permissions}
