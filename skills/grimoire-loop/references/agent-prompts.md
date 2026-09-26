@@ -4,14 +4,16 @@ Use these modules only when delegated QA is selected. Identify the assigned skil
 
 ## Shared handoff
 
-Prepend to each assignment:
+Prepend to each assignment and specialize the modules below to enabled responsibilities only. Composition policy and checkpoint behavior are defined in [../SKILL.md](../SKILL.md); pass their applicable execution contract to every delegate.
 
 ```text
 Use {skill_name} for the assigned responsibility at {risk_level} depth. Load only relevant references. If it is unavailable, report that limitation and the fallback used.
 
 Intent, acceptance criteria, and constraints: {intent_and_criteria}
 Source artifacts or conversation contract: {sources}
-Persisted plan path and relevant steps, including material revision notes (or why no plan applies): {plan_context}
+Available plan path or conversation approach, relevant steps/revisions (or planning disabled): {plan_context}
+Execution contract — enabled/disabled stages and substages, order, human checkpoints, required evidence, fixes/repetition permissions: {execution_contract}
+Apply specialist methods within this contract, including its exclusions. Return control at human checkpoints with the requested handoff; the coordinator obtains user feedback.
 Changed files and relevant diff, including untracked files: {change_context}
 Assigned scope and verification already performed: {scope_and_prior_evidence}
 Write permissions: {write_permissions}
@@ -24,7 +26,7 @@ Inspect actual files as needed. Return evidence tied to intent or risk, commands
 ```text
 Audit alignment with the supplied intent and acceptance criteria. Treat incidental plan details as guidance.
 Return matches, gaps, deviations, extras, and needs-verification items using grimoire-check.
-This assignment is read-only: propose justified artifact status changes for the coordinator to apply after integrated verification. Do not modify files.
+This assignment is read-only: propose justified artifact status changes for the coordinator to handle within the execution contract. Do not modify files.
 ```
 
 ## Review assignment — grimoire-review
@@ -37,15 +39,15 @@ Verify testable concerns where practical. Return confirmed blockers, needs-verif
 ## Test assignment — grimoire-test
 
 ```text
-Use grimoire-test to assess coverage, write missing valuable tests, and run relevant checks for {behavior_and_risks}.
+Use grimoire-test for the selected test responsibilities {test_substages} covering {behavior_and_risks}.
 Reuse adequate existing coverage; do not add tests merely to create an artifact.
-Write only within {test_write_scope}. Report product defects for grimoire-implement rather than changing production behavior. Return commands/results and test changes so final review/check can include them.
+Write only within {test_write_scope}. Report product defects rather than changing production behavior. Return actual commands/results, test changes, and pending human evidence for enabled downstream stages.
 ```
 
 ## Delegation guidance
 
-- Combine read-only review/check dimensions when separate agents would duplicate exploration; load each selected skill. When the same agent also authors tests, give it a separate test phase with explicit test-write permission, followed by a read-only review/check assignment over the resulting diff. Do not concatenate incompatible assignment-wide write permissions.
+- Combine enabled read-only dimensions when separate agents would duplicate exploration. Separate test-writing and read-only assignments with explicit permissions; only schedule enabled downstream assessments.
 - Split dimensions when independent perspectives materially increase coverage and delegation is authorized.
 - Supply bounded context plus paths for further inspection; do not omit the intent needed to judge the change.
-- Sequence prompts when one result should shape the next check. Coordinate test writes before final review/check, or isolate them and verify the integrated result.
-- The coordinator deduplicates findings and owns final status; a child's clean result is evidence for its assigned scope, not the whole change.
+- Sequence dependent assignments and coordinate test writes before enabled downstream checks, or isolate writes and refresh affected enabled checks over the combined result.
+- The coordinator owns cross-stage status; a child's clean result is evidence for its assigned scope, not the whole change.
