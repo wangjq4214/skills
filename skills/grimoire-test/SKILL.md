@@ -17,7 +17,7 @@ Use real collaborators when fast and deterministic. Use stubs for controlled val
 
 Prefer public outcomes, but allow focused internal assertions for characterization, complex invariants, or precise regressions when the coupling is worthwhile. Choose scenario, table-driven, property, state-machine, snapshot, concurrency, or framework-native structure as appropriate. Several assertions may describe one coherent scenario. Keep tests independently runnable and avoid accidental shared mutable state.
 
-For dependency or structure choices needing examples, read [patterns.md](./references/patterns.md) and [examples.md](./references/examples.md). For the rationale behind these tradeoffs, see [principles.md](./references/principles.md).
+For dependency or structure choices needing examples, read [patterns.md](./references/patterns.md) and [examples.md](./references/examples.md).
 
 ## Execution and evidence
 

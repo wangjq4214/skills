@@ -90,7 +90,7 @@ loop 内部循环      plan → implement → test → review + check → 评估
 
 `map`、`improve`、`simplify` 均可独立使用。需要编排时选择 `refactor`：持久化地图 → 多切面发现 → 统一依赖计划 → 分批实施 → 集成后 test/review/check → 复扫与验收。授权后可让独立修改单元使用 subagent/worktree，也支持按同一标准串行执行。
 
-地图保存在 `.grimoire/map/index.json` 和按模块划分的快照中，记录源文件哈希、新鲜度、覆盖率与证据；它是导航缓存，不是行为正确的证明。改造进度保存在 `.grimoire/refactor/<run-id>/`。全面简化默认以生产代码净 LOC 至少减少 30% 为目标，同时验收行为与可读性；局部任务不强加该比例。未达标如实报告，禁止靠搬代码或压行凑数。
+允许持久化时，地图保存在 `.grimoire/map/index.json` 和按模块划分的快照中，改造进度保存在 `.grimoire/refactor/<run-id>/`。地图记录源文件哈希、新鲜度、覆盖率与证据；它是导航缓存，不是行为正确的证明。明确禁止写入时，观察结果与报告仅在对话中返回。全面简化默认以生产代码净 LOC 减少 30% 为努力目标，而非完成门槛；局部任务不继承该目标。如实报告实际收益与差距，不靠搬代码或压行凑数。只有明确要求的数字阈值才是硬门槛。refactor 保留完成前两轮全范围无新增发现复查。improve 默认输出简洁文本或 Markdown，仅明确需要时生成 HTML。
 
 ```text
 用 grimoire-map 梳理这个仓库，并持久化结果。

@@ -1,49 +1,14 @@
-# Severity Classification
+# Classification edge cases
 
-Every finding carries a severity and confidence level. Severity reflects demonstrated impact; confidence reflects evidence quality.
+Use the main skill's classifications; confidence is separate from impact.
 
----
-
-## Blocking
-
-Use blocking only when evidence shows at least one of: incorrect behavior, security exposure, data loss, regression, violated acceptance criteria, or a concrete architectural breakage.
-
-Examples include a reproducible logic error, unsafe input handling, destructive migration, broken public contract, or demonstrated dependency cycle with material consequences.
-
-Uncertainty is not blocking. Run a targeted check when practical; otherwise classify the concern as **needs-verification**.
-
----
-
-## Needs verification
-
-Use when the concern is credible but depends on unavailable runtime evidence, domain authority, production configuration, or broader context. State what evidence would confirm or refute it and its potential impact.
-
----
-
-## Suggestion
-
-Use for valid optional improvements in readability, maintainability, performance, reuse, or non-critical test coverage. Explain the concrete benefit. Drop preferences without impact.
-
----
-
-## Praise
-
-Call out a specific decision that improves correctness, clarity, simplicity, or risk management. Praise the code decision, not the author.
-
----
-
-## Confidence
-
-- **High** — reproduced, tested, or directly proven by code and contract.
-- **Medium** — strong code evidence with a stated assumption.
-- **Low** — plausible but dependent on missing context; usually needs-verification rather than blocking.
-
-## Quick decision table
-
-| Evidence and impact | Classification |
+| Situation | Classification |
 | --- | --- |
-| Demonstrated contract, correctness, security, or data failure | blocking |
-| Credible impact but missing decisive evidence | needs-verification |
-| Current behavior is valid; improvement is optional | suggestion |
-| Specific decision worth preserving | praise |
-| No concrete impact | drop |
+| Reproduced regression or demonstrated contract/security/data failure | blocking |
+| Suspected race depends on unknown production scheduling | needs-verification; state the confirming/refuting evidence |
+| Tool fails before running relevant checks | unavailable evidence, not proof of a product defect |
+| Valid implementation could have lower maintenance cost | suggestion with concrete benefit |
+| Dependency cycle has no established material consequence | investigate, not an automatic blocker |
+| Specific boundary prevents invalid states or isolates real complexity | praise if useful, not obligatory |
+
+High confidence needs direct source/contract proof or reproduction. Medium confidence states its assumptions. Low-confidence plausible harm normally needs verification, not blocking. Drop preferences without concrete impact.

@@ -2,7 +2,8 @@
 
 ## Persistent run state
 
-Store `.grimoire/refactor/<run-id>/state.json` with `schemaVersion: 1`, repository identity, requested scope, authorization, immutable baseline revision/fingerprint, measurement configuration, acceptance criteria, map snapshot reference, discovery coverage, findings, work units, integration head/fingerprint, validation records, dry-pass count, and next action. Large findings/results may live in referenced per-unit files. One coordinator writes shared state; publish valid JSON safely and retain the prior valid state on interruption.
+When persistence is allowed, store `.grimoire/refactor/<run-id>/state.json` with `schemaVersion: 1`, repository identity, requested scope, authorization, immutable baseline revision/fingerprint, measurement configuration, acceptance criteria, map snapshot reference, discovery coverage, findings, work units, integration head/fingerprint, validation records, dry-pass count, and next action. Large findings/results may live in referenced per-unit files. One coordinator writes shared state; publish valid JSON safely and retain the prior valid state on interruption.
+Record the execution contract (allowed writes, persistence, checks, and reporting) and each numeric target's value, scope, source, and aspirational/required status. All artifact writes below are conditional on these permissions. Without persistence, return equivalent state and next actions inline; do not create artifacts.
 
 Each finding has a stable ID, root cause, evidence, locations, affected contract, and disposition: pending, planned, implemented, retained-with-reason, out-of-scope, or blocked. Deduplicate against all previously evaluated findings, not just accepted ones. Reopen a dismissed finding only for new evidence or changed source.
 
@@ -20,11 +21,11 @@ planned → ready → running → verified → integrated → accepted
 Inputs to a worker:
 
 - mode: analyze or implement; selected responsible skill;
-- target, objective, acceptance criteria, preserved behavior;
+- target, objective, acceptance criteria, targets with source and aspirational/required status, preserved behavior;
 - base revision plus relevant dirty-source fingerprint;
-- owned write paths and read-only neighbors;
+- owned write paths, read-only neighbors, persistence and reporting permissions;
 - upstream contracts and decisions, relevant map shards;
-- validation commands, working directory, baseline failures;
+- permitted validation commands, working directory, baseline failures;
 - output location and integration dependencies.
 
 Outputs:

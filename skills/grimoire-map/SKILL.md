@@ -1,70 +1,38 @@
 ---
 name: grimoire-map
-description: Build and incrementally refresh an evidence-backed, persistent map of codebase responsibilities, dependencies, entry points, and verification boundaries.
+description: Build and refresh an evidence-backed map of codebase responsibilities, dependencies, entry points, and verification boundaries.
 ---
 
-# Purpose
+Make repository behavior paths navigable through source-backed observations, not an invented architecture. Do not modify production code or prescribe a redesign; a map is not proof of behavior.
 
-Make a codebase navigable without requiring every investigation to rediscover its structure. Persist observations with provenance and explicit coverage, not an invented architecture.
+Under orchestration, the caller's execution contract governs scope, writes, persistence, reporting, and completion. Apply only enabled responsibilities. Explicit no-write requests return in-memory observations without creating map files. Standalone, persist `.grimoire/map/index.json` and supporting shards; no other skill is required.
 
-# Scope
+## Inventory and inspect
 
-Read repository evidence and write `.grimoire/map/index.json` plus supporting map data. Do not modify production code, prescribe a redesign, or treat the map as proof of current behavior. Works independently; no other skill or formal artifact is required.
+Record repository identity, revision/dirty state, scope, exclusions, languages, and build systems. Default to the whole first-party repository, including relevant untracked files, manifests, tests, configuration, and scripts; distinguish generated/vendor content.
 
-# Workflow
+Load existing index metadata first, then relevant shards. Follow [persistence.md](./references/persistence.md) for schema, freshness, and safe updates. Never replace a broader map with a narrower scan or mix repository identities.
 
-## 1. Establish identity and scope
+Account for every included file: assign it to a responsibility/package/entry-point/state-ownership module or an explicit unclassified set, not equal-sized file groups. Track inventoried-only, inspected, partial, or blocked separately from module assignment. Search/index hits are triage, not semantic inspection. Record exclusions and unreadable paths; page large inventories rather than silently truncating coverage.
 
-Record repository identity, revision, dirty working-tree state, requested roots, exclusions, and available languages/build systems. Default to the whole first-party repository when no narrower target is given. Include manifests, configuration, tests, and scripts as structural evidence; distinguish generated and third-party content.
-
-Load an existing index when present. Apply [references/persistence.md](./references/persistence.md) for format, freshness, and safe updates. Never overwrite a broader map with a narrower scan or mix different repository identities.
-
-Completion: Scope, source snapshot, and whether this is a fresh scan or refresh are explicit.
-
-## 2. Inventory and partition
-
-Enumerate in-scope files, including relevant untracked files; record exclusions and unreadable paths. Group by actual responsibility, package, entry point, state ownership, and dependency seams, not equal file counts. Use manifests, symbol/import indexes, search, and history when available to prioritize reading.
-
-Assign every included file to a module or an explicit unclassified set. Record inspection as inventoried-only, inspected, partial, or blocked; separately count unclassified files from null module IDs. A file may be both inspected and unclassified. Enumeration and search hits do not count as semantic inspection. Large modules may have paged file inventories and separate shards.
-
-Completion: All included files are accounted for, with an inspectable coverage denominator and no silent top-N cutoff.
-
-## 3. Trace relationships
-
-For each module, inspect its entry points, public exports, core implementation, state lifecycle, configuration, and relevant tests. Follow representative behavior paths through callers and dependencies. Record:
-
-- responsibility and owning paths;
-- entry points and exposed contracts;
-- incoming/outgoing dependencies and their kind: import, call, data, event, or runtime registration;
-- state/resource ownership and external systems;
-- test boundaries and discovered validation commands;
+Inspect each module's entry points, exports, core code, state lifecycle, configuration, and tests. Trace representative behavior through callers and dependencies. Record:
+- responsibilities, owning paths, public contracts, and state/resource owners;
+- incoming/outgoing import, call, data, event, and runtime-registration edges;
+- external systems, test boundaries, and candidate validation commands;
 - concentration, cycles, duplication clues, and unresolved relationships.
 
-Every material claim needs a path and symbol or other concrete source locator. Distinguish observed edges from inferred ones; reflection, plugins, DI, configuration, and generated registration need inspection beyond static imports. Mark uncertainty rather than inventing missing connections.
+Every material claim needs a source locator and fingerprint. Distinguish observed/inferred edges; reflection, DI, plugins, configuration, and generated registration require more than static imports. Unknown relationships stay explicit.
 
-Completion: Inspected modules can be explained through evidence-backed responsibilities and connections; remaining gaps are explicit.
+## Refresh and publish
 
-## 4. Persist and refresh
+Compare current inventory and hashes, including new/deleted/dirty files. Invalidate changed claims, incident edges, reverse dependents, and test links. Reinspect further dependents when contracts change; unknown dynamic impact requires broader scanning. Reuse evidence only after verifying source hashes and relationship assumptions.
 
-Write module shards before publishing an index that references them. Follow the persistence reference for hashes, invalidation, schema validation, and interrupted writes. Only the coordinating writer publishes shared map data; read-only subagents may return module observations.
+When persistence is enabled, one coordinating writer publishes immutable shards before the index, following the persistence reference's validation and recovery rules. Read-only workers may return observations when delegation is permitted. Worker-branch evidence must be refreshed against the integrated tree. When persistence is disabled, return equivalent coverage/provenance in the result, not files.
 
-Refresh changed/new/deleted files and invalidate affected claims, incoming references, reverse dependents, and relevant test links. Unknown dynamic impact requires a broader rescan, not an assumption of isolation. Reuse unchanged observations only when their source fingerprints still match.
+Keep secrets, credentials, customer data, and raw source dumps out of artifacts; persist concise facts and locators. Existing maps accelerate navigation, never replace current-source validation before editing or issuing verdicts.
 
-Completion: The index resolves to valid shards; freshness and partial coverage are accurate for the recorded source snapshot.
+## Completion
 
-## 5. Present navigation
+Return entry points, responsibility boundaries, connections, coverage counts, uncertainty, and artifact paths when present. For broad persisted maps, write `.grimoire/map/overview.md`: a snapshot-labelled module table and relationship sketch linked to evidence, not a second source of truth.
 
-Report the main entry points, responsibility boundaries, important connections, coverage counts, uncertainty, and persisted paths. For broad maps, write `.grimoire/map/overview.md` with a short module table and a simple dependency/data-flow sketch. Label its snapshot and link back to evidence; it is a navigation view, not a second source of truth.
-
-Completion: Another reader can locate a behavior path and its validation without repeating the inventory. A partial map is reported as partial, never as a completed full audit.
-
-# Execution and reuse
-
-- Read index metadata first and load only relevant module shards. Do not flood context with the whole repository.
-- Parallel read-only mapping is optional and subject to host/user authorization. Serial execution produces the same artifacts and coverage semantics.
-- Existing maps are accelerators, not authorities. Consumers revalidate claims against current source before editing or issuing verdicts.
-- Keep secrets, credentials, customer data, and raw source dumps out of persisted artifacts. Record source locators rather than sensitive contents.
-
-# References
-
-- [persistence.md](./references/persistence.md) — versioned data contract, incremental refresh, and safe publication
+A persisted index must resolve to valid shards with accurate freshness and coverage. A partial map remains partial; unread source is not a completed audit. Readers should be able to locate a behavior path and its validation without repeating the inventory.

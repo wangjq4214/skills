@@ -128,3 +128,68 @@ test('refactoring guidance is nested under Quick Start', () => {
     assert.ok(source.split(quickStart)[1].split(/^## /m)[0].includes(refactoring), doc);
   }
 });
+
+test('LOC aspirations cannot silently become acceptance gates', () => {
+  for (const name of ['refactor', 'simplify']) {
+    const source = read(skillPath(name));
+    assert.match(source, /30%/);
+    assert.match(source, /aspirational target, not a completion gate/);
+    assert.match(source, /Only an explicitly required numeric threshold is a hard gate/);
+    assert.match(source, /below an aspirational LOC target may still complete/);
+  }
+  const check = read('skills/grimoire-check/references/batch-context.md');
+  assert.match(check, /missed required threshold is a gap/);
+  assert.match(check, /missed aspirational target is a reported shortfall/);
+  assert.match(check, /Do not invent a target or promote an aspiration into a requirement/);
+  assert.match(read('skills/grimoire-refactor/references/coordination.md'), /targets with source and aspirational\/required status/);
+});
+
+test('zero and non-code baselines do not fabricate percentage achievement', () => {
+  const source = read('skills/grimoire-refactor/references/measurement.md');
+  assert.match(source, /For B = 0, report percentage not applicable, never 100%/);
+  assert.match(source, /default aspiration is inapplicable/);
+  assert.match(source, /Non-code repositories need a relevant agreed content metric/);
+  assert.match(source, /explicit incompatible numeric requirement needs clarification/);
+});
+
+test('refactoring children inherit no-write and persistence restrictions', () => {
+  for (const name of ['map', 'improve', 'simplify']) {
+    const source = read(skillPath(name));
+    assert.match(source, /Under orchestration, the caller's execution contract governs/);
+    assert.match(source, /Apply only enabled responsibilities/);
+    assert.match(source, /Explicit no-write requests/);
+  }
+  const source = read(skillPath('refactor'));
+  assert.match(source, /Before any writes/);
+  assert.match(source, /create no map, ledger, or report files/);
+  assert.match(source, /Pass these restrictions to every child skill/);
+  assert.match(source, /Implementation, numeric achievement, and dry passes are not audit gates/);
+});
+
+test('refactor retains distinct-lens convergence and integrated acceptance', () => {
+  const source = read(skillPath('refactor'));
+  assert.match(source, /two consecutive full-scope discovery passes with different lenses and no new actionable findings/);
+  assert.match(source, /A code change resets the count/);
+  assert.match(source, /conflict-free merging and worker summaries do not establish acceptance/);
+  assert.match(source, /unavailable required checks remain unresolved/);
+});
+
+test('HTML reporting is opt-in without losing finding evidence', () => {
+  const source = read(skillPath('improve'));
+  assert.match(source, /concise text or Markdown/);
+  assert.match(source, /For explicitly requested HTML, read/);
+  const report = read('skills/grimoire-improve/references/report-template.md');
+  assert.match(report, /Read only when HTML output is explicitly requested/);
+  assert.match(report, /only the designated writer publishes/);
+  assert.match(report, /Escape all repository text/);
+});
+
+test('illustrations preserve visibility and do not equate diagram shape with structure', () => {
+  const examples = read('skills/grimoire-simplify/references/examples.md');
+  const stateExample = examples.split('## 2. Collapse duplicated state')[1].split('## 3.')[0];
+  assert.match(stateExample, /private isOpen = false/);
+  assert.match(stateExample, /private get isOpen\(\)/);
+  assert.match(stateExample, /own-property enumeration, serialization, or descriptors/);
+  const diagrams = read('skills/grimoire-improve/references/mermaid-conventions.md');
+  assert.match(diagrams, /Identical high-level shapes can hide structural changes/);
+});

@@ -1,41 +1,44 @@
-# Reduction and structural acceptance
+# Measurement and acceptance
+
+Separate aspirational targets from required acceptance gates. Record each numeric target's value, metric/scope, source (user or default), and whether explicitly required. The default 30% reduction is an aspiration, not a hard gate.
 
 ## Fixed baseline
 
-Before modifications, save the actual source snapshot (revision plus dirty-source evidence), included roots, exclusions with reasons, file inventory, counter/version, command, language classification, and formatter configuration. Use a language-aware counter such as cloc/tokei when available. If unavailable, use a documented reproducible fallback and disclose its limitations; incomparable estimates cannot establish a percentage gate.
+Before edits, save the actual source snapshot (revision plus dirty-source evidence), included roots, exclusions/reasons, inventory, counter/version, command, language classification, and formatter configuration. Prefer a language-aware counter such as cloc/tokei; a reproducible fallback must disclose limitations. Incomparable estimates cannot establish target achievement.
 
-Primary metric: nonblank, noncomment first-party production source lines. Report test, configuration, documentation, generated, and vendor totals separately; also show total first-party change so moving logic between categories is visible. For non-code repositories, establish the relevant content metric explicitly rather than pretending a production LOC denominator exists.
+Count nonblank/noncomment first-party production LOC. Report tests, configuration, documentation, generated, and vendor totals separately, plus total first-party change to expose transfers.
 
-Let B be baseline production LOC and F be final production LOC:
-
+For baseline B and final F:
 ```text
 net reduction = B - F
 reduction percentage = 100 * (B - F) / B
-30% gate: F <= 0.70 * B
+30% target achieved when F <= 0.70 * B (B > 0)
 ```
 
-For B = 0, the percentage is undefined; report not applicable, not 100%. Calculate on the integrated tree using unchanged classification/filter rules and formatting conventions. Newly added source counts; deleted source disappears; moved or renamed responsibilities stay in scope even when their new paths fall outside the original roots. Do not sum worker percentages or count only deletions from git diff. Include all scope additions in the final numerator; scope changes require an explicit baseline reconciliation, never a quiet reset.
+For B = 0, report percentage not applicable, never 100%; the default aspiration is inapplicable. Non-code repositories need a relevant agreed content metric, not an invented production denominator. An explicit incompatible numeric requirement needs clarification, not a silent waiver.
 
-## Anti-gaming constraints
+Measure the integrated tree with unchanged counting/formatting rules. Include additions and moved/renamed responsibilities even outside original roots. Do not sum worker percentages or count only diff deletions. Reconcile scope changes explicitly; never quietly reset the baseline.
 
-A LOC win must remove or simplify maintained logic. Do not claim reduction through minification, compressed formatting, removed explanatory comments, renamed extensions, reclassification as generated code, moving implementations into config/templates/tests/vendor, or outsourcing the same complexity to a new dependency. Report transferred logic and dependency footprint separately; transferred complexity cannot satisfy the reduction gate. Preserve needed features, APIs, validation, authorization, error paths, observability, and performance guarantees.
+## Anti-gaming
 
-Tests may grow to protect behavior. Do not delete useful tests to reach a source target. Removing obsolete tests is justified by the removed private implementation, not by the line budget.
+Savings must remove or simplify maintained logic. Do not claim minification, compressed formatting, removed comments, renamed extensions, reclassification as generated, transfers into config/templates/tests/vendor, or outsourcing unchanged complexity to a dependency. Report transferred logic and dependency footprint separately; they are not simplification gains.
 
-## Independent structural gates
+Preserve features, APIs, validation, authorization, errors, observability, and performance guarantees. Useful tests may grow; remove obsolete tests only because their private implementation disappeared, not for a budget.
 
-Record before/after evidence for requested dimensions, not only LOC:
+## Structural evidence
 
-| Dimension | Useful evidence | False win |
+| Dimension | Before/after evidence | False win |
 | --- | --- | --- |
-| God files | Responsibility groups, state ownership, largest files, dependency edges | Same god object scattered across partial files |
-| Reuse | Duplicate implementations eliminated, one semantic owner, migrated callers | Global utils dumping ground or flag-heavy universal helper |
-| Control flow | Maximum nesting and decision structure for affected paths | Nested ternaries or hidden routing framework |
-| Explainability | Entry → policy → effects path, concepts/hops, short explanation | More files and forwarding layers with nicer names |
-| Dependencies | Cycles, fan-out, changed contracts and consumers | Smaller modules coupled through a universal context |
+| Responsibility | State ownership, cohesive groups, dependency edges | God object scattered across files |
+| Reuse | Equivalent policies eliminated, stable owner, migrated callers | Universal utils or flag-heavy helper |
+| Control flow | Nesting, decision/error precedence | Nested ternaries or hidden routing framework |
+| Explainability | Entry → policy → effects, concepts/hops | More forwarding layers with nicer names |
+| Dependencies | Cycles, fan-out, contracts and consumers | Modules coupled through a universal context |
 
-Size/depth thresholds are investigation signals, not universal style laws. Splitting can add lines temporarily; assess the net outcome across all units. Set the reduction target globally, never per worker or per module.
+Size/depth thresholds are clues, not laws. Splits may temporarily add lines; assess net results globally, never impose per-module quotas.
 
 ## Completion evidence
 
-Report B, F, percentage, source snapshots, commands, category totals, structural outcomes, validation, and exact remaining shortfall. Achieving LOC does not waive coverage, readability, or behavior gates. Exhausting safe candidates does not retroactively waive a requested percentage: report incomplete/unmet target with concrete retained-code evidence, not fabricated success or unsafe deletion. Continue actionable work until resolved; resource interruption is a resumable incomplete run.
+Report B, F, percentage, snapshots, commands, category totals, structural outcomes, validation, and target shortfalls. Reaching LOC never waives behavior, readability, coverage, or remaining actionable work.
+
+If safe candidates are exhausted below an aspirational target, completion is allowed when all required gates pass; disclose the shortfall and retention evidence. Missing an explicitly required threshold remains an unmet gate. Never delete necessary behavior to force either target. Resource interruption remains resumable incomplete work.

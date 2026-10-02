@@ -54,7 +54,7 @@ class Panel {
     this.status = "open";
   }
 
-  get isOpen() {
+  private get isOpen() {
     return this.status === "open";
   }
 }
@@ -62,7 +62,7 @@ class Panel {
 
 Why: one source of truth removes an invalid state where `status` and `isOpen` disagree.
 
-Preserve the cached value when deriving it would change a measured performance characteristic.
+This assumes callers do not observe own-property enumeration, serialization, or descriptors. Preserve the field when those are contracts, or when deriving it would change a measured performance characteristic.
 
 ## 3. Merge equivalent branches
 
