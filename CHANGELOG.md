@@ -1,5 +1,22 @@
 # skills
 
+## 0.4.0
+
+### Minor Changes
+
+- f4ee03a: Make Grimoire workflows risk-adaptive: clarify only material ambiguity, allow direct implementation from clear intent, use flexible ticket slicing, scale QA and tests to change risk, and treat plans and ADRs as revisable guidance backed by evidence.
+- 49acdba: Add independently usable grimoire-map with versioned, incremental persistent evidence and grimoire-refactor for dependency-ordered, resumable repository-scale orchestration. Strengthen standalone improve/simplify with comprehensive coverage, coherent rewrites, integrated verification, and honest LOC/structural acceptance. Preserve test/review/check workflows while adding optional batch evidence and coordinator-owned status handoffs.
+- ac7c040: add simplify skill to clean codebase
+
+### Patch Changes
+
+- c683d16: Restore explicit default skill composition: refine routes requirement, specification, ticket, and planning work to their owning skills; loop loads implement, test, review, and check for selected responsibilities. Preserve adaptive depth, ordering, direct inputs, and authorization boundaries, and pass specialist instructions to delegated QA.
+- c683d16: Align skill references with evidence-led, adaptable workflows. Judge deviations and artifact status by verified requirements; preserve architectural decisions until retirement is evidenced. Replace rigid edge-case, seam, abstraction, testing, and knowledge-recording heuristics with contextual guidance. Clarify registration-block maintenance, scoped formatter selection, and commit staging/intent boundaries without adding mandatory workflow stages.
+- 95b3b16: Align loop specialists with optional planning persistence and verification, remove the init prerequisite for plans, unify evidence and blocker thresholds, and define conservative artifact status transitions. Simplify skill instructions, consolidate loop composition/handoff/evidence rules without relocating them, and move batch-specific evidence guidance to conditional references. Replace QA phase-count tests with contract checks and cover loop specialists in static validation; register the previously omitted loop skill.
+- ec3b954: Make grimoire-plan model-invoked and integrate persisted planning into grimoire-loop before authorized implementation, without routine human approval. Preserve standalone planning, plan reuse, revision history, and plan context for delegated checks. Make browser preview opt-in. End simple grimoire-refine work with a recommendation to use loop instead of generating a plan, and align related skill handoffs and bilingual documentation.
+- 7883391: Treat the default 30% simplification target as aspirational while preserving explicitly required thresholds and two-pass refactor convergence. Propagate no-write/persistence permissions through refactoring skills, make improve HTML reports opt-in, and shorten overlapping workflows and references without changing map wire format. Correct simplification and architecture examples and add static authoring regressions.
+- 5f0b42c: Fix grimoire-refine to coordinate clarify with synchronous automatic recording during discussion, recommend spec/slice by task complexity, and route simple work directly to plan. End refinement at slice or plan completion. Require downstream artifacts to consume settled knowledge and return knowledge gaps to discussion without inventing new decisions; align specialist handoffs and bilingual workflow documentation.
+
 ## 0.3.0
 
 ### Minor Changes
