@@ -1,123 +1,41 @@
 ---
 name: grimoire-slice
-description: Decompose a requirement into coherent, independently valuable or enabling tickets with explicit dependencies.
+description: Break clear requirements into coherent, verifiable tickets with evidence-based dependencies.
 disable-model-invocation: true
 ---
 
-# Purpose
+Write ticket sets in `.grimoire/ticket/NNNN-title/`; do not implement code or invent requirements.
 
-Convert a requirement into a ticket set sized for reliable implementation. Prefer vertical value slices, but allow enabling, migration, component, or operational slices when those better match the work.
+Under `grimoire-refine`, require and follow its supplied knowledge boundary, permissions, and endpoint. Return gaps/results to the coordinator rather than settle new semantic choices or launch downstream work. Request a missing coordination contract; do not guess its location.
 
-# Scope
+# Establish input
 
-This skill writes `.grimoire/ticket/NNNN-title/` relationship and ticket files. It does not implement code or invent missing requirements.
+Use an adequate current spec, or conversation requirements with clear outcomes, constraints, and acceptance. Reading a spec is not invoking its authoring skill; do not create one merely to satisfy a dependency.
 
-Complete the ticket set first, then recommend `grimoire-loop` for execution or hand off when execution is already authorized. Loop handles persisted planning automatically; `grimoire-plan` remains available for an explicit plan-only request. These are follow-up workflows, not dependencies to preload.
+Read relevant context, applicable ADRs, and affected repository surfaces. Resolve bounded factual questions from evidence. Standalone, surface material scope/solution gaps and recommend refine or spec only when needed and authorized; under refine, return those gaps.
 
-When coordinated by `grimoire-refine`, apply the knowledge boundary and selected endpoint supplied in its coordination contract instead of standalone decision and handoff permissions. If that contract is missing, pause and request it from the coordinator; do not guess its installation path. Return knowledge gaps and stage results to the coordinator.
+Require `.grimoire/`; otherwise stop and request `grimoire-init`. Create `ticket/` within permission and allocate the next unused numbered folder. Carry source paths or a concise conversation contract into the README and tickets.
 
-Completion: Every requirement is assigned to a coherent ticket, dependencies reflect real execution constraints, and each ticket has observable acceptance criteria.
+# Decompose
 
----
+- Map every required outcome and affected surface across the set, not into every ticket.
+- Prefer vertical value slices, but allow component, migration, operational, documentation, and enabling work when independently verifiable. Split by value, risk, lifecycle, or testable contract, not mechanically by layer or context-window estimate.
+- Keep tightly coupled behaviors together when splitting creates incomplete states or artificial coordination.
+- Put setup/refactoring in the first consumer unless a separate ticket has independent verification and either multiple real consumers or an independent rollout/lifecycle. Separation must reduce duplication, unsafe intermediate states, or coordination; avoid cosmetic global pre-refactoring.
+- Add a blocking edge only when a consumer cannot be implemented or verified before the producer. Shared files are merge risks, not semantic dependencies; agreed interfaces may permit parallel work. Record blocking, parallel-with-coordination, and independent relationships as relevant.
+- Revisit cyclic boundaries; merge only when the result is a coherent work unit.
 
-# Workflow
+Present outcomes, real dependencies, coordination risks, and recommended order. Within permission, write reversible drafts and invite edits; obtain confirmation before decomposition materially commits scope or sequencing.
 
-## 1. Resolve input
+# Generate and validate
 
-Default to an existing, relevant spec as the requirement contract. Use conversation requirements directly when they already make outcomes, constraints, and acceptance clear; do not create a spec merely to satisfy an input dependency. Preserve multiple independent outcomes and derive a folder name.
+Read [relationship-file-template.md](./references/relationship-file-template.md) for the README and [vertical-slice-template.md](./references/vertical-slice-template.md) for `TNNNN-title.md` tickets. These are defaults, not mandatory empty sections.
 
-Reading an existing spec is reading input, not invoking grimoire-spec. Resolve bounded questions from the source and repository; substantial unresolved scope or solution decisions may warrant grimoire-refine, while a needed formal contract belongs to grimoire-spec. Use those skills by name only when that work is actually needed and authorized, not as routine prerequisites. Slice may summarize its source in the ticket README, but does not generate a separate spec using its own method.
+Completion requires:
+- Every requirement maps to an actionable ticket with observable acceptance and source traceability.
+- All necessary surfaces are covered; boundaries do not force unnecessary cross-layer work.
+- Every blocker has a reason, the graph is acyclic, and recommended order follows it.
+- Coordination risks, ADR alignment, and feasible scope are checked.
+- Written files are read back; every ticket appears in the README with a valid link.
 
-Carry source paths or a concise conversation contract into the ticket set so downstream plan, implement, and check can trace acceptance to intent.
-
-Completion: Input, material requirement decisions, and target folder are known; missing contracts are routed rather than invented.
-
----
-
-## 2. Load relevant constraints
-
-Read the requirement source, relevant domain context, applicable ADRs, and repository areas involved. Scan metadata before expanding unrelated ADRs or modules.
-
-Completion: Material constraints and integration surfaces are understood.
-
----
-
-## 3. Map delivery surfaces
-
-Identify the architectural surfaces touched by the overall requirement using project terminology. This is a map, not a checklist that every ticket must satisfy.
-
-For each prospective ticket, include only the surfaces it actually changes. A ticket may be vertical, enabling, migration-focused, component-focused, documentation-focused, or operational when that shape provides the clearest independently verifiable progress.
-
-Completion: Required surfaces are covered across the ticket set, with intentional omissions explained where useful.
-
----
-
-## 4. Identify enabling work
-
-Separate enabling work only when it is independently verifiable or truly blocks multiple outcomes. Prefer placing setup or refactoring inside the first slice that needs it. Avoid global pre-refactoring tickets that merely make later work aesthetically cleaner.
-
-Completion: Enabling tickets have concrete acceptance criteria and only real dependents.
-
----
-
-## 5. Decompose
-
-Create tickets around coherent outcomes. A ticket may contain several tightly coupled observable behaviors when splitting them would create artificial coordination or incomplete states.
-
-Prefer sizes that fit one implementation context, but treat this as a planning signal rather than a hard limit. Split large work by value, risk, lifecycle, or independently testable contract—not mechanically by architectural layer.
-
-Completion: All requirements are covered without artificial cross-layer boilerplate.
-
----
-
-## 6. Map dependencies
-
-Add a blocking edge only when the consumer cannot be implemented or verified before the producer. Shared files indicate possible merge conflict, not semantic dependency. Shared contracts may be coordinated through an agreed interface without forcing serial implementation.
-
-Classify pairs as blocking, parallel with coordination, or independent. If a cycle appears, revisit boundaries; merge tickets only when that produces a more coherent unit.
-
-Completion: Every blocking edge has a concrete reason and the graph supports a practical execution strategy.
-
----
-
-## 7. Present decomposition
-
-Show ticket outcomes, relevant surfaces, dependencies, coordination risks, and recommended order. Invite adjustments to naming, grouping, boundaries, and dependencies. Require confirmation only before writing when decomposition materially commits scope or sequencing; otherwise write a reversible draft and invite edits.
-
-Completion: The decomposition is approved or safe to record as a draft.
-
----
-
-## 8. Generate ticket folder
-
-Create `README.md` plus `TNNNN-title.md` files. Use the reference templates as defaults.
-
-Each ticket should contain:
-
-1. **Goal** — coherent outcome or enabling capability.
-2. **Surfaces** — only affected layers/modules, with important boundaries.
-3. **Approach** — enough direction without freezing incidental implementation detail.
-4. **Dependencies and coordination** — proven blockers and merge/contract risks.
-5. **Acceptance** — observable, testable criteria.
-6. **Out of Scope** — meaningful exclusions only.
-
-Completion: Every requirement maps to a ticket and every ticket is actionable.
-
----
-
-## 9. Validate
-
-Check requirement coverage, coherent ticket boundaries, dependency evidence, feasible size, applicable ADR alignment, and testable acceptance. Fix inconsistencies and revalidate.
-
-Completion: The ticket set is complete without forcing every ticket through every architectural layer.
-
----
-
-# Rules
-
-- Prefer vertical slices, but choose the decomposition shape that best preserves coherent value and safe delivery.
-- Shared files are coordination risks, not automatic blockers.
-- Enabling work precedes only the tickets it truly blocks.
-- Multiple tightly coupled outcomes may stay together when splitting harms coherence.
-- Cover all necessary architectural surfaces across the ticket set, not mechanically in every ticket.
-- Treat ADR conflicts as decisions to surface, not text to hide in Out of Scope.
+Standalone, recommend `grimoire-loop` after the set is complete; execute further work only when authorized. Under refine, return at the selected endpoint. Do not preload plan or implementation skills.

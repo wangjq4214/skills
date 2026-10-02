@@ -1,39 +1,27 @@
-# Directory Structure
+# Directory structure
 
-The canonical `.grimoire` layout:
+The base layout (not an exhaustive list of allowed content):
 
-```
+```text
 .grimoire/
+├── .gitignore
 ├── CONTEXT.md
 ├── adr/
 ├── spec/
 └── ticket/
 ```
 
-## CONTEXT.md
+- `CONTEXT.md`: shared domain concepts and terminology, maintained by grimoire-record. It may instead index `CONTEXT-[domain].md` files; preserve existing indexes. When creating a missing file, use only the initial scaffold from [the context template](../../grimoire-record/references/context-template.md), not its examples; do not invent project concepts.
+- `adr/`: architecture decision records, maintained by grimoire-record; filenames use `NNNN-title-with-dashes.md` with a zero-padded sequence number.
+- `spec/`: requirements describing what must be built and why.
+- `ticket/`: implementation plans and cross-cutting aspects: changes, sequence, and verification, not implementation code.
 
-Unified project concept descriptions and terminology.
+Create missing directories empty; do not generate sample records or plans.
 
-Records the shared vocabulary of the project domain. Every significant term, entity, or concept gets a definition here. Other grimoire files reference these definitions instead of re-explaining them.
+## Git allowlist
 
-When entries grow large, grimoire-record may split into domain files (`CONTEXT-[domain].md`), with CONTEXT.md becoming a domain index.
+Create `.grimoire/.gitignore` from [the allowlist template](../assets/grimoire.gitignore). It allows only itself, root `CONTEXT.md` / `CONTEXT-*.md`, and `.md` files recursively under `adr/`, `spec/`, and `ticket/`. Everything else, including `map/` and `refactor/`, stays local.
 
-## adr/
+If an ignore file already exists, show its proposed diff and obtain approval rather than overwriting it silently. This configuration file is the exception to add-only initialization; preserve knowledge files. Check effective rules with `git check-ignore --no-index` when Git is available; parent or nested ignore rules may change the result. Report any mismatch rather than claiming the allowlist is enforced.
 
-Architecture Decision Records.
-
-Each file records one significant architectural decision. Maintained by grimoire-record.
-
-Naming: `NNNN-title-with-dashes.md` (zero-padded sequence number).
-
-## spec/
-
-Requirements specifications.
-
-Each file describes a feature, capability, or constraint the project must satisfy. Specs define what must be built and why.
-
-## ticket/
-
-Implementation plans and cross-cutting aspects.
-
-Each file bridges a spec to the implementation: which files change, in what order, what to verify. Tickets capture the plan, not the code.
+Ignore rules do not affect already tracked files. Inspect `git ls-files -- .grimoire` and report tracked paths outside the allowlist; do not delete or untrack them without separate approval. Without Git verification, report the policy as written but unverified.

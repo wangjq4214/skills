@@ -1,206 +1,50 @@
 ---
 name: grimoire-record
-description: Record domain terminology and architectural decisions from conversations.
+description: Maintain durable project terminology and architectural decisions from conversations.
 ---
 
-# Purpose
+# What to record
 
-Watch the conversation for domain concepts and architectural decisions. Record them into the `.grimoire` knowledge store.
+Write only `.grimoire/CONTEXT.md`, its indexed `CONTEXT-[domain].md` files, and `adr/`. Do not bootstrap the store, interview the user, or write specs/tickets.
 
-# Scope
+Record project-specific definitions, aliases, relationships, and consequential durable architectural choices or constraints whose rationale helps future work. Skip transient details, speculation, unconfirmed assumptions, trivial defaults, and information already clear from code. Ordinary requirements belong in the task contract, not automatically in this knowledge store.
 
-This skill edits two areas under `.grimoire/`:
+Read existing relevant entries before writing. Resolve factual conflicts from evidence; return material unresolved conflicts to the user or coordinator instead of inventing knowledge.
 
-- `CONTEXT.md` and its indexed `CONTEXT-[domain].md` files — domain entities, definitions, synonyms, relationships
-- `adr/` — architecture decision records
+Verify `.grimoire/` exists; otherwise report that `grimoire-init` is needed. Create missing target files/directories only within authorized maintenance. When writes are restricted, report qualifying pending items, not a persistence claim.
 
-This skill does NOT:
+Standalone low-urgency updates may be batched. Under `grimoire-refine`, process each settled delta before the next discussion round and return changed paths, concrete skip reasons, or pending items. Do not independently settle decisions or launch clarification.
 
-- Bootstrap `.grimoire/` (use grimoire-init)
-- Interrogate the user (use grimoire-clarify)
-- Write `spec/` or `ticket/` files
+# Domain context
 
-Completion: Only CONTEXT.md, its indexed domain context files, and adr/ are modified by this skill.
+Read `CONTEXT.md` and relevant indexed files. Match by name and synonym; reuse matching entries and update changed definitions rather than append duplicates.
 
----
-
-# Trigger Detection
-
-When this skill is active, scan for durable project knowledge:
-
-- domain terms with project-specific meanings;
-- aliases or relationships needed to interpret the codebase;
-- consequential architectural decisions, constraints, and rejected alternatives.
-
-Record only when persistence will improve future work. Skip transient implementation details, speculative ideas, and information already clear from code. Batch low-urgency updates so documentation does not interrupt the user's objective.
-
-Completion: Durable qualifying knowledge is recorded or intentionally skipped without ceremony.
----
-
-# CONTEXT.md Workflow
-
-## Entry format
-
-Every concept gets one entry:
+Use this entry shape; omit absent fields:
 
 ```markdown
-### [concept-name]
-- **Definition:** [concise, unambiguous definition]
-- **Synonyms:** [alias1, alias2, ...] (omit if none)
+### Concept
+- **Definition:** Concise project-specific meaning.
+- **Synonyms:** Alias, OtherAlias
 - **Relationships:**
-  - [verb] [target-concept] (omit if none)
+  - references OtherConcept
 ```
 
-Constraints:
-- Keep definitions concise and unambiguous; use additional sentences when needed. Split concepts for genuine domain distinctions, not sentence count.
-- Synonyms list comma-separated aliases the user or codebase uses interchangeably.
-- Relationship verbs: `depends on`, `contains`, `references`, `implements`, `extends`, `communicates with`, `belongs to`.
+Relationship verbs: `depends on`, `contains`, `references`, `implements`, `extends`, `communicates with`, `belongs to`. Read [context-template.md](./references/context-template.md) when choosing relationship semantics or splitting domains.
 
-See [references/context-template.md](./references/context-template.md) for full template and examples.
+Keep definitions complete without arbitrary sentence limits. Split files only when domain grouping or navigation benefits; move rather than duplicate entries and index every domain file in `CONTEXT.md`. Update index counts and affected synonyms/relationships after edits or moves. Corrections, merges, deprecation, and removal are allowed; summarize destructive changes and repair references.
 
-## Adding a concept
+# Architectural decisions
 
-1. Read the current `CONTEXT.md` and relevant indexed domain context files.
-2. Check: does this concept already exist (name or synonym match)?
-   - If yes and the definition matches: skip.
-   - If yes and the definition conflicts: use repository evidence and context to resolve it; ask the user only if a material conflict remains.
-   - If no: append the new entry to the appropriate context file.
-3. Update any existing entries whose relationships or synonyms reference this new concept.
-4. Assess whether file size, navigation difficulty, or coherent domain groupings would benefit from an [Entity Overflow Split](#entity-overflow-split).
+Use ADRs for consequential durable choices, including boundaries, security/operational constraints, strong technology commitments, and meaningful rejected alternatives. Switching cost is a signal, not a requirement. Do not record experiments that have not committed the project, routine library defaults, or mere concept definitions.
 
-Completion: New concept is present in CONTEXT.md or an indexed domain context file. Cross-references are updated and organization remains manageable.
+Read relevant ADRs to avoid duplication. New records use the next unused `NNNN-title-with-dashes.md` in `adr/`. Read [adr-template.md](./references/adr-template.md) when creating a record or changing status; it defines metadata, sections, and lifecycle. Default to `Proposed` unless actual progress is established. Record known rationale/alternatives only; do not invent them to fill the template.
 
-## Updating a concept
+Preserve decision history:
+- A changed decision needs a new superseding ADR with links in both directions.
+- Correct factual errors or unclear wording in place only when the decision is unchanged; add a dated correction note.
+- Merge duplicates under one canonical record and mark the others `Superseded` with links.
+- Delete only records created in error with no historical value; summarize deletion and leave a correction note when future readers need it.
 
-When the user refines a definition:
+# Completion
 
-1. Locate the existing entry.
-2. Replace the definition/synonyms/relationships with the refined version.
-3. Check all entries that reference this concept — update if the relationship changed.
-
-Completion: Old definition replaced. Dependent entries consistent.
-
-## Entity Overflow Split
-
-Split when file size, navigation difficulty, or coherent domain groupings make separate files useful. Entry counts are signals, not mandatory thresholds.
-
-1. Group entries into coherent domain categories (e.g., "Billing", "Auth", "Ordering").
-2. For domains that benefit from separate navigation, create or reuse `.grimoire/CONTEXT-[domain-slug].md`.
-3. Move those entries into the domain file, preserving existing entries.
-4. Index each domain file in `CONTEXT.md` rather than duplicating moved entries.
-
-Index table format:
-
-```markdown
-## Domain Index
-
-| Domain        | File                               | Entry Count |
-| ------------- | ---------------------------------- | ----------- |
-| [Domain Name] | [CONTEXT-xxx.md](./CONTEXT-xxx.md) | N           |
-```
-
-5. Entries that do not benefit from a separate domain file stay inline in CONTEXT.md under a "Concepts" or "Uncategorized" section.
-
-Completion: All entries are preserved and reachable from CONTEXT.md, inline or through its index. Organization is manageable without a hard entry cap.
-
----
-
-# ADR Workflow
-
-## When to write an ADR
-
-Write an ADR for consequential, durable architectural decisions whose rationale, material alternatives, or constraints will help future readers understand the choice.
-
-Consider effects on boundaries, operations, security, compliance, and future options. Switching cost is one signal of significance, not a prerequisite; a binding constraint can merit a record even when it leaves only one viable option.
-
-Do NOT write an ADR for:
-- Trivial or obvious defaults (e.g., "we use Git").
-- Routine library choices without consequential tradeoffs or constraints.
-- Concept definitions without a consequential decision to explain; an existing CONTEXT.md entry does not replace decision rationale.
-- Temporary or experimental choices that don't yet commit the project.
-
-Completion: Every qualifying decision has an ADR. Every skipped decision can be justified by the exclusion criteria.
-
-## ADR categories
-
-Record decisions in these categories:
-
-| Category              | Example triggers                                                                                   |
-| --------------------- | -------------------------------------------------------------------------------------------------- |
-| Architecture pattern  | Monorepo vs polyrepo, event sourcing, CQRS, microservices vs monolith                              |
-| Integration pattern   | Domain events vs sync HTTP, shared DB vs API                                                       |
-| Strong tech binding   | Database, message bus, auth provider, deployment target — consequential commitments or constraints |
-| Boundary definition   | "X belongs to Y context; others reference by ID only." Explicit NOT-dos.                           |
-| Intentional deviation | "We hand-write SQL instead of using an ORM because X."                                             |
-| Invisible constraint  | "Compliance forbids AWS." "Partner API requires <200ms response."                                  |
-| Rejected alternative  | "We chose REST over GraphQL because X." Record the rejected option.                                |
-
-## File format
-
-Naming: `NNNN-title-with-dashes.md` (zero-padded, next available sequence number).
-
-Template:
-
-```markdown
-# [Decision Title]
-
-**Status:** [Proposed | Implementing | Testing | Completed | Deprecated | Superseded]
-**Date:** YYYY-MM-DD
-
-## Context
-
-[1–2 sentences: what prompted this decision and what alternatives existed.]
-
-## Decision
-
-[1–2 sentences: what we chose and why.]
-
-## Consequences
-
-- [What this enables.]
-- [What this constrains.]
-- [What we must do because of this.]
-```
-
-See [references/adr-template.md](./references/adr-template.md) for full template and examples.
-
-## Adding an ADR
-
-1. Determine the next available sequence number (check existing adr/ files).
-2. Create the file.
-3. Set status to `Proposed` unless the user indicates otherwise.
-
-Completion: ADR file exists with correct sequence number and valid frontmatter.
-
-## Maintaining ADRs
-
-ADRs preserve decision history while allowing explicit correction:
-
-1. Update status as implementation progresses.
-2. When a decision changes, create a superseding ADR and link both records.
-3. Correct factual errors or ambiguous wording in place when the original decision is unchanged; add a dated correction note describing the edit.
-4. Merge duplicate ADRs by choosing one canonical record and marking the others `Superseded` with links.
-5. Delete an ADR only when it was created in error and has no historical decision value. Summarize the deletion in the user-facing result; when future readers need the correction, leave a note in the canonical ADR or context entry.
-
-Do not silently rewrite history. Material changes to the decision require a new ADR rather than an in-place edit.
-
-Completion: Current guidance is accurate and historical changes remain traceable.
-
----
-
-# Pre-Flight Checks
-
-Before writing, verify `.grimoire/` and create missing target files/directories only when the current user request authorizes knowledge-store maintenance. Otherwise explain what initialization is needed.
-
-Completion: Target paths are available or the limitation is reported.
-
----
-
-# Rules
-
-- Keep definitions concise, but use additional sentences when needed to prevent ambiguity.
-- Never invent definitions; ask only when repository evidence and context cannot resolve a material conflict.
-- CONTEXT entries may be corrected, merged, moved, deprecated, or removed when obsolete or wrong; update references and summarize destructive changes.
-- ADRs record consequential, durable decisions with material alternatives or constraints; switching cost alone does not determine whether a decision qualifies.
-- Preserve decision history through status, supersession links, and correction notes rather than blanket immutability.
-- Prefer an accurate, maintainable knowledge base over append-only accumulation.
+Read back entries or inspect diffs. Qualifying knowledge is recorded or has a concrete skip/block reason; context entries remain reachable and consistent, ADR metadata and history links are valid, and only authorized knowledge-store paths changed.

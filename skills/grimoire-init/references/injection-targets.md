@@ -1,21 +1,12 @@
-# Injection Targets
+# Injection targets
 
-Configuration files that instruct AI coding agents about the project.
+## Choose targets
 
-## Target Files
+Inspect root `AGENTS.md` and `CLAUDE.md`. Recommend the file used by the intended agent; if several agents need registration, propose each relevant target explicitly rather than selecting by filename priority or modifying every file found. If the intended agent is unclear, ask which target(s) to use as part of plan approval.
 
-Search for these files in the project root (in order of priority):
+Treat other names, including `CURSOR.md` and `AGENT.md`, as candidates only when project configuration or the user confirms they are loaded; their presence alone does not establish host support. If no suitable target exists, offer to create root `AGENTS.md`, making any unverified host support explicit. Do not claim registration is effective while that support remains unresolved.
 
-1. `AGENTS.md` — convention used by multiple agent tools
-2. `CLAUDE.md` — Anthropic Claude Code convention
-3. `CURSOR.md` — Cursor IDE convention
-4. `AGENT.md` — fallback single-file convention
-
-If none exist, offer to create `AGENTS.md`.
-
-## Injection Block
-
-After approval, append this block only to targets without a grimoire block. For existing blocks, follow Detection below:
+## Registration block
 
 ```markdown
 <!-- GRIMOIRE:START -->
@@ -32,18 +23,11 @@ Consult relevant grimoire files before making design decisions that affect proje
 <!-- GRIMOIRE:END -->
 ```
 
-## Detection
+## Propose the action
 
-The `<!-- GRIMOIRE:START -->` / `<!-- GRIMOIRE:END -->` markers allow re-detection.
+- Neither marker exists: append the block, adding a trailing newline first if needed.
+- One complete block exists: offer keep, replace with the canonical block, or merge; show the proposed result.
+- Multiple complete, non-nested blocks exist: propose consolidation into one, preserving content between them.
+- Markers are unpaired, reversed, or nested: show the malformed region and propose exact repair boundaries for explicit approval. Without that approval, leave the target unchanged and report registration as blocked.
 
-If a target already contains a grimoire block:
-
-- Capture the existing block content during Explore.
-- In the Plan step, show the existing block alongside the canonical block. Let the user choose: keep existing, replace with canonical, or merge.
-- Never inject a duplicate block. If multiple blocks already exist, include consolidation to one block in the plan for approval.
-
-## Rules
-
-- Preserve unrelated content outside the registration markers; do not delete or reorder it. Within the block, apply only the approved keep, replace, or merge action.
-- Append only if no block exists. If the target file ends without a trailing newline, add one before appending the block.
-- Leave at most one registration block per target file.
+Do not delete or reorder unrelated content outside approved block or repair boundaries.
