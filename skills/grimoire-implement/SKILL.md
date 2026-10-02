@@ -3,78 +3,26 @@ name: grimoire-implement
 description: Implement code from a plan, ticket, spec, or sufficiently clear conversation using proportionate design and verification.
 ---
 
-# Purpose
+Implement the authorized behavior from the original source and available plan context; a persisted plan is not required.
 
-Implement production code from the best available source of intent. Preserve useful architecture while adapting the approach to repository evidence.
+Under orchestration, the caller's execution contract governs scope, writes, verification, checkpoints, reporting, and completion. Apply only enabled responsibilities; disabled verification stays omitted, not passed. The practices below are standalone defaults, not permission to restore excluded stages.
 
-# Scope
+## Source and scope
 
-This skill writes code to the repository. In standalone use, a formal plan is optional: a clear conversation, ticket, or spec can be sufficient for bounded work. When coordinated by grimoire-loop, consume the persisted plan and original source supplied by loop; return material deviations so loop can maintain the audit trail.
+Resolve intended outcomes, constraints, and acceptance criteria from the supplied conversation, ticket, spec, or plan. User intent outranks incidental plan details. Ask when ambiguity would materially change scope, safety, or an irreversible decision; otherwise state bounded assumptions.
 
-Completion: Requested behavior is implemented and verified at an appropriate scope, with assumptions and material deviations reported.
+Inspect relevant implementation and consumers. Plans predict files and types, not immutable boundaries. When repository evidence invalidates the approach, make authorized adaptations and return material deviations to the coordinator; ask before changing approved scope or irreversible decisions.
 
----
+## Change boundaries
 
-# Workflow
+Implement coherent units, allowing coupled files to change atomically. Include adjacent cleanup only when necessary for correctness, removing duplication introduced by the change, or materially reducing its risk. Avoid unrelated formatting and opportunistic rewrites.
 
-## 1. Resolve implementation source
+An abstraction may be justified by current boundary value—test substitution, dependency inversion, external isolation, invariant enforcement—even with one implementation. Do not add interfaces solely for predicted future variation. For consequential ownership or boundary tradeoffs, consult [principles.md](./references/principles.md); these are heuristics, not syntax rules.
 
-Use the richest available source: plan, ticket, spec, or conversation. Stop only when a material ambiguity could cause irreversible, unsafe, or substantially different work. Otherwise state reasonable assumptions and proceed.
+## Evidence and handoff
 
-Extract intended outcomes, constraints, likely affected areas, and verification expectations. Treat predicted files and types as hypotheses that repository exploration may revise.
+When verification is enabled, select checks for requested behavior and changed risks: public API/schema compatibility, dependency direction, ownership, error paths, and integration as applicable. Verify coherent units, not uncompilable intermediate types. Reuse evidence only when its source and relevant dependencies/environment remain applicable.
 
-Completion: The objective is actionable and material assumptions are explicit.
+Return the complete authorized diff including new files, material deviations, executed checks/results, and remaining limitations when reporting is enabled. Separate product failures from baseline failures and unavailable tooling.
 
----
-
-## 2. Survey relevant code
-
-Read the files likely to change and enough neighboring code to understand patterns, ownership, error handling, and available language features. Search for reusable behavior before introducing new helpers, but do not force reuse when it creates coupling or obscures intent.
-
-Completion: Relevant implementation patterns and constraints are understood.
-
----
-
-## 3. Choose structure
-
-Apply [references/principles.md](./references/principles.md) as heuristics, not universal laws. For each material boundary, consider lifecycle, ownership, responsibility, state validity, dependencies, and public contract.
-
-An abstraction is justified when it provides current boundary value: stable protocol, dependency inversion, test substitution, plugin surface, invariant enforcement, or meaningful complexity hiding. Multiple implementations are evidence, not a prerequisite.
-
-Record design reasoning only for non-obvious or high-impact boundaries. Small local changes do not require a type-by-type design dossier.
-
-Completion: The chosen structure is proportionate and material tradeoffs are understood.
-
----
-
-## 4. Implement coherently
-
-Implement in the smallest coherent units that can be reviewed and verified. Coupled files or types may change atomically. Prefer focused changes, while allowing adjacent cleanup when it is necessary for correctness, removes duplication introduced by the change, or materially reduces risk.
-
-Follow current project conventions unless they are the source of the problem. Avoid unrelated formatting and opportunistic rewrites.
-
-Completion: Requested behavior is implemented without avoidable scope expansion.
-
----
-
-## 5. Verify
-
-Run checks appropriate to the change: compile/type-check, targeted tests, integration tests, linting, or focused manual validation. At minimum:
-
-- verify the requested behavior or acceptance criteria;
-- inspect public API/schema compatibility when those surfaces changed;
-- inspect dependency direction, ownership, and error paths when architectural boundaries changed.
-
-Verify after coherent units rather than every type when intermediate states cannot compile. If repository evidence requires a material departure from a plan, implement the safer solution and report the deviation; ask first only when it changes approved scope or an irreversible decision.
-
-Completion: Selected checks have recorded results, every changed high-risk surface has a corresponding check, and remaining failures are reported with evidence.
-
----
-
-# Rules
-
-- A clear ticket, spec, or conversation can authorize implementation; do not require ceremony for its own sake.
-- Prefer surgical scope, but include necessary adjacent changes and explain them.
-- Treat architectural principles as decision aids with explicit exceptions, not absolute syntax rules.
-- Optimize for coherent, verifiable behavior rather than artificial type-by-type sequencing.
-- Repository evidence may revise the plan; user intent and acceptance criteria outrank incidental plan details.
+Complete when the authorized behavior exists and enabled verification has results or explicit evidence gaps. Unavailable or disabled checks cannot establish verified success; do not silently run them to satisfy this completion condition.

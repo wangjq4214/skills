@@ -6,7 +6,7 @@ import test from 'node:test';
 import { createHash } from 'node:crypto';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const selected = ['map', 'refactor', 'improve', 'simplify', 'test', 'review', 'check'];
+const selected = ['map', 'refactor', 'improve', 'simplify', 'loop', 'plan', 'implement', 'test', 'review', 'check'];
 const read = path => readFileSync(join(root, path), 'utf8').replace(/\r\n/g, '\n');
 const skillPath = name => `skills/grimoire-${name}/SKILL.md`;
 
@@ -25,7 +25,7 @@ test('skill names and invocation modes remain explicit', () => {
     assert.ok(metadata, `${name}: frontmatter missing`);
     assert.match(metadata[1], new RegExp(`^name: grimoire-${name}$`, 'm'));
     assert.match(metadata[1], /^description: .+/m);
-    const userInvoked = name === 'refactor';
+    const userInvoked = ['refactor', 'loop'].includes(name);
     assert.equal(/^disable-model-invocation: true$/m.test(metadata[1]), userInvoked, name);
   }
 });
@@ -62,13 +62,7 @@ test('literal JSON examples in persistent map documentation parse', () => {
   for (const [, example] of examples) assert.doesNotThrow(() => JSON.parse(example));
 });
 
-test('QA extensions preserve existing public classification vocabularies and phases', () => {
-  for (const [name, phases] of [['test', 7], ['review', 5], ['check', 7]]) {
-    const source = read(skillPath(name));
-    const headings = [...source.matchAll(/^## (\d+)\. /gm)].map(match => Number(match[1]));
-    assert.deepEqual(headings, Array.from({ length: phases }, (_, i) => i + 1), name);
-    assert.match(source, /^# Optional refactoring and batch context$/m);
-  }
+test('QA preserves public classification vocabularies independently of document structure', () => {
   for (const word of ['blocking', 'needs-verification', 'suggestion', 'praise']) {
     assert.ok(read(skillPath('review')).includes(`**${word}**`), word);
   }

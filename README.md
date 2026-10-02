@@ -80,7 +80,7 @@ Small and reversible     implement → targeted verification
 Existing spec/tickets    enter at the next useful stage
 ```
 
-[Refine](./skills/grimoire-refine/SKILL.md) coordinates clarify with automatic recording during discussion, then recommends spec/slice according to task complexity. Simple tasks end with a settled handoff and a recommendation to use loop, not a generated plan. Artifact stages consume settled knowledge and return gaps to discussion rather than inventing knowledge. [Loop](./skills/grimoire-loop/SKILL.md) accepts conversation, spec, tickets, or an existing plan; it saves or updates a plan in `.grimoire/plans/` and proceeds to implementation/QA without routine approval gates. Load and apply each responsible skill; inline execution is valid.
+[Refine](./skills/grimoire-refine/SKILL.md) coordinates clarify with automatic recording during discussion, then recommends spec/slice according to task complexity. Simple tasks end with a settled handoff and a recommendation to use loop, not a generated plan. Artifact stages consume settled knowledge and return gaps to discussion rather than inventing knowledge. [Loop](./skills/grimoire-loop/SKILL.md) accepts conversation, spec, tickets, or an existing plan; by default it saves or updates a plan in `.grimoire/plans/` and proceeds to implementation/QA without routine approval gates. Stages and plan persistence are independently selectable; conversation-only planning creates no files. Saving a plan creates only missing plan directories, without requiring init or changing registration/Git configuration. Load and apply each responsible skill; inline execution is valid.
 
 `clarify` owns requirements discussion; `record` persists durable context and decisions; `spec` owns requirement contracts; `slice` owns tickets. Loop uses plan for an auditable implementation approach shared with subagents, implement for production changes, test for test work, review for code risks, and check for intent alignment. Plan remains directly invocable for plan-only work. Browser preview and its server are prepared only on user request.
 
@@ -98,7 +98,7 @@ Use grimoire-simplify to flatten this function without changing behavior.
 Use grimoire-refactor to comprehensively simplify this repository; use parallel subagents and worktrees.
 ```
 
-Maintainers: `pnpm run test:skills` (or `node --test tests/refactoring-skills.test.mjs`) checks skill metadata, local references, registry entries, JSON examples, and retained QA phases. These are static authoring checks, not an end-to-end proof of agent execution.
+Maintainers: `pnpm run test:skills` (or `node --test tests/*.test.mjs`) runs the maintenance suite, including metadata, local references, registry entries, JSON examples, init Git behavior, and explicit loop/QA contract checks. Skill text checks and scenario walkthroughs do not prove end-to-end agent compliance.
 
 ---
 

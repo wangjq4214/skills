@@ -1,6 +1,6 @@
 # Edge Case Guide
 
-Use this guide during step 5 (Identify Edge Cases) to filter meaningful edge cases from noise.
+Use when selecting edge cases to separate consequential omissions from noise.
 
 ---
 
@@ -48,4 +48,4 @@ For each edge case the plan lists, record:
 
 - **Condition**: The specific input, state, or timing that triggers it.
 - **Expected behavior**: What the system should do.
-- **Owning step**: Which step from section 4 (Implementation Steps) must handle it.
+- **Owning step or check**: Which implementation step or verification covers it.

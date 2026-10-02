@@ -22,6 +22,12 @@ These scenarios illustrate the composition policy in [../SKILL.md](../SKILL.md).
 | “Turn review back on before continuing.” | Revise the remaining contract and review the current applicable diff | The earlier exclusion does not permanently disable the stage. |
 | “Stop after the plan and wait for me.” | Plan → waiting for user | No production changes until the user releases implementation. |
 | “Disable every stage.” | No work stages execute | No default stage is restored merely to give the loop something to do. |
+| “Implement in this new repository; there is no `.grimoire` yet.” | Default plan creates only `.grimoire/plans/`, then authorized work | No init, registration, knowledge-file, or Git configuration changes. |
+| “Only run the existing tests.” | Test execution and results | No test authoring or automatic test-defect repair. |
+| Required runtime is inaccessible during intent check | Preserve needs-verification for runtime-dependent criteria | Do not infer a gap or change artifact status from missing evidence. |
+| Test command fails because its runner is unavailable | Report the missing prerequisite | Do not manufacture a confirmed product defect or authorize a fix. |
+| ADR implementation is complete; required manual verification is pending | Recommend Testing for an active ADR | No Completed status or overall acceptance before required evidence. |
+| A Superseded ADR still has code in the repository | Retain historical status | Code presence cannot reactivate the old decision. |
 
 ## Resume walkthrough
 

@@ -1,6 +1,6 @@
 # Markdown Plan Template
 
-Use this structure in step 7. Write the output to `.grimoire/plans/NNNN-title.md`.
+Use for persisted plans at `.grimoire/plans/NNNN-title.md`. Conversation-only planning does not require this file template.
 
 Adapt or omit sections that do not apply. Do not emit empty headings or placeholder text.
 

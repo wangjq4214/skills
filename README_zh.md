@@ -80,7 +80,7 @@ loop 内部循环      plan → implement → test → review + check → 评估
 已有规格或工单     从下一个有价值的阶段进入
 ```
 
-[refine](./skills/grimoire-refine/SKILL.md) 协调 clarify，并在讨论期间同步调度 record 自动记录知识，再按任务复杂度推荐 spec／slice。简单任务以澄清结果和使用 loop 的建议收尾，不生成计划。产物阶段只消费已澄清知识，发现缺口交回讨论，不能自行产生新知识。[loop](./skills/grimoire-loop/SKILL.md) 可直接接收对话、spec、tickets 或已有计划，先在 `.grimoire/plans/` 保存或更新计划，再进入实现与 QA，不设置例行人工审批关卡。每个阶段实际加载并应用对应 skill，允许同一 agent 内联执行。
+[refine](./skills/grimoire-refine/SKILL.md) 协调 clarify，并在讨论期间同步调度 record 自动记录知识，再按任务复杂度推荐 spec／slice。简单任务以澄清结果和使用 loop 的建议收尾，不生成计划。产物阶段只消费已澄清知识，发现缺口交回讨论，不能自行产生新知识。[loop](./skills/grimoire-loop/SKILL.md) 可直接接收对话、spec、tickets 或已有计划，默认在 `.grimoire/plans/` 保存或更新计划，再进入实现与 QA，不设置例行人工审批关卡。各阶段和计划落盘可独立选择；仅在对话中规划时不创建文件。保存计划只创建缺失的计划目录，不要求先运行 init，也不修改注册或 Git 配置。每个阶段实际加载并应用对应 skill，允许同一 agent 内联执行。
 
 `clarify` 负责需求讨论，`record` 持久化领域上下文与决策，`spec` 负责需求契约，`slice` 负责工单。loop 内由 plan 留存可供审计和 subagent 核对的实现计划，implement 负责生产改动、test 负责测试工作、review 评估代码风险、check 核对需求满足情况。仍可单独调用 plan，只生成计划；仅在用户要求预览时准备浏览器预览和服务器。
 
@@ -98,7 +98,7 @@ loop 内部循环      plan → implement → test → review + check → 评估
 用 grimoire-refactor 全面简化这个仓库，使用并行 subagent 和 worktree。
 ```
 
-维护验证：`pnpm run test:skills`（或 `node --test tests/refactoring-skills.test.mjs`）检查技能元数据、本地引用、注册项、JSON 示例和保留的 QA 阶段。这是静态检查，不等于真实 agent 执行的端到端验证。
+维护验证：`pnpm run test:skills`（或 `node --test tests/*.test.mjs`）运行全部维护测试，包括元数据、本地引用、注册项、JSON 示例、init Git 行为及 loop／QA 的显式契约检查。技能文本检查和场景推演不能证明真实 agent 的端到端执行符合规则。
 
 ---
 

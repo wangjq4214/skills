@@ -16,6 +16,7 @@
         "grimoire-improve",
         "grimoire-simplify",
         "grimoire-refactor",
+        "grimoire-loop",
         "grimoire-implement",
         "grimoire-test",
         "grimoire-check",

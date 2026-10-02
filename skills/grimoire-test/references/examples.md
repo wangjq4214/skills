@@ -53,7 +53,7 @@ it('should return user when user exists', async () => {
 
 ## AAA separation
 
-Bad — mixed setup and assertion:
+Valid when the initial value is an important precondition; otherwise the first assertion adds noise:
 ```typescript
 it('should apply discount', () => {
   const cart = new Cart();
@@ -64,7 +64,7 @@ it('should apply discount', () => {
 });
 ```
 
-Good — clear AAA separation:
+More focused when only the discounted result is the contract:
 ```typescript
 it('should reduce total by 10% when 10% discount is applied', () => {
   // Arrange
