@@ -1,127 +1,53 @@
 ---
 name: skill-forge
-description: Create, review, and refactor agent skills for predictable execution.
+description: Create, review, and simplify agent skills into minimal, effective instructions.
 disable-model-invocation: true
 ---
 
-# Purpose
+Write the smallest skill that reliably supplies what the agent would otherwise
+miss: task-specific knowledge, consequential decisions, necessary constraints,
+and non-obvious procedures.
 
-Create skills that produce predictable execution paths.
+Assume the agent already knows general task-solving practices.
 
-# Workflow
+## Shape the skill
 
-## 1. Define boundary
+Identify when the skill applies and what it must change about the agent's
+behavior. When revising, preserve required behavior, not the existing outline.
 
-Identify:
+Start with direct instructions in one SKILL.md. Choose structure to fit the
+task; a skill may be a few rules, a decision guide, or an ordered procedure.
+Use ordered steps only when sequence matters.
 
-- what behavior this skill controls ?
-- what is outside its scope ?
+Include completion criteria where success is ambiguous or premature completion
+is a meaningful risk. Do not require a done condition for every step.
 
-Completion: The skill scope can be describe in one sentence.
+Write the description around recognizable usage situations. Choose automatic
+or explicit invocation according to the target host and intended usage.
 
----
+## Keep only what earns its place
 
-## 2. Select invocation mode
+For each instruction, ask: what concrete mistake or knowledge gap would its
+removal expose? Delete generic advice, obvious task decomposition, repeated
+requirements, and explanations that add no useful distinction.
 
-Choose:
+Prefer familiar language. Add examples when they resolve ambiguity more
+efficiently than prose; introduce terminology only when it reduces explanation.
 
-- model-invoked
-- user-invoked
+Delete unnecessary material rather than relocating it. Use references for
+necessary material needed only in specific situations, and state when to read
+each reference. Keep essential constraints in the main file.
 
-Use model-invoked when automatic discovery is required.
-Use user-invoked when explicit selection is preferred.
+Split skills when they have independently useful triggers or responsibilities,
+not merely to shorten a file.
 
-See: [references/invocation.md](./references/invocation.md)
+## Check the result
 
-Completion: Invocation mode and reason are defined.
+Check representative tasks and important edge cases against the required
+behavior. Use execution evidence when available; label scenario reasoning as
+unverified rather than claiming tested reliability.
 
----
+If a shorter version preserves the required behavior, prefer it. Add instructions
+to address a concrete failure or a credible risk, not to fill out a template.
 
-## 3. Separate execution from reference
-
-Put in SKILL.md:
-
-- workflow
-- required decisions
-- completion criteria
-
-Put in references:
-
-- explanations
-- examples
-- uncommon cases
-
-See: [references/hierarchy.md](./references/hierarchy.md)
-
-Completion: Every piece of information has a clear location.
-
----
-
-## 4. Add completion criteria
-
-Every step must define how completion is verified.
-Avoid vague instructions.
-
-Bad:
-
-```markdown
-Check carefully.
-```
-
-Good:
-
-```markdown
-Verify every modified file has passed validation.
-```
-
-Completion: Every step has an observable done condition.
-
----
-
-## 5. Remove duplication
-
-Keep every rule in one authoritative location.
-
-See: [references/pruning.md](./references/pruning.md)
-
-Completion: No behavior is defined twice.
-
----
-
-## 6. Apply stable terminology
-
-Use leading words for repeated concepts.
-
-See: [references/leading-words.md](./references/leading-words.md)
-
-Completion: Repeated concepts use consistent names.
-
----
-
-## 7. Split when predictable improves
-
-Split by:
-
-- invocation
-- execution sequence
-
-Only split when it improves predictability.
-
-See: [references/splitting.md](./references/splitting.md)
-
-Completion: Every split has a predictable reason.
-
----
-
-# Validation
-
-Before finishing:
-
-- [ ] Scope is clear
-- [ ] Invocation mode is intentional
-- [ ] Steps have completion criteria
-- [ ] References are progressively disclosed
-- [ ] Rules have one source of truth
-- [ ] No unnecessary prose remains
-
-See: [references/failure-modes.md](./references/failure-modes.md)
+Keep the delivery brief: summarize material changes and verification limits.
