@@ -119,7 +119,7 @@ These skills require explicit user selection. They have `disable-model-invocatio
 | ---------------------------------------------------------- | ----------------------------------------------------------------------- |
 | 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**         | Create, review, and prune agent skills                                  |
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | Bootstrap optional `.grimoire` project knowledge                        |
-| 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | Organize knowledge and retire verified, completed specs and tickets     |
+| 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | Consolidate knowledge and retire redundant specs/tickets while preserving active work contracts     |
 | 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | Coordinate clarification, context persistence, specs, tickets, and execution handoff |
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | Produce proportionate specs from requirements and relevant context      |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | Decompose requirements into coherent value or enabling tickets          |
