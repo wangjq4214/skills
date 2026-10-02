@@ -1,127 +1,59 @@
 ---
 name: commit
-description: Write commit messages in Conventional Commits format with gitmoji and execute the commit — type, scope, summary, and body.
+description: Draft a gitmoji-prefixed Conventional Commit message for staged changes and create the local commit after user approval.
 disable-model-invocation: true
 ---
 
-# Purpose
+Commit only the user's staged changes. Do not stage or repartition files, manage
+branches, resolve conflicts, create merge commits, amend history, push, or
+interact with remotes.
 
-Guide the agent to produce a commit message in `<gitmoji> <type>(<scope>): <summary>\n\n<body>` format and execute the commit.
+## Prepare and confirm
 
-# Scope
+1. Check `git status` and read `git diff --cached`, not just filenames or stats.
+   Stop for an in-progress merge or unresolved conflicts. If nothing is staged,
+   report modified/untracked files and ask the user to stage their selection or
+   authorize a separate staging task; recheck the index afterward.
+2. Read [references/format.md](./references/format.md) to choose type and one
+   emoji. Classify by primary semantic intent, not line count or generated-file
+   volume. Inspect large diffs in coherent file/package groups; ask about intent
+   only if material ambiguity remains. For independent changes, propose a split
+   for the user to arrange rather than altering the index.
+3. Draft the message using the rules below, display it in a code block, and ask
+   “Commit with this message?” Wait for approval clearly referring to this
+   message and the reviewed staged changes; a brief affirmation can suffice.
 
-This skill writes commit messages and commits staged changes. It does NOT stage files, manage branches, resolve merge conflicts, amend history, push, or interact with remotes. The user decides what to commit; the skill decides how to format it.
+## Message
 
----
+```text
+<gitmoji> <type>(<scope>): <summary>
 
-# Leading words
-
-- **header** — the first line: `<gitmoji> <type>(<scope>): <summary>`
-- **body** — the optional paragraph(s) after the blank line, explaining why and what
-- **summary** — the imperative, one-line description in the header
-- **scope** — the module, component, or area affected (lowercase, hyphenated when multi-word)
-
----
-
-# Workflow
-
-## 1. Pre-flight
-
-Check the staging area:
-
-```bash
-git diff --cached --stat
+<optional body>
 ```
 
-If staged changes exist, proceed to step 2.
+- Scope: lowercase, hyphenated module/component name; use its directory or
+  package when unclear. For multiple scopes, choose the most meaningful change;
+  omit scope and parentheses for project-wide changes with no useful scope.
+- Summary: imperative, lowercase initial unless a proper noun, no trailing
+  period. Aim for 50 characters or fewer, maximum 72; do not pad short summaries.
+- Body: explain why and what effect the change has, not implementation details
+  already visible in the diff. Omit it if it only repeats the header or diff.
+  Separate it from the header with a blank line and wrap at 72 characters.
+  Include applicable issue references as `Closes #123` or `Refs #456`.
 
-If no staged changes exist, run `git status`, report modified/untracked files, and ask the user to stage the intended changes or authorize a separate staging task. This skill does not stage files; resume by checking the index again once staging is complete.
+## Execute
 
-Completion: Staged changes are confirmed and ready for analysis, or execution is paused with the staging prerequisite explained.
+Recheck the staged diff before committing. If the message or staged content has
+materially changed, present the revised draft and obtain approval again. Clarify
+ambiguous approval rather than treating it as permission.
 
----
+Run `git commit` with the approved message only: use `-m` for the header and a
+second `-m` only when there is a body, or `-F` with a message file. Pass the text
+literally using safe quoting for the active shell; do not let message contents
+expand as shell commands or variables. Do not use `-a` or path arguments, which
+would change the staged-only scope.
 
-## 2. Analyze changes
-
-Read the staged diff:
-
-```bash
-git diff --cached
-```
-
-Determine from the diff content, not the file names alone:
-
-- **type** — one of the conventional commit types (see [references/format.md](./references/format.md))
-- **scope** — the affected module, component, or area (lowercase, hyphenated)
-- **gitmoji** — one emoji matching the primary intent (see [references/format.md](./references/format.md))
-
-Decision rules:
-
-- When changes span multiple types, pick the primary intent by semantic impact; generated churn or line count need not dominate.
-- When scope is ambiguous, use the directory or package name of the affected files.
-- For a large diff, inspect coherent file/package groups and distinguish generated changes from behavioral changes. Ask about primary intent only when material ambiguity remains after inspection, not because the diff crosses a line-count threshold.
-
-Completion: type, scope, and gitmoji are selected. Every selection has a reason traceable to the diff.
-
----
-
-## 3. Draft message
-
-Apply [references/format.md](./references/format.md) for message syntax. Write a concise header expressing the primary intent and add a body when rationale, impact, or issue references need explanation. Omit a body that would only repeat the header or diff.
-
-Draft the full message and present it to the user as a code block:
-
-```
-✨ feat(auth): add OAuth2 token refresh
-
-Invalid tokens were silently rejected after expiry, causing unexpected
-login prompts. This adds automatic refresh via the /token endpoint.
-```
-
-Completion: A draft message is displayed. The user has not yet approved.
-
----
-
-## 4. Confirm
-
-Ask the user: "Commit with this message?"
-
-Wait for approval that clearly refers to committing the displayed message and staged changes. A brief affirmation can suffice in that context; ask again if its referent is ambiguous or the message or staged content materially changes.
-
-If the user asks for changes, return to step 3 and revise.
-
-Completion: User has explicitly approved the message. Execution proceeds to step 5.
-
----
-
-## 5. Commit
-
-Execute:
-
-```bash
-git commit -m "<header>" -m "<body>"
-```
-
-If the body is empty, use only `-m "<header>"`.
-
-After commit, confirm with the commit hash from `git rev-parse --short HEAD`.
-
-Do NOT push.
-
-Completion: Commit is created. Short hash is reported. Execution ends.
-
----
-
-# Rules
-
-- Never stage files. The user controls what goes into the commit.
-- Never push. Commits stay local.
-- Never amend or force-push without an explicit user request.
-- Never generate a message without reading the diff. Guessing from file names is not sufficient.
-- Format details live in [references/format.md](./references/format.md). SKILL.md controls workflow only.
-
----
-
-# References
-
-- [format.md](./references/format.md) — full type list, gitmoji mapping, scope naming rules, and edge cases
+If the commit fails, report the failure; do not bypass hooks or report an
+existing HEAD as success. Reinspect staged changes before any retry and renew
+approval if materially changed. After a successful commit, report its short
+hash from `git rev-parse --short HEAD`. Do not push.
