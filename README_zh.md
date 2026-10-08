@@ -4,7 +4,7 @@
 
 > *"一次只处理一个技能，让执行结果更可预测。"* ✨
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./LICENSE)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square)](./LICENSE)
 
 </div>
 
@@ -98,7 +98,7 @@ loop 内部循环      plan → implement → test → review + check → 评估
 用 grimoire-refactor 全面简化这个仓库，使用并行 subagent 和 worktree。
 ```
 
-维护验证：`pnpm run test:skills`（或 `node --test tests/*.test.mjs`）运行全部维护测试，包括元数据、本地引用、注册项、JSON 示例、init Git 行为及 loop／QA 的显式契约检查。技能文本检查和场景推演不能证明真实 agent 的端到端执行符合规则。
+维护验证：`pnpm test`（或 `pnpm run test:skills` / `node --test tests/*.test.mjs`）运行全部维护测试，包括元数据、本地引用、注册项、JSON 示例、init Git 行为及 loop／QA 的显式契约检查。技能文本检查和场景推演不能证明真实 agent 的端到端执行符合规则。
 
 ---
 
@@ -163,7 +163,7 @@ Grimoire Skills 分为两种调用方式：
 
 ## 📜 许可证
 
-MIT © 2025 — 详见 [LICENSE](./LICENSE)。
+Apache-2.0 © 2025 — 详见 [LICENSE](./LICENSE)。
 
 ---
 

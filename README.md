@@ -4,7 +4,7 @@
 
 > *"Predictable execution, one skill at a time."* ✨
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./LICENSE)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square)](./LICENSE)
 
 </div>
 
@@ -98,7 +98,7 @@ Use grimoire-simplify to flatten this function without changing behavior.
 Use grimoire-refactor to comprehensively simplify this repository; use parallel subagents and worktrees.
 ```
 
-Maintainers: `pnpm run test:skills` (or `node --test tests/*.test.mjs`) runs the maintenance suite, including metadata, local references, registry entries, JSON examples, init Git behavior, and explicit loop/QA contract checks. Skill text checks and scenario walkthroughs do not prove end-to-end agent compliance.
+Maintainers: `pnpm test` (or `pnpm run test:skills` / `node --test tests/*.test.mjs`) runs the maintenance suite, including metadata, local references, registry entries, JSON examples, init Git behavior, and explicit loop/QA contract checks. Skill text checks and scenario walkthroughs do not prove end-to-end agent compliance.
 
 ---
 
@@ -163,7 +163,7 @@ These skills may be selected by the model when relevant, or invoked explicitly b
 
 ## 📜 License
 
-MIT © 2025 — See [LICENSE](./LICENSE) for full terms.
+Apache-2.0 © 2025 — See [LICENSE](./LICENSE) for full terms.
 
 ---
 
