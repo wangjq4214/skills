@@ -121,8 +121,6 @@ Grimoire Skills 分为两种调用方式：
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | 按需初始化 `.grimoire` 项目知识库      |
 | 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | 整理知识库，保留长期知识与活跃工作契约后清理冗余 spec/ticket |
 | 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 协调澄清、上下文落盘、规格、工单与执行交接 |
-| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | 根据需求和相关上下文生成适量规格       |
-| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | 将需求拆成连贯的价值或使能工单         |
 | 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | 自动留存计划，再运行自适应实现和 QA |
 | 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | 按依赖分批编排大规模改造，并在集成后验收 |
 | ✍️ **[commit](./skills/commit/SKILL.md)**                   | 准备并执行经确认的 Conventional Commit |
@@ -137,6 +135,8 @@ Grimoire Skills 分为两种调用方式：
 | ---------------------------------------------------------------- | ------------------------------------------ |
 | 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)**     | 只解决会阻塞行动的关键歧义                 |
 | 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)**       | 维护持久的项目术语和架构决策               |
+| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | 根据需求和相关上下文生成适量规格       |
+| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | 将需求拆成连贯的价值或使能工单         |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | 为 loop 留存可修订计划，也支持单独调用 |
 | ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | 根据明确的计划、工单、规格或对话实现代码   |
 | ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | 对照意图、验收标准、相关产物和证据审计实现 |

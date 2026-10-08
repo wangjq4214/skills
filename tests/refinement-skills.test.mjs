@@ -17,7 +17,7 @@ test('refinement skill identities and invocation modes remain intact', () => {
     const metadata = skill(name).match(/^---\r?\n([\s\S]*?)\r?\n---/)[1];
     assert.match(metadata, new RegExp(`^name: grimoire-${name}$`, 'm'));
     assert.match(metadata, /^description: .+/m);
-    assert.equal(/^disable-model-invocation: true$/m.test(metadata), ['refine', 'spec', 'slice'].includes(name));
+    assert.equal(/^disable-model-invocation: true$/m.test(metadata), name === 'refine');
   }
 });
 
@@ -46,4 +46,21 @@ test('live recording, assumptions, and coordinated artifact boundaries remain ex
   }
   assert.match(skill('refine'), /recommend user invocation of `grimoire-loop`; do not start it/);
   assert.match(read('skills/grimoire-record/references/adr-template.md'), /body metadata, not YAML frontmatter/);
+});
+
+test('standalone artifact skills do not require the refinement coordinator', () => {
+  for (const name of ['spec', 'slice']) {
+    assert.match(skill(name), /Standalone invocation does not require refine or its handoff/, name);
+    assert.match(skill(name), /Under `grimoire-refine`, require and follow/, name);
+  }
+});
+
+test('refine loads the selected specialist method instead of merely naming it', () => {
+  const source = skill('refine');
+  assert.match(source, /exact name through the host's registry or discovery mechanism/);
+  assert.match(source, /Load their full instructions and required references from the reported paths; inline execution is sufficient/);
+  assert.match(source, /Never guess an installation path or treat naming a skill as execution/);
+  assert.match(source, /If unavailable or invocation requires user action, report the blocked stage/);
+  assert.match(source, /load artifact skills only when selected/);
+  assert.match(source, /Run selected specialists and read their outputs/);
 });

@@ -1,10 +1,10 @@
 ---
 name: grimoire-slice
 description: Break clear requirements into coherent, verifiable tickets with evidence-based dependencies.
-disable-model-invocation: true
 ---
 
 Write ticket sets in `.grimoire/ticket/NNNN-title/`; do not implement code or invent requirements.
+Standalone invocation does not require refine or its handoff.
 
 Under `grimoire-refine`, require and follow its supplied knowledge boundary, permissions, and endpoint. Return gaps/results to the coordinator rather than settle new semantic choices or launch downstream work. Request a missing coordination contract; do not guess its location.
 

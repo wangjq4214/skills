@@ -121,8 +121,6 @@ These skills require explicit user selection. They have `disable-model-invocatio
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | Bootstrap optional `.grimoire` project knowledge                        |
 | 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | Consolidate knowledge and retire redundant specs/tickets while preserving active work contracts     |
 | 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | Coordinate clarification, context persistence, specs, tickets, and execution handoff |
-| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | Produce proportionate specs from requirements and relevant context      |
-| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | Decompose requirements into coherent value or enabling tickets          |
 | 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | Persist a plan, then run adaptive implementation and QA |
 | 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | Coordinate large refactoring through dependency-ordered batches and integrated acceptance |
 | ✍️ **[commit](./skills/commit/SKILL.md)**                   | Prepare and execute an approved Conventional Commit                     |
@@ -137,6 +135,8 @@ These skills may be selected by the model when relevant, or invoked explicitly b
 | ---------------------------------------------------------------- | --------------------------------------------------------------------- |
 | 🔍 **[grimoire-clarify](./skills/grimoire-clarify/SKILL.md)**     | Resolve only material blocking ambiguity                              |
 | 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)**       | Maintain durable project terminology and decisions                    |
+| 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | Produce proportionate specs from requirements and relevant context      |
+| ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | Decompose requirements into coherent value or enabling tickets          |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | Persist revisable plans for loop; also available for standalone planning |
 | ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | Implement from a clear plan, ticket, spec, or conversation            |
 | ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | Audit behavior against intent, criteria, artifacts, and evidence      |

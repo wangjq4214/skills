@@ -5,6 +5,7 @@ disable-model-invocation: true
 ---
 
 Coordinate scope, permissions, evidence, and handoffs; specialists own their methods.
+Run this workflow only on explicit user invocation, not automatically from a specialist or a general implementation request.
 
 Default: **plan → implement → test → review + check → assess → affected fixes/checks → final integrated verification → format → report**.
 

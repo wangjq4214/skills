@@ -95,3 +95,29 @@ test('loop finalization keeps evidence freshness and acceptance separate from ta
   assert.match(source, /Never claim overall acceptance without required evidence/);
   assert.match(source, /If reporting is disabled, omit routine summaries, not necessary questions, checkpoints, or blockers/);
 });
+
+test('automatic implementation selection cannot implicitly start loop', () => {
+  const metadata = name => skill(name).match(/^---\r?\n([\s\S]*?)\r?\n---/)[1];
+  assert.doesNotMatch(metadata('implement'), /^disable-model-invocation: true$/m);
+  assert.match(metadata('loop'), /^disable-model-invocation: true$/m);
+  assert.match(skill('implement'), /do not start `grimoire-loop`; it requires explicit user invocation/);
+  assert.match(skill('loop'), /only on explicit user invocation, not automatically from a specialist/);
+});
+
+test('disabled tests stay excluded inline, in delegates, and during finalization', () => {
+  const source = skill('loop');
+  assert.match(source, /Disabling a parent stage disables its substages unless explicitly retained/);
+  assert.match(source, /specialist's defaults, risk recommendation, automatic fix, or renamed check/);
+  assert.match(source, /This applies inline and to delegates/);
+  assert.match(source, /Run final integrated verification only within its enabled scope/);
+  assert.match(reference('loop', 'agent-prompts'), /Apply specialist methods within this contract, including its exclusions/);
+});
+
+test('read-only review prohibits direct and command-induced file changes', () => {
+  const source = skill('review');
+  assert.match(source, /Standalone review is read-only unless the user separately authorizes fixes/);
+  assert.match(source, /For read-only work, do not write reports or status, apply fixes, or run commands that may generate files/);
+  assert.match(source, /test caches, snapshots, and build output/);
+  assert.match(source, /Use existing evidence and report verification gaps instead/);
+  assert.match(skill('loop'), /Only review.*excludes other work stages/);
+});

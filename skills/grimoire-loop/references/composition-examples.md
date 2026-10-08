@@ -1,6 +1,6 @@
 # Composition examples
 
-These scenarios illustrate the composition policy in [../SKILL.md](../SKILL.md). They are walkthrough cases, not additional rules or evidence of runtime compliance.
+After explicit user invocation of loop, these scenarios illustrate the composition policy in [../SKILL.md](../SKILL.md). They are walkthrough cases, not additional rules or evidence of runtime compliance.
 
 | User request | Expected execution path | Observable boundary |
 | --- | --- | --- |

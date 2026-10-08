@@ -6,6 +6,7 @@ description: Review code changes for evidence-backed correctness, security, comp
 Review actual changes and relevant consumers, not just worker summaries. Include deletions and untracked files. Infer purpose from source intent, diff, tests, and surrounding code; ask only when competing interpretations materially change the verdict.
 
 Under orchestration, the caller's execution contract governs scope, permitted verification, writes, checkpoints, reporting, and completion. Apply only enabled responsibilities; do not restore excluded checks. Standalone review is read-only unless the user separately authorizes fixes.
+For read-only work, do not write reports or status, apply fixes, or run commands that may generate files (including test caches, snapshots, and build output). Use existing evidence and report verification gaps instead.
 
 ## Evidence threshold
 

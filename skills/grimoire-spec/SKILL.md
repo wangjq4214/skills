@@ -1,10 +1,10 @@
 ---
 name: grimoire-spec
 description: Turn requirements and relevant repository context into proportionate, traceable specs.
-disable-model-invocation: true
 ---
 
 Write requirements contracts in `.grimoire/spec/`, not production code. Preserve every independent outcome; scale detail to risk.
+Standalone invocation does not require refine or its handoff.
 
 Under `grimoire-refine`, require and follow its supplied knowledge boundary, permissions, and endpoint. Return gaps/results to the coordinator; do not resolve new semantic choices or choose downstream workflows. If the coordination contract is absent, request it rather than guess its location.
 
