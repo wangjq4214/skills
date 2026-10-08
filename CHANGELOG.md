@@ -1,5 +1,17 @@
 # skills
 
+## 0.5.0
+
+### Minor Changes
+
+- 8d743d8: Add grimoire-debug for adaptive, evidence-backed diagnosis and original-symptom verification without mandatory TDD or agent handoffs.
+
+### Patch Changes
+
+- dc33870: Batch refine recording within each user turn and keep only durable knowledge. Route simple loop tasks directly through implementation and targeted verification; retain independently selectable planning for reusable approaches, recovery, coordination, or explicit requests. Clarify specs as continuing requirements contracts and tickets as execution/handoff aids, with tidy retiring redundancy only after preserving requirements. Update bilingual guidance, static regressions, and bounded agent Eval evidence.
+- 4ef038b: Strengthen review contract tracing and risk-condition checks, and check's source-first acceptance audit. Add blind evaluation cases for caller regressions, false blocking, and requirements missed by green tests.
+- fcac7d5: Scale map, simplify, and refactor inspection to function, module, subsystem, or repository scope. Reserve two full-scope convergence passes for comprehensive refactoring. Remove the default LOC reduction target and require an explicit user quantified compression goal; prioritize understanding cost and preserve required acceptance gates. Update bilingual guidance, static regressions, and runtime-unverified scope scenarios.
+
 ## 0.4.0
 
 ### Minor Changes
