@@ -1,6 +1,6 @@
 ---
 name: grimoire-refactor
-description: Coordinate repository-scale refactoring with full-scope discovery, dependency-ordered changes, integrated verification, and measurable outcomes.
+description: Use when explicitly asked to coordinate a subsystem or repository refactor, including comprehensive restructuring or simplification with integrated acceptance.
 disable-model-invocation: true
 ---
 
@@ -8,21 +8,21 @@ Own coordination and acceptance; use `grimoire-map`, `grimoire-improve`, `grimoi
 
 ## Execution contract
 
-Before any writes, establish scope, analyze/implement mode, allowed write paths, persistence, permitted checks, and reporting. Audit requests do not authorize code changes. Explicit no-write requests use in-memory observations and inline reports: create no map, ledger, or report files. Pass these restrictions to every child skill; standalone defaults cannot restore excluded work.
+Before any writes, establish scope, analyze/implement mode, allowed write paths, persistence, permitted checks, and reporting. Match discovery to the task: function plus necessary callers/contracts/tests; module internals plus adjacent dependencies/consumers; full specified subsystem plus external seams; or every first-party module and cross-module seam for deep whole-repository work. Expand reads for affected contracts or uncertain reachability, not unrelated cleanup. Pass the selected scan scope to every child skill. Audit requests do not authorize code changes. Explicit no-write requests use in-memory observations and inline reports: create no map, ledger, or report files. Pass these restrictions to every child skill; standalone defaults cannot restore excluded work.
 
 Comprehensive implementation authorization covers reversible in-scope internal rewrites without per-batch approval. Preserve observable behavior and public contracts; ask only for material scope expansion, contract changes, or irreversible actions. Multi-agent execution is optional and requires host/user permission. Serial execution retains the same coverage and verification.
 
 ## 1. Establish baseline
 
-Record source revision and dirty-tree fingerprint, user changes to preserve, baseline checks, and acceptance criteria. For comprehensive simplification, aim for 30% net production LOC reduction unless another target is specified. This is an aspirational target, not a completion gate or worker quota. Only an explicitly required numeric threshold is a hard gate. Bounded or architecture-only work does not inherit the default.
+Record source revision and dirty-tree fingerprint, user changes to preserve, baseline checks, and acceptance criteria. Optimize understanding cost; there is no default LOC reduction target. Use LOC as a target only when the user explicitly requests a quantified compression goal. Only an explicitly required numeric threshold is a hard gate; targets are global, never worker quotas.
 
-Use [measurement.md](./references/measurement.md) for fixed-scope counting, anti-gaming rules, and zero/non-code baselines. Separate each target's source and aspirational/required status from behavior and structural gates.
+Use [measurement.md](./references/measurement.md) when evaluating a user-specified LOC target; otherwise use relevant structural evidence without requiring a LOC baseline. Separate user targets' aspirational/required status from behavior and structural gates.
 
 When persistence is allowed, create `.grimoire/refactor/<run-id>/state.json` using [coordination.md](./references/coordination.md). Revalidate prior evidence on resume.
 
 ## 2. Discover and synthesize
 
-Use `grimoire-map` for navigation, then `grimoire-improve` and `grimoire-simplify` in analyze-only mode. Examine responsibility/state, control flow, duplication/dead code, abstractions/dependencies, and cross-module reuse. Omit irrelevant lenses with reasons, not unexamined subsystems. Require file-level coverage; search hits are not inspection. Keep unread/blocked regions visible and retain module results without loading the entire repository into one context.
+Use `grimoire-map` for scoped navigation, then `grimoire-improve` and `grimoire-simplify` in analyze-only mode within the same scope. Examine responsibility/state, control flow, duplication/dead code, abstractions/dependencies, and cross-module reuse where relevant. Omit irrelevant lenses with reasons, not unexamined in-scope subsystems. For subsystem/repository scans, require file-level coverage; function-level observations may leave the containing file partial. Search hits are not inspection. Keep unread/blocked regions visible and retain module results without loading the entire repository into one context.
 
 Deduplicate findings by root cause and affected contract. Validate deletions against callers, exports, registrations, tests, and configuration. Every retained finding needs a dependency-ordered work unit or evidence-backed disposition. Units specify write ownership, read dependencies, preserved contracts, checks, and expected benefit. Set shared-helper contracts before consumer migrations; serialize cycles and shared writes or group them atomically. Report emphasis must not cap the backlog.
 
@@ -38,10 +38,10 @@ Follow the coordination reference for dirty-source snapshots, isolated writers, 
 
 Run `grimoire-review` on the integrated diff and cross-module effects; run `grimoire-check` against acceptance criteria independently of review readiness. Run permitted affected build/type/lint/integration tests, using `grimoire-test` when behavior evidence is missing. Preserve their classifications; unavailable required checks remain unresolved.
 
-Refresh affected map evidence and metrics. Rescan the full requested scope for obsolete paths, duplicate helpers, concentrated responsibilities, deep routing, and disconnected documentation; route findings back to synthesis. After the backlog clears, require two consecutive full-scope discovery passes with different lenses and no new actionable findings. A code change resets the count. Reuse hash-validated coverage but revisit cross-module effects.
+Refresh affected map evidence and relevant metrics. For bounded work, recheck changed paths and affected relationships for obsolete code and new complexity; do not rescan unrelated modules or require two full-scope passes. For comprehensive refactoring, rescan the full requested scope for obsolete paths, duplicate helpers, concentrated responsibilities, deep routing, and disconnected documentation; route findings back to synthesis. Only comprehensive refactoring requires two consecutive full-scope discovery passes with different lenses and no new actionable findings after the backlog clears. A code change resets the count. Reuse hash-validated coverage but revisit cross-module effects.
 
 ## Completion and report
 
-Complete only with full requested coverage, no unresolved actionable work, current integrated verification/map evidence, and all required gates satisfied. Exhausting safe candidates below an aspirational LOC target may still complete: report the actual reduction, shortfall, and retention evidence. Never force unsafe changes to reach it, stop merely because it is reached, or waive an explicitly required threshold.
+Complete only with full requested coverage, no unresolved actionable work, current integrated verification/map evidence, and all required gates satisfied. Exhausting safe candidates below a user-specified aspirational LOC target may still complete: report the actual reduction, shortfall, and retention evidence. Never force unsafe changes to reach it, stop merely because it is reached, or waive an explicitly required threshold.
 
-Report baseline/final snapshots, counting scope and category totals, structural outcomes, coverage, finding dispositions, commands/results, and remaining work. Persist `.grimoire/refactor/<run-id>/report.md` only when allowed. Distinguish complete, incomplete, and blocked; interruptions need a resumable next action, not a convergence claim.
+Report baseline/final snapshots, structural outcomes, coverage, finding dispositions, commands/results, and remaining work; include counting scope and category totals when evaluating a user-specified LOC target. Persist `.grimoire/refactor/<run-id>/report.md` only when allowed. Distinguish complete, incomplete, and blocked; interruptions need a resumable next action, not a convergence claim.

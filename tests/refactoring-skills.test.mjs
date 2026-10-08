@@ -129,14 +129,21 @@ test('refactoring guidance is nested under Quick Start', () => {
   }
 });
 
-test('LOC aspirations cannot silently become acceptance gates', () => {
+test('LOC targets require an explicit user goal and cannot silently become acceptance gates', () => {
   for (const name of ['refactor', 'simplify']) {
     const source = read(skillPath(name));
-    assert.match(source, /30%/);
-    assert.match(source, /aspirational target, not a completion gate/);
+    assert.doesNotMatch(source, /30%/);
+    assert.match(source, /no default LOC reduction target/);
+    assert.match(source, /only when the user explicitly requests a quantified compression goal/);
     assert.match(source, /Only an explicitly required numeric threshold is a hard gate/);
-    assert.match(source, /below an aspirational LOC target may still complete/);
+    assert.match(source, /below a user-specified aspirational LOC target may still complete/);
+    assert.match(source, /(?:do not require|without requiring) a LOC baseline/);
   }
+  for (const path of [
+    'skills/grimoire-refactor/references/measurement.md',
+    'skills/grimoire-check/references/batch-context.md',
+    'README.md', 'README_zh.md',
+  ]) assert.doesNotMatch(read(path), /30%/);
   const check = read('skills/grimoire-check/references/batch-context.md');
   assert.match(check, /missed required threshold is a gap/);
   assert.match(check, /missed aspirational target is a reported shortfall/);
@@ -147,7 +154,7 @@ test('LOC aspirations cannot silently become acceptance gates', () => {
 test('zero and non-code baselines do not fabricate percentage achievement', () => {
   const source = read('skills/grimoire-refactor/references/measurement.md');
   assert.match(source, /For B = 0, report percentage not applicable, never 100%/);
-  assert.match(source, /default aspiration is inapplicable/);
+  assert.match(source, /target T% achieved when F <= \(1 - T \/ 100\) \* B/);
   assert.match(source, /Non-code repositories need a relevant agreed content metric/);
   assert.match(source, /explicit incompatible numeric requirement needs clarification/);
 });
@@ -169,9 +176,33 @@ test('refactoring children inherit no-write and persistence restrictions', () =>
 test('refactor retains distinct-lens convergence and integrated acceptance', () => {
   const source = read(skillPath('refactor'));
   assert.match(source, /two consecutive full-scope discovery passes with different lenses and no new actionable findings/);
+  assert.match(source, /Only comprehensive refactoring requires two consecutive/);
+  assert.match(source, /For bounded work,[^\n]*do not rescan unrelated modules or require two full-scope passes/);
   assert.match(source, /A code change resets the count/);
   assert.match(source, /conflict-free merging and worker summaries do not establish acceptance/);
   assert.match(source, /unavailable required checks remain unresolved/);
+});
+
+test('scan costs follow task scope without weakening full-scope coverage', () => {
+  const map = read(skillPath('map'));
+  assert.match(map, /Function: inspect the function and necessary callers, contracts, and tests/);
+  assert.match(map, /Module: inspect its internals and adjacent dependencies\/consumers/);
+  assert.match(map, /Subsystem: fully scan the specified subsystem and inspect its external seams/);
+  assert.match(map, /Deep whole-repository refactor: cover every first-party module and cross-module seam/);
+  assert.match(map, /Never replace a broader map with a narrower scan/);
+  assert.match(map, /unrelated preserved evidence retains its original freshness\/provenance/);
+  const simplify = read(skillPath('simplify'));
+  assert.match(simplify, /No map or other skill is required/);
+  assert.match(simplify, /a function and necessary callers\/contracts\/tests/);
+  assert.match(simplify, /a module's internals and adjacent dependencies\/consumers/);
+  assert.match(simplify, /every module and seam in a specified subsystem/);
+  assert.match(simplify, /full first-party repository for deep whole-repository work/);
+  assert.match(simplify, /bounded work rechecks changed paths and affected relationships, not unrelated modules/);
+  const refactor = read(skillPath('refactor'));
+  assert.match(refactor, /Pass the selected scan scope to every child skill/);
+  assert.match(refactor, /every first-party module and cross-module seam for deep whole-repository work/);
+  assert.match(refactor, /For subsystem\/repository scans, require file-level coverage/);
+  assert.match(refactor, /function-level observations may leave the containing file partial/);
 });
 
 test('HTML reporting is opt-in without losing finding evidence', () => {

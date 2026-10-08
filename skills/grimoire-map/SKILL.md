@@ -1,6 +1,6 @@
 ---
 name: grimoire-map
-description: Build and refresh an evidence-backed map of codebase responsibilities, dependencies, entry points, and verification boundaries.
+description: Use when asked to map a repository or subsystem, locate responsibility and dependency boundaries, or refresh an existing codebase map.
 ---
 
 Make repository behavior paths navigable through source-backed observations, not an invented architecture. Do not modify production code or prescribe a redesign; a map is not proof of behavior.
@@ -9,13 +9,20 @@ Under orchestration, the caller's execution contract governs scope, writes, pers
 
 ## Inventory and inspect
 
-Record repository identity, revision/dirty state, scope, exclusions, languages, and build systems. Default to the whole first-party repository, including relevant untracked files, manifests, tests, configuration, and scripts; distinguish generated/vendor content.
+Record repository identity, revision/dirty state, scope, exclusions, languages, and build systems. Match inventory and inspection to the request; use the whole first-party repository only for a repository-wide map or refactor. Include relevant untracked files, manifests, tests, configuration, and scripts; distinguish generated/vendor content.
+
+- Function: inspect the function and necessary callers, contracts, and tests.
+- Module: inspect its internals and adjacent dependencies/consumers.
+- Subsystem: fully scan the specified subsystem and inspect its external seams.
+- Deep whole-repository refactor: cover every first-party module and cross-module seam.
+
+Expand inspection when changed contracts or uncertain reachability require it, not merely because the repository is large. Keep unrelated areas outside the scan; do not present bounded coverage as a whole-repository audit.
 
 Load existing index metadata first, then relevant shards. Follow [persistence.md](./references/persistence.md) for schema, freshness, and safe updates. Never replace a broader map with a narrower scan or mix repository identities.
 
-Account for every included file: assign it to a responsibility/package/entry-point/state-ownership module or an explicit unclassified set, not equal-sized file groups. Track inventoried-only, inspected, partial, or blocked separately from module assignment. Search/index hits are triage, not semantic inspection. Record exclusions and unreadable paths; page large inventories rather than silently truncating coverage.
+Account for every included file: assign it to a responsibility/package/entry-point/state-ownership module or an explicit unclassified set, not equal-sized file groups. Track inventoried-only, inspected, partial, or blocked separately from module assignment. Inspecting one function does not mark its entire file inspected. Search/index hits are triage, not semantic inspection. Record exclusions and unreadable paths; page large inventories rather than silently truncating coverage.
 
-Inspect each module's entry points, exports, core code, state lifecycle, configuration, and tests. Trace representative behavior through callers and dependencies. Record:
+Within the selected scope, inspect relevant entry points, exports, core code, state lifecycle, configuration, and tests. Trace representative behavior through callers and dependencies. Record:
 - responsibilities, owning paths, public contracts, and state/resource owners;
 - incoming/outgoing import, call, data, event, and runtime-registration edges;
 - external systems, test boundaries, and candidate validation commands;
@@ -25,7 +32,7 @@ Every material claim needs a source locator and fingerprint. Distinguish observe
 
 ## Refresh and publish
 
-Compare current inventory and hashes, including new/deleted/dirty files. Invalidate changed claims, incident edges, reverse dependents, and test links. Reinspect further dependents when contracts change; unknown dynamic impact requires broader scanning. Reuse evidence only after verifying source hashes and relationship assumptions.
+Compare inventory and hashes within the refresh scope, including new/deleted/dirty files and affected dependencies. Invalidate changed claims, incident edges, reverse dependents, and test links. Reinspect further dependents when contracts change; unknown dynamic impact requires broader scanning. Reuse evidence only after verifying source hashes and relationship assumptions; unrelated preserved evidence retains its original freshness/provenance.
 
 When persistence is enabled, one coordinating writer publishes immutable shards before the index, following the persistence reference's validation and recovery rules. Read-only workers may return observations when delegation is permitted. Worker-branch evidence must be refreshed against the integrated tree. When persistence is disabled, return equivalent coverage/provenance in the result, not files.
 

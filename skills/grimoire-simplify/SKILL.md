@@ -1,6 +1,6 @@
 ---
 name: grimoire-simplify
-description: Simplify existing code through deletion, flattening, consolidation, and coherent internal rewrites while preserving behavior.
+description: Use when asked to simplify a function, module, subsystem, or repository by removing redundant code, state, branches, or indirection without changing behavior.
 ---
 
 Reduce the concepts, states, branches, indirections, and maintained code needed to explain existing behavior. Cosmetic movement is not simplification.
@@ -11,13 +11,13 @@ Under orchestration, the caller's execution contract governs scope, writes, veri
 
 Explicit simplification requests authorize behavior-preserving internal rewrites and file reorganization within established responsibility boundaries. Analyze-only or discussion requests produce candidates without changing tests or production code. Ask before changing public contracts, expanding architectural scope, or irreversible actions. Structural redesign belongs to `grimoire-improve` when selected; otherwise report it outside this skill's boundary and continue safe work.
 
-No map or other skill is required. Revalidate any supplied map against source. Read code, callers, registrations/configuration, and relevant tests. Record source revision/dirty state, contracts, boundaries, validation commands, and baseline results. Before risky poorly tested rewrites, add characterization coverage when authorized.
+No map or other skill is required. Revalidate supplied map evidence used for the task against source. Match inspection to scope: a function and necessary callers/contracts/tests; a module's internals and adjacent dependencies/consumers; every module and seam in a specified subsystem; or the full first-party repository for deep whole-repository work. Inspect relevant registrations/configuration; expand only for affected contracts or uncertain reachability. Record source revision/dirty state, contracts, boundaries, validation commands, and baseline results. Before risky poorly tested rewrites, add characterization coverage when authorized.
 
 For broad work, inventory every in-scope first-party module and cross-module seam. Track coverage, candidate evidence/dispositions, dependencies, results, and next action; search hits are not inspection. Persist `.grimoire/simplify-state.json` only when allowed and not using a coordinator's ledger.
 
-For comprehensive simplification, aim for 30% net production LOC reduction unless specified otherwise: an aspirational target, not a completion gate. Only an explicitly required numeric threshold is a hard gate; bounded work does not inherit the default. Under orchestration, targets are global, never per-worker quotas.
+Optimize understanding cost, not line count. There is no default LOC reduction target; use LOC as a target only when the user explicitly requests a quantified compression goal. Only an explicitly required numeric threshold is a hard gate. Under orchestration, user targets are global, never per-worker quotas.
 
-Fix the counter/version, command, formatting, filters, and baseline inventory before edits. Count nonblank/noncomment first-party production LOC; report tests/config/docs/generated/vendor separately and show total first-party change. Include all new/moved implementations, even outside original roots. Compute `100 * (baseline - final) / baseline` on the combined tree; a zero baseline is not applicable. For non-code repositories, agree on a relevant metric rather than inventing production LOC. Reconcile scope changes explicitly; never reset the denominator or claim minification, comment removal, deleted useful tests, or transferred complexity as savings.
+Only for a user-specified LOC target, fix the baseline inventory, counter/version, command, formatting, and filters before edits. Count nonblank/noncomment first-party production LOC; report tests/config/docs/generated/vendor separately. Include new/moved implementations and reconcile scope changes without resetting the denominator. Compute `100 * (baseline - final) / baseline` on the combined tree; zero is not applicable, and non-code targets need an agreed metric. Never count minification, comment removal, deleted useful tests, or transferred complexity as savings. Otherwise do not require a LOC baseline.
 
 ## Select transformations
 
@@ -35,12 +35,12 @@ Replace obsolete private paths completely, including unreachable adapters, state
 
 Run permitted baseline/changed-risk checks, consumers, and integration paths. Inspect guarantees tests may miss: authorization, error precedence, ordering, cleanup, transactions, concurrency, ownership, and sensitive performance. Repair or selectively undo regressions; unavailable checks remain unresolved, not passes.
 
-Compare before/after explanations and metrics: net LOC, duplicate implementations, nesting, responsibility concentration, cycles, and call/file hops. Retain changes only when they reduce understanding cost without hiding complexity; fewer lines or files alone prove nothing.
+Compare before/after explanations and relevant structural evidence: duplicate implementations, nesting, responsibility concentration, cycles, and call/file hops. Retain changes only when they reduce understanding cost without hiding complexity; fewer lines or files alone prove nothing.
 
 ## Rescan and finish
 
-Continue while actionable in-scope candidates remain. For comprehensive work, revisit all modules and cross-module seams after integration; reuse only hash-validated inspection and recheck affected relationships. Decline stylistic/equivalent-complexity swaps, speculative generalization, or contract-breaking candidates with concrete retention reasons. Update navigation and refresh an existing map or flag it stale.
+Continue while actionable in-scope candidates remain. For comprehensive work, revisit all in-scope modules and cross-module seams after integration; bounded work rechecks changed paths and affected relationships, not unrelated modules. Reuse only hash-validated inspection. Decline stylistic/equivalent-complexity swaps, speculative generalization, or contract-breaking candidates with concrete retention reasons. Update navigation and refresh affected evidence in an existing map or flag it stale.
 
-Completion requires full requested coverage, no unresolved actionable candidates, behavior evidence, and all required gates. Safe candidates exhausted below an aspirational LOC target may still complete: disclose the shortfall and retention evidence. An explicitly required threshold remains binding. Do not stop just at 30% or force unsafe changes to reach it. Blocked checks or interruption require incomplete status and a next action.
+Completion requires full requested coverage, no unresolved actionable candidates, behavior evidence, and all required gates. Safe candidates exhausted below a user-specified aspirational LOC target may still complete: disclose the shortfall and retention evidence. An explicitly required threshold remains binding. Do not stop merely at a target or force unsafe changes to reach it. Blocked checks or interruption require incomplete status and a next action.
 
 Return changed paths, preserved contracts, snapshot, commands/results, actual metrics, coverage, and remaining work; include unit ID and base/head or fingerprints under orchestration. Small standalone work needs no ledger.

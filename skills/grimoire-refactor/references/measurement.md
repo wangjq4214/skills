@@ -1,6 +1,6 @@
 # Measurement and acceptance
 
-Separate aspirational targets from required acceptance gates. Record each numeric target's value, metric/scope, source (user or default), and whether explicitly required. The default 30% reduction is an aspiration, not a hard gate.
+Use LOC targets only for a user's explicit quantified compression goal; there is no default target. Separate aspirational targets from required acceptance gates. Record each numeric target's value, metric/scope, user source, and whether explicitly required. The counting sections below apply only when evaluating such a LOC target; understanding cost and preserved behavior remain primary.
 
 ## Fixed baseline
 
@@ -12,10 +12,10 @@ For baseline B and final F:
 ```text
 net reduction = B - F
 reduction percentage = 100 * (B - F) / B
-30% target achieved when F <= 0.70 * B (B > 0)
+target T% achieved when F <= (1 - T / 100) * B (B > 0)
 ```
 
-For B = 0, report percentage not applicable, never 100%; the default aspiration is inapplicable. Non-code repositories need a relevant agreed content metric, not an invented production denominator. An explicit incompatible numeric requirement needs clarification, not a silent waiver.
+For B = 0, report percentage not applicable, never 100%. Non-code repositories need a relevant agreed content metric, not an invented production denominator. An explicit incompatible numeric requirement needs clarification, not a silent waiver.
 
 Measure the integrated tree with unchanged counting/formatting rules. Include additions and moved/renamed responsibilities even outside original roots. Do not sum worker percentages or count only diff deletions. Reconcile scope changes explicitly; never quietly reset the baseline.
 
@@ -39,6 +39,6 @@ Size/depth thresholds are clues, not laws. Splits may temporarily add lines; ass
 
 ## Completion evidence
 
-Report B, F, percentage, snapshots, commands, category totals, structural outcomes, validation, and target shortfalls. Reaching LOC never waives behavior, readability, coverage, or remaining actionable work.
+Report structural outcomes and validation. When evaluating a user-specified LOC target, also report B, F, percentage, snapshots, commands, category totals, and target shortfalls. Reaching LOC never waives behavior, readability, coverage, or remaining actionable work.
 
 If safe candidates are exhausted below an aspirational target, completion is allowed when all required gates pass; disclose the shortfall and retention evidence. Missing an explicitly required threshold remains an unmet gate. Never delete necessary behavior to force either target. Resource interruption remains resumable incomplete work.

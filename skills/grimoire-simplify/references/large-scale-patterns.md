@@ -8,9 +8,9 @@ A useful split lets a reader understand one responsibility without the rest of t
 
 ## Consolidate semantic duplicates
 
-Search across packages and naming variants for equivalent normalization, validation, parsing, mapping, retry, error translation, and routing policy. Compare inputs, outputs, exceptions, side effects, and order before merging. Similar syntax is insufficient when business rules evolve independently.
+Within the requested scope and relevant neighbors, search across packages and naming variants for equivalent normalization, validation, parsing, mapping, retry, error translation, and routing policy. Compare inputs, outputs, exceptions, side effects, and order before merging. Similar syntax is insufficient when business rules evolve independently.
 
-Choose the nearest stable common owner: a feature-local helper for feature policy, a domain module for domain rules, or a dependency-neutral package for genuinely shared primitives. Reuse an existing suitable helper first. Set its contract and tests, migrate all intended consumers, then delete obsolete copies and imports. Include helper additions and caller changes in the net LOC calculation.
+Choose the nearest stable common owner: a feature-local helper for feature policy, a domain module for domain rules, or a dependency-neutral package for genuinely shared primitives. Reuse an existing suitable helper first. Set its contract and tests, migrate all intended consumers, then delete obsolete copies and imports. If evaluating a user-specified LOC target, include helper additions and caller changes.
 
 Reject a universal helper needing unrelated mode flags, callback hooks, feature imports, or an options object that reproduces every old branch. Retain intentional duplication when merging would create wrong coupling, with evidence. Keep meaningful one-use functions that name dense logic or isolate resource/security boundaries.
 

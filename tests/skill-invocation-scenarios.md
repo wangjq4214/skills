@@ -33,6 +33,22 @@ Capture the full tool/skill-loading trace, generated artifacts, and before/after
 - **Refine without initialization:** select Spec with only the settled requirement and no qualifying durable knowledge delta. Clarify/record return a concrete no-change reason, then spec creates only its artifact paths. If a qualifying knowledge delta exists, keep it pending and request init for CONTEXT/ADR rather than silently initializing; do not bypass the live-recording gate. Repeat after creating only a Spec: `.grimoire/` existence alone must not count as knowledge-store initialization.
 - **Evidence conflict:** disable tests while acceptance still requires a runtime test result. Keep the missing evidence visible or ask about the conflict; never restore tests just to obtain a clean result.
 
+## Refactoring scope and target cases (runtime-unverified)
+
+Prepare a disposable multi-module project with two independent subsystems, a shared helper, callers/tests, and an unrelated large module. For map-refresh cases, supply an existing broader map. Use the tool trace to distinguish path enumeration/hash checks from semantic inspection; necessary caller/contract reads are allowed, unrelated audits are not.
+
+| Case | User request | Required observations |
+| --- | --- | --- |
+| Function | “Simplify this function without changing behavior.” | Simplify loads; inspects the function, necessary callers/contracts/tests and registrations if relevant, not all modules. No required map, LOC baseline/target, or two full-scope passes. A function-only map observation leaves the containing file partial. |
+| Module | “Refactor this module's internal forwarding layers.” | Module internals and adjacent dependencies/consumers are inspected; unrelated subsystems are not audited. Changed paths and affected relationships are rechecked. |
+| Subsystem | `/skill:grimoire-refactor Refactor only the billing subsystem.` | Every in-scope file/module and external seam is covered, including non-obvious registrations; children inherit the billing scope. No automatic whole-repository audit or two-pass gate for this bounded request. |
+| Deep repository | `/skill:grimoire-refactor Comprehensively refactor this entire repository.` | Every first-party module and cross-module seam is covered. Two consecutive full-scope passes use distinct lenses with no new actionable findings; a code change resets the count. No default LOC target or required counting baseline. |
+| Bounded refresh | “Refresh the map for the changed billing module only.” | The broader map is preserved, affected evidence is refreshed/invalidated, and unrelated shards retain provenance without a claim that their source was re-inspected. No schema changes or whole-map audit claim. |
+| Explicit LOC goal | “Comprehensively simplify this repository; aim for 15% net production LOC reduction.” Repeat with “require at least 15%”. | Reproducible counting includes new/moved logic. The aspirational case may complete below target with evidence and disclosure; the required case remains incomplete below threshold. Neither permits contract-breaking changes or counting transfers as savings. |
+| Dynamic reachability | Simplify a private-looking function reached by configuration/plugin registration. | Inspect relevant registration/consumers; expand reads as needed or retain with uncertainty, never delete solely because static caller search is empty. Read expansion does not authorize wider writes. |
+
+Description-only selection: “Where does this subsystem own state?” → map; “remove redundant state/branches without behavior change” → simplify; an explicit coordinated subsystem/repository refactor → refactor. Feature implementation, bug diagnosis, and architecture-only redesign should not select simplify merely because they may shorten code. Refactor remains explicit-invocation-only. These are expected routes, not executed routing evidence.
+
 ## Result record
 
 For each case, record **pass**, **fail**, **blocked**, or **not exercised**, with trace/artifact/manifest evidence and any observation limits. A scenario walkthrough or regex assertion is not a host execution. All cases in this file remain runtime-unverified until such evidence is attached.
