@@ -138,6 +138,7 @@ Grimoire Skills 分为两种调用方式：
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | 根据需求和相关上下文生成适量规格       |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | 将需求拆成连贯的价值或使能工单         |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | 为 loop 留存可修订计划，也支持单独调用 |
+| 🐛 **[grimoire-debug](./skills/grimoire-debug/SKILL.md)** | 自动选择诊断深度，以复现和证据定位、解释故障 |
 | ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | 根据明确的计划、工单、规格或对话实现代码   |
 | ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | 对照意图、验收标准、相关产物和证据审计实现 |
 | 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)**       | 使用证据、严重度和置信度审查代码           |

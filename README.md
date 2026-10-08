@@ -138,6 +138,7 @@ These skills may be selected by the model when relevant, or invoked explicitly b
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | Produce proportionate specs from requirements and relevant context      |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | Decompose requirements into coherent value or enabling tickets          |
 | 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | Persist revisable plans for loop; also available for standalone planning |
+| 🐛 **[grimoire-debug](./skills/grimoire-debug/SKILL.md)** | Reproduce and diagnose failures with adaptive depth and causal evidence |
 | ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | Implement from a clear plan, ticket, spec, or conversation            |
 | ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | Audit behavior against intent, criteria, artifacts, and evidence      |
 | 📋 **[grimoire-review](./skills/grimoire-review/SKILL.md)**       | Review with evidence-backed severity and confidence                   |

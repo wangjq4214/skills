@@ -6,7 +6,7 @@ import test from 'node:test';
 import { createHash } from 'node:crypto';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const selected = ['map', 'refactor', 'improve', 'simplify', 'loop', 'plan', 'implement', 'test', 'review', 'check'];
+const selected = ['debug', 'map', 'refactor', 'improve', 'simplify', 'loop', 'plan', 'implement', 'test', 'review', 'check'];
 const read = path => readFileSync(join(root, path), 'utf8').replace(/\r\n/g, '\n');
 const skillPath = name => `skills/grimoire-${name}/SKILL.md`;
 
