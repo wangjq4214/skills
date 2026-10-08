@@ -71,18 +71,18 @@ pnpx skills@latest add wangjq4214/skills
 根据任务选择最小充分流程：
 
 ```text
-refine 讨论阶段    clarify + 同步 record
+refine 讨论阶段    clarify + 每回合合并长期知识后 record
 简单任务          → 澄清结果 → 建议使用 loop → 结束
 需契约／拆分      → 用户选择 spec → 建议使用 loop → 结束
                   → 用户选择 [spec →] slice → 建议使用 loop → 结束
-loop 内部循环      plan → implement → test → review + check → 评估 ↺
-小型、可回滚       implement → 定向验证
+loop 需要规划时    plan → implement → test → review + check → 评估 ↺
+简单 loop／直接实现 implement → 定向验证
 已有规格或工单     从下一个有价值的阶段进入
 ```
 
-[refine](./skills/grimoire-refine/SKILL.md) 协调 clarify，并在讨论期间同步调度 record 自动记录知识，再按任务复杂度推荐 spec／slice。简单任务以澄清结果和使用 loop 的建议收尾，不生成计划。产物阶段只消费已澄清知识，发现缺口交回讨论，不能自行产生新知识。[loop](./skills/grimoire-loop/SKILL.md) 可直接接收对话、spec、tickets 或已有计划，默认在 `.grimoire/plans/` 保存或更新计划，再进入实现与 QA，不设置例行人工审批关卡。各阶段和计划落盘可独立选择；仅在对话中规划时不创建文件。保存计划只创建缺失的计划目录，不要求先运行 init，也不修改注册或 Git 配置。每个阶段实际加载并应用对应 skill，允许同一 agent 内联执行。
+[refine](./skills/grimoire-refine/SKILL.md) 协调 clarify，在每个用户回合内合并已确定的相关知识，只在暂停或交接产物阶段前记录对后续任务长期有效的信息；无有效增量时不调用 record。按需推荐 spec／slice，简单任务以澄清结果和使用 loop 的建议收尾，不生成计划。产物阶段只消费已澄清知识，发现缺口交回讨论，不能自行产生新知识。[loop](./skills/grimoire-loop/SKILL.md) 可直接接收对话、spec、tickets 或已有计划。范围清晰、可回滚且无需恢复或交接的简单任务直接 implement + 定向验证，不生成 Plan；只有执行顺序、恢复、协作或重要方案决策使规划有价值，或用户明确要求时，才在 `.grimoire/plans/` 保存或更新计划。各阶段和落盘可独立选择；仅在对话中规划时不创建文件。保存计划只创建缺失的计划目录，不要求 init，也不修改注册或 Git 配置。实际加载并应用选定 skill，允许内联执行。
 
-`clarify` 负责需求讨论，`record` 持久化领域上下文与决策，`spec` 负责需求契约，`slice` 负责工单。loop 内由 plan 留存可供审计和 subagent 核对的实现计划，implement 负责生产改动、test 负责测试工作、review 评估代码风险、check 核对需求满足情况。仍可单独调用 plan，只生成计划；仅在用户要求预览时准备浏览器预览和服务器。
+`clarify` 负责需求讨论，`record` 持久化领域上下文与决策。`spec` 是值得持续维护的需求契约；`slice` 生成的 ticket 主要服务多步执行与交接，不是永久任务日志。完成后显式调用 [tidy](./skills/grimoire-tidy/SKILL.md)，确认仍有效的需求信息和活跃工作连续性已由经验证的来源承接，再清理冗余文档；有持续价值的 Spec 应保留，不为删除而搬家。loop 按需组合 plan、负责生产改动的 implement、测试工作的 test、代码风险评估的 review 和需求核对的 check。仍可单独调用 plan；仅在用户要求预览时准备浏览器预览和服务器。
 
 较窄的请求仍可直接选择专业技能。按风险调整深度，但保留选定交付物和必要验证。技能组合须遵守授权范围和宿主调用规则；讨论不等于授权实现。
 
@@ -98,7 +98,7 @@ loop 内部循环      plan → implement → test → review + check → 评估
 用 grimoire-refactor 全面简化这个仓库，使用并行 subagent 和 worktree。
 ```
 
-维护验证：`pnpm test`（或 `pnpm run test:skills` / `node --test tests/*.test.mjs`）运行全部维护测试，包括元数据、本地引用、注册项、JSON 示例、init Git 行为及 loop／QA 的显式契约检查。技能文本检查和场景推演不能证明真实 agent 的端到端执行符合规则。
+维护验证：`pnpm test`（或 `pnpm run test:skills` / `node --test tests/*.test.mjs`）运行全部维护测试，包括元数据、本地引用、注册项、JSON 示例、init Git 行为及 loop／QA 的显式契约检查。技能文本检查和场景推演不能证明真实 agent 的端到端执行符合规则。隔离项目中的 agent 实跑与证据边界见 [loop 路由 Eval](./tests/loop-acceptance.md)。
 
 ---
 
@@ -121,7 +121,7 @@ Grimoire Skills 分为两种调用方式：
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | 按需初始化 `.grimoire` 项目知识库      |
 | 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | 整理知识库，保留长期知识与活跃工作契约后清理冗余 spec/ticket |
 | 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 协调澄清、上下文落盘、规格、工单与执行交接 |
-| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | 自动留存计划，再运行自适应实现和 QA |
+| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | 编排实现和 QA；仅在有价值或明确要求时规划 |
 | 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | 按依赖分批编排大规模改造，并在集成后验收 |
 | ✍️ **[commit](./skills/commit/SKILL.md)**                   | 准备并执行经确认的 Conventional Commit |
 
@@ -137,7 +137,7 @@ Grimoire Skills 分为两种调用方式：
 | 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)**       | 维护持久的项目术语和架构决策               |
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | 根据需求和相关上下文生成适量规格       |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | 将需求拆成连贯的价值或使能工单         |
-| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | 为 loop 留存可修订计划，也支持单独调用 |
+| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | 按需生成可修订计划，支持单独或在 loop 内使用 |
 | 🐛 **[grimoire-debug](./skills/grimoire-debug/SKILL.md)** | 自动选择诊断深度，以复现和证据定位、解释故障 |
 | ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | 根据明确的计划、工单、规格或对话实现代码   |
 | ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | 对照意图、验收标准、相关产物和证据审计实现 |

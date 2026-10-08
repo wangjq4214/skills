@@ -1,6 +1,6 @@
 ---
 name: grimoire-record
-description: Maintain durable project terminology and architectural decisions from conversations.
+description: Use when a conversation establishes or corrects project terminology, domain relationships, or lasting architectural decisions.
 ---
 
 # What to record
@@ -13,7 +13,7 @@ Read existing relevant entries before writing. Resolve factual conflicts from ev
 
 Before qualifying writes, verify a knowledge store exists: an artifact-only `.grimoire/` is not initialization. If absent, report that `grimoire-init` is needed to establish CONTEXT/ADR; do not bootstrap it through recording. Create missing target files/directories only within authorized maintenance of an existing store. When writes are restricted, report qualifying pending items, not a persistence claim.
 
-Standalone low-urgency updates may be batched. Under `grimoire-refine`, process each settled delta before the next discussion round and return changed paths, concrete skip reasons, or pending items. Do not independently settle decisions or launch clarification.
+Batch related settled updates within each user turn. Under `grimoire-refine`, process the coordinator's qualifying batch before a user-turn pause or artifact handoff; return changed paths, concrete skip reasons, or pending items. Reuse relevant reads unless sources changed or conflicts require rechecking. Do not independently settle decisions or launch clarification.
 
 # Domain context
 

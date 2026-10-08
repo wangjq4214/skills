@@ -1,10 +1,10 @@
 ---
 name: grimoire-tidy
-description: Tidy Git-tracked .grimoire knowledge, consolidate durable information, and retire redundant specs and tickets without losing active work contracts.
+description: Use when explicitly asked to audit or clean up Git-tracked .grimoire documents, consolidate knowledge, or retire redundant specs and tickets.
 disable-model-invocation: true
 ---
 
-Keep `.grimoire/` compact. Treat specs and tickets as temporary compression inputs: prefer deletion once useful knowledge and active-work continuity survive elsewhere. Status alone neither permits nor blocks retirement, including for inactive unfinished artifacts.
+Keep `.grimoire/` compact, not a permanent task log. Specs are requirements contracts with continuing value; tickets primarily support multi-step execution and handoff. Retire completed redundant documents when the gates below pass; do not delete useful specs merely because implementation is complete. Status alone neither permits nor blocks retirement, including for inactive unfinished artifacts.
 
 ## Scope and authority
 
@@ -22,7 +22,7 @@ Follow the existing [directory structure](../grimoire-init/references/directory-
 
 - Put terminology and domain relationships in `CONTEXT.md` or its indexed domain files. It is not a project dashboard or requirements dump.
 - Preserve actual architectural choices, rationale, alternatives, and binding constraints in appropriate ADRs; do not turn them into implementation diaries.
-- Preserve behavior, business rules, exceptions, unresolved requirements, and acceptance criteria in maintained feature/domain documentation or tests that actually encode the contract. Tests may preserve behavior without preserving intent; implementation alone is not proof of the required contract. Retain the spec if no adequate destination exists.
+- Preserve behavior, business rules, exceptions, unresolved requirements, and acceptance criteria in useful specs, maintained feature/domain documentation, or tests that actually encode the contract. Tests may preserve behavior without preserving intent; implementation alone is not proof of the required contract. Retain a spec or ticket holding unique requirements if no adequate destination exists. Do not relocate a useful contract solely to delete its source.
 - Discard obsolete execution detail, investigation logs, progress notes, and completed checklists when retirement is eligible. Do not duplicate information already preserved.
 
 Prefer concise additions to existing sources. If transfer needs a new durable document or an out-of-scope edit, propose the destination and retain the source until approved and verified. Reuse navigation, stable IDs, and filenames; split by domain or lifecycle, not length. Avoid parallel summaries, compulsory indexes, ADR renumbering, archive copies, and per-run report files. Surface unresolved contradictions with sources; do not resolve them by recency or merge distinct requirements merely because they sound alike.
@@ -31,7 +31,7 @@ Prefer concise additions to existing sources. If transfer needs a new durable do
 
 Evaluate linked specs and tickets together. For each candidate, identify surviving information destinations, affected references, and any blocker. All three gates must pass before deletion:
 
-- **Knowledge preservation:** unique durable knowledge and still-relevant requirements, acceptance criteria, and constraints survive in adequate accessible sources. Git history alone is not a home for active behavior contracts.
+- **Knowledge preservation:** unique durable knowledge and still-relevant requirements, acceptance criteria, and constraints survive in adequate accessible sources, including requirements found only in tickets. Git history alone is not a home for active behavior contracts.
 - **Active-work continuity:** no current work loses its only execution contract. Search tracked files across the repository for paths, stable IDs, and plain-text references; retarget meaningful references. Do not discard execution detail still needed by active work. Report the tracked-only evidence boundary rather than claiming excluded content was checked.
 - **Tracked recoverability and authority:** the candidate is tracked and deletion is authorized. Preserve working-tree changes unless the user explicitly authorizes deleting content unrecoverable from the index or history. Retain candidates blocked by uncertainty, unresolved contradictions, or unauthorized reference repairs.
 

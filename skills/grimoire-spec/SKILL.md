@@ -1,9 +1,9 @@
 ---
 name: grimoire-spec
-description: Turn requirements and relevant repository context into proportionate, traceable specs.
+description: Use when asked to create or revise a requirements spec from a conversation or repository context.
 ---
 
-Write requirements contracts in `.grimoire/spec/`, not production code. Preserve every independent outcome; scale detail to risk.
+Write requirements contracts in `.grimoire/spec/`, not production code. Preserve every independent outcome; scale detail to risk. A spec retains value after implementation while it explains required behavior, constraints, or acceptance. Small tasks may proceed from clear conversation requirements without a spec; do not make one a universal prerequisite.
 Standalone invocation does not require refine or its handoff.
 
 Under `grimoire-refine`, require and follow its supplied knowledge boundary, permissions, and endpoint. Return gaps/results to the coordinator; do not resolve new semantic choices or choose downstream workflows. If the coordination contract is absent, request it rather than guess its location.
@@ -26,5 +26,7 @@ Present material choices, assumptions, seams, and exclusions. Write reversible d
 Read written files and check every requested outcome, source/ADR links, necessary contracts, and verification criteria. A blocking decision remains incomplete even if a draft exists.
 
 Completion: All requested outcomes have traceable specs with useful verification guidance and no unresolved blocking choice.
+
+Retirement belongs to explicitly invoked `grimoire-tidy`, not spec completion; retain useful contracts and retire only redundant documents after its preservation and safety gates pass.
 
 Standalone, recommend `grimoire-slice` only if decomposition adds value, otherwise `grimoire-loop`; execute further work only when authorized. Under refine, return at its selected endpoint.

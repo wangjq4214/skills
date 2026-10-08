@@ -4,7 +4,7 @@ After explicit user invocation of loop, these scenarios illustrate the compositi
 
 | User request | Expected execution path | Observable boundary |
 | --- | --- | --- |
-| “Implement this feature.” | Default plan, implementation, applicable QA, assessment/fixes, finalization, report | No routine approval gate is inserted. |
+| “Implement this bounded label-normalization fix.” | Implement → targeted verification → report | No plan invocation, file, directory, or viewer without a planning need or explicit request. |
 | “Skip planning; implement directly from this ticket.” | Ticket supplies implementation context; other applicable defaults remain | No plan file is created or demanded by a delegate. |
 | “Plan first, but don't save a file.” | Keep the approach in conversation, then continue applicable defaults | Plan persistence is disabled independently of planning. |
 | “Only review this diff; don't change anything.” | Read-only review and requested results | No plan creation, implementation, test authoring, fixes, or writing formatter. “Only” excludes other work stages. |
@@ -22,7 +22,7 @@ After explicit user invocation of loop, these scenarios illustrate the compositi
 | “Turn review back on before continuing.” | Revise the remaining contract and review the current applicable diff | The earlier exclusion does not permanently disable the stage. |
 | “Stop after the plan and wait for me.” | Plan → waiting for user | No production changes until the user releases implementation. |
 | “Disable every stage.” | No work stages execute | No default stage is restored merely to give the loop something to do. |
-| “Implement in this new repository; there is no `.grimoire` yet.” | Default plan creates only `.grimoire/plans/`, then authorized work | No init, registration, knowledge-file, or Git configuration changes. |
+| “Implement this staged migration in a new repository; retain a plan for resumption.” | Plan creates only `.grimoire/plans/`, then authorized work | No init, registration, knowledge-file, or Git configuration changes. |
 | “Only run the existing tests.” | Test execution and results | No test authoring or automatic test-defect repair. |
 | Required runtime is inaccessible during intent check | Preserve needs-verification for runtime-dependent criteria | Do not infer a gap or change artifact status from missing evidence. |
 | Test command fails because its runner is unavailable | Report the missing prerequisite | Do not manufacture a confirmed product defect or authorize a fix. |

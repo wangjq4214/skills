@@ -35,9 +35,16 @@ test('refinement instructions have no broken local references', () => {
   }
 });
 
-test('live recording, assumptions, and coordinated artifact boundaries remain explicit', () => {
-  assert.match(skill('refine'), /before the next discussion round/);
-  assert.match(skill('record'), /Under `grimoire-refine`, process each settled delta before the next discussion round/);
+test('turn-batched durable recording and coordinated artifact boundaries remain explicit', () => {
+  assert.match(skill('refine'), /Within each user turn, merge related settled updates into one pending batch/);
+  assert.match(skill('refine'), /before yielding to the user or handing off to selected artifact work/);
+  assert.match(skill('refine'), /only project knowledge with lasting value for later tasks/);
+  assert.match(skill('refine'), /If nothing qualifies[\s\S]*without invoking record/);
+  assert.match(skill('refine'), /Reuse the turn's relevant reads and record results unless sources changed/);
+  assert.match(skill('record'), /process the coordinator's qualifying batch before a user-turn pause or artifact handoff/);
+  for (const name of ['refine', 'record', 'clarify']) {
+    assert.doesNotMatch(skill(name), /process each settled delta|After each resolved discussion delta|overrides standalone batching|live recording before the next round/);
+  }
   assert.match(skill('clarify'), /Never present an assumption as a confirmed fact/);
   assert.match(skill('record'), /Skip[^\n]*unconfirmed assumptions/);
   assert.match(skill('refine'), /no downstream invention followed by retrospective recording/);
@@ -94,7 +101,7 @@ test('artifact creation leaves Git policy, registration, and commits separately 
 test('refinement distinguishes missing artifact directories from pending knowledge initialization', () => {
   assert.match(skill('refine'), /missing `\.grimoire\/` alone does not block spec\/ticket creation/);
   assert.match(skill('refine'), /Keep qualifying record updates pending if initialization or writes are blocked/);
-  assert.match(skill('refine'), /the live-recording and completion gates still apply/);
+  assert.match(skill('refine'), /the recording and completion gates still apply/);
   assert.match(skill('record'), /Before qualifying writes/);
   assert.match(skill('record'), /an artifact-only `\.grimoire\/` is not initialization/);
   assert.match(skill('record'), /`grimoire-init` is needed to establish CONTEXT\/ADR/);

@@ -1,13 +1,15 @@
 ---
 name: grimoire-loop
-description: Coordinate implementation and selected quality checks from a conversation, plan, ticket, spec, or diff, with optional stages and human checkpoints.
+description: Use when the user requests coordinated implementation and quality checks from a conversation, plan, ticket, spec, or diff, including staged execution or human checkpoints.
 disable-model-invocation: true
 ---
 
 Coordinate scope, permissions, evidence, and handoffs; specialists own their methods.
 Run this workflow only on explicit user invocation, not automatically from a specialist or a general implementation request.
 
-Default: **plan → implement → test → review + check → assess → affected fixes/checks → final integrated verification → format → report**.
+Choose the smallest useful route before applying defaults. For clear, bounded, reversible work with no recovery, handoff, or reusable planning need, default to **implement → targeted verification → report**. Do not invoke plan or create a Plan file, plan directory, or viewer merely because loop was selected. Explicitly requested planning or artifacts still apply.
+
+When sequencing, recovery, coordination, or consequential approach decisions make a plan useful, default to **plan → implement → test → review + check → assess → affected fixes/checks → final integrated verification → format → report**. Planning and execution remain independently composable; risk determines check depth, not a compulsory document.
 
 ## Resolve the execution contract
 
@@ -32,9 +34,9 @@ Load each selected skill before its work, inline or delegated; a separate agent/
 | Code risks and regressions | `grimoire-review` |
 | Intent, acceptance, artifact alignment | `grimoire-check` |
 
-- **Plan:** reuse/revise adequate plans. By default persist before production edits; persistence needs only the plan directory, not init or registration/Git changes. If persistence is disabled, pass the approach in conversation; if planning is disabled, use the original source. Report required saves that fail. Material approach changes revise enabled planning context, never erase acceptance criteria.
+- **Plan (when selected):** reuse/revise adequate plans. Persist before production edits by default only on this route; persistence needs only the plan directory, not init or registration/Git changes. If persistence is disabled, pass the approach in conversation; if planning is disabled, use the original source. Report required saves that fail. Material approach changes revise enabled planning context, never erase acceptance criteria.
 - **Handoff:** pass source intent/criteria, available plan context, contract, assigned scope, risk, write permissions, complete change context, and prior evidence. Capture resulting diffs and evidence. For delegated QA, read [agent-prompts.md](./references/agent-prompts.md).
-- **Depth:** local reversible work usually needs focused inline checks; integration, security, migration, concurrency, API, or architectural changes need deeper enabled checks. Risk does not authorize delegation or excluded work. Delegate only when authorized and useful for coverage/context; coordinate writes and sequence dependent checks.
+- **Depth:** local reversible work usually needs focused inline checks; implement may perform targeted verification without a separate QA stage or report. Select test/review/check when their responsibility adds needed coverage. Integration, security, migration, concurrency, API, or architectural changes need deeper enabled checks. Risk does not authorize delegation or excluded work. Delegate only when authorized and useful for coverage/context; coordinate writes and sequence dependent checks.
 
 ## Evidence, fixes, and finalization
 
@@ -56,7 +58,7 @@ Honor user-specified checkpoints. Select discretionary checkpoints only when the
 
 ## Completion and report
 
-End when authorized work is complete or a concrete stopping reason exists. When reporting is enabled, summarize contract adaptations, plan path/context, completed/omitted stages, evidence, findings, and remaining work:
+End when authorized work is complete or a concrete stopping reason exists. When reporting is enabled, summarize the selected route and why planning was useful or omitted, plan path/context if any, completed/omitted stages, evidence, findings, and remaining work:
 - **clean**: enabled work complete, selected gates establish the result with no confirmed blockers, and all required evidence is available—not acceptance of disabled checks.
 - **blocked**: unmet prerequisite; **issues remaining**: unresolved findings; **unverified**: work done but no quality gates establish a clean result.
 - **waiting for user**: paused, not final completion.

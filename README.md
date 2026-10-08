@@ -71,18 +71,18 @@ Run grimoire-loop and scale checks to risk
 Choose the smallest sufficient path:
 
 ```text
-Refine discussion        clarify + live record
+Refine discussion        clarify + turn-batched durable record
 Simple task              → settled handoff → recommend loop → end
 Contract / decomposition → user-selected spec → recommend loop → end
                          → user-selected [spec →] slice → recommend loop → end
-Inside loop              plan → implement → test → review + check → assess ↺
-Small and reversible     implement → targeted verification
+Loop with planning need  plan → implement → test → review + check → assess ↺
+Simple loop / direct     implement → targeted verification
 Existing spec/tickets    enter at the next useful stage
 ```
 
-[Refine](./skills/grimoire-refine/SKILL.md) coordinates clarify with automatic recording during discussion, then recommends spec/slice according to task complexity. Simple tasks end with a settled handoff and a recommendation to use loop, not a generated plan. Artifact stages consume settled knowledge and return gaps to discussion rather than inventing knowledge. [Loop](./skills/grimoire-loop/SKILL.md) accepts conversation, spec, tickets, or an existing plan; by default it saves or updates a plan in `.grimoire/plans/` and proceeds to implementation/QA without routine approval gates. Stages and plan persistence are independently selectable; conversation-only planning creates no files. Saving a plan creates only missing plan directories, without requiring init or changing registration/Git configuration. Load and apply each responsible skill; inline execution is valid.
+[Refine](./skills/grimoire-refine/SKILL.md) coordinates clarify, batches related settled knowledge within each user turn, and records only information with lasting value for later tasks before a pause or artifact handoff. No qualifying delta means no record call. It recommends spec/slice when they add value; simple tasks end with a settled handoff and a recommendation to use loop, not a generated plan. Artifact stages consume settled knowledge and return gaps to discussion rather than inventing knowledge. [Loop](./skills/grimoire-loop/SKILL.md) accepts conversation, spec, tickets, or an existing plan. Clear, bounded, reversible work without recovery or handoff needs goes directly to implement and targeted verification, without a Plan. When sequencing, recovery, coordination, or consequential decisions justify planning—or the user requests it—loop saves or updates a plan in `.grimoire/plans/`. Stages and persistence remain independently selectable; conversation-only planning creates no files. Saving a plan creates only missing plan directories, without requiring init or changing registration/Git configuration. Load and apply selected skills; inline execution is valid.
 
-`clarify` owns requirements discussion; `record` persists durable context and decisions; `spec` owns requirement contracts; `slice` owns tickets. Loop uses plan for an auditable implementation approach shared with subagents, implement for production changes, test for test work, review for code risks, and check for intent alignment. Plan remains directly invocable for plan-only work. Browser preview and its server are prepared only on user request.
+`clarify` owns requirements discussion; `record` persists durable context and decisions. A `spec` is a requirements contract worth maintaining beyond execution; `slice` produces tickets for multi-step execution and handoff, not a permanent task diary. After work completes, explicitly invoke [tidy](./skills/grimoire-tidy/SKILL.md) to retire redundant documents only after still-relevant requirements and active-work continuity survive in verified sources. Keep a useful spec; do not move it merely to delete it. Loop composes plan when useful, implement for production changes, test for test work, review for code risks, and check for intent alignment. Plan remains directly invocable for plan-only work. Browser preview and its server are prepared only on user request.
 
 Direct specialist entry remains available for narrower requests. Scale depth to risk while preserving selected deliverables and verification. Composition respects authorized scope and host invocation rules; discussion does not authorize implementation.
 
@@ -98,7 +98,7 @@ Use grimoire-simplify to flatten this function without changing behavior.
 Use grimoire-refactor to comprehensively simplify this repository; use parallel subagents and worktrees.
 ```
 
-Maintainers: `pnpm test` (or `pnpm run test:skills` / `node --test tests/*.test.mjs`) runs the maintenance suite, including metadata, local references, registry entries, JSON examples, init Git behavior, and explicit loop/QA contract checks. Skill text checks and scenario walkthroughs do not prove end-to-end agent compliance.
+Maintainers: `pnpm test` (or `pnpm run test:skills` / `node --test tests/*.test.mjs`) runs the maintenance suite, including metadata, local references, registry entries, JSON examples, init Git behavior, and explicit loop/QA contract checks. Skill text checks and scenario walkthroughs do not prove end-to-end agent compliance. See [loop routing Eval](./tests/loop-acceptance.md) for disposable-project agent runs and evidence limits.
 
 ---
 
@@ -121,7 +121,7 @@ These skills require explicit user selection. They have `disable-model-invocatio
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | Bootstrap optional `.grimoire` project knowledge                        |
 | 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | Consolidate knowledge and retire redundant specs/tickets while preserving active work contracts     |
 | 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | Coordinate clarification, context persistence, specs, tickets, and execution handoff |
-| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | Persist a plan, then run adaptive implementation and QA |
+| 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | Coordinate implementation and QA; plan only when useful or requested |
 | 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | Coordinate large refactoring through dependency-ordered batches and integrated acceptance |
 | ✍️ **[commit](./skills/commit/SKILL.md)**                   | Prepare and execute an approved Conventional Commit                     |
 
@@ -137,7 +137,7 @@ These skills may be selected by the model when relevant, or invoked explicitly b
 | 🧠 **[grimoire-record](./skills/grimoire-record/SKILL.md)**       | Maintain durable project terminology and decisions                    |
 | 📝 **[grimoire-spec](./skills/grimoire-spec/SKILL.md)**     | Produce proportionate specs from requirements and relevant context      |
 | ✂️ **[grimoire-slice](./skills/grimoire-slice/SKILL.md)**   | Decompose requirements into coherent value or enabling tickets          |
-| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | Persist revisable plans for loop; also available for standalone planning |
+| 🗺️ **[grimoire-plan](./skills/grimoire-plan/SKILL.md)** | Create revisable plans when needed, standalone or within loop |
 | 🐛 **[grimoire-debug](./skills/grimoire-debug/SKILL.md)** | Reproduce and diagnose failures with adaptive depth and causal evidence |
 | ⚙️ **[grimoire-implement](./skills/grimoire-implement/SKILL.md)** | Implement from a clear plan, ticket, spec, or conversation            |
 | ✅ **[grimoire-check](./skills/grimoire-check/SKILL.md)**         | Audit behavior against intent, criteria, artifacts, and evidence      |

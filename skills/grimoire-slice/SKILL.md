@@ -1,9 +1,9 @@
 ---
 name: grimoire-slice
-description: Break clear requirements into coherent, verifiable tickets with evidence-based dependencies.
+description: Use when asked to break clear requirements into tickets for multi-step execution or handoff.
 ---
 
-Write ticket sets in `.grimoire/ticket/NNNN-title/`; do not implement code or invent requirements.
+Write ticket sets in `.grimoire/ticket/NNNN-title/` primarily for multi-step execution and handoff; do not implement code or invent requirements. Tickets are not a permanent task log. Completed redundant tickets are retired by explicitly invoked `grimoire-tidy`, only after preserving any requirements unique to them and active-work continuity.
 Standalone invocation does not require refine or its handoff.
 
 Under `grimoire-refine`, require and follow its supplied knowledge boundary, permissions, and endpoint. Return gaps/results to the coordinator rather than settle new semantic choices or launch downstream work. Request a missing coordination contract; do not guess its location.

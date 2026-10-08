@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { normalizeLabel } from './fixtures/loop-lightweight/normalize-label.mjs';
 
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 const skill = name => read(`skills/grimoire-${name}/SKILL.md`);
@@ -8,6 +9,23 @@ const reference = (name, file) => read(`skills/grimoire-${name}/references/${fil
 
 // Static authoring regression checks, not execution of an agent or a policy engine.
 // These protect explicit boundary rules without prescribing heading counts/order.
+test('loop selects a lightweight default without losing explicit planning', () => {
+  const source = skill('loop');
+  assert.match(source, /no recovery, handoff, or reusable planning need/);
+  assert.match(source, /default to \*\*implement → targeted verification → report\*\*/);
+  assert.match(source, /Do not invoke plan or create a Plan file, plan directory, or viewer merely because loop was selected/);
+  assert.match(source, /Explicitly requested planning or artifacts still apply/);
+  assert.match(source, /When sequencing, recovery, coordination, or consequential approach decisions make a plan useful/);
+  assert.match(source, /Persist before production edits by default only on this route/);
+  assert.match(source, /implement may perform targeted verification without a separate QA stage or report/);
+  assert.doesNotMatch(source, /^Default: \*\*plan/m);
+});
+
+test('loop Eval fixture retains the seeded normalization defect', () => {
+  assert.equal(normalizeLabel('  HeLLo  '), '  HeLLo  ');
+  assert.equal(normalizeLabel('   '), '   ');
+});
+
 test('every loop specialist states the coordinated permission boundary', () => {
   for (const name of ['plan', 'implement', 'test', 'review', 'check']) {
     assert.match(skill(name), /Under orchestration, the caller's execution contract governs/, name);
