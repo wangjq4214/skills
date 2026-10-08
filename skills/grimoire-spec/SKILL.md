@@ -10,8 +10,10 @@ Under `grimoire-refine`, require and follow its supplied knowledge boundary, per
 
 # Build the contract
 
-- Require an existing `.grimoire/`; otherwise stop and request `grimoire-init`. Create `spec/` if authorized. Allocate unused `NNNN-title-with-dashes.md` names; do not overwrite unrelated specs.
-- Read the requirement, relevant context/domain files, applicable ADRs, and affected repository surfaces. Scan ADR titles/statuses before expanding unrelated history.
+- A request to create a spec authorizes creating `.grimoire/spec/` and missing parents unless writes are restricted. Do not require `grimoire-init` or create unrelated directories or knowledge files; use init only when establishing the CONTEXT/ADR system is requested. A path/type conflict or denied write blocks persistence, not permission to replace existing content.
+- Allocate unused `NNNN-title-with-dashes.md` names; do not overwrite unrelated specs.
+- Leave Git configuration (including ignore rules) and agent registration unchanged without separate explicit authorization. The existing Git allowlist permits Markdown specs; creating one neither installs that policy nor authorizes staging or committing. Report conflicting ignore rules rather than bypassing them.
+- Read the requirement, available relevant context/domain files, applicable ADRs, and affected repository surfaces. Missing optional knowledge files are not prerequisites. Scan ADR titles/statuses before expanding unrelated history.
 - Surface ADR conflicts. Standalone work may recommend a resolution or keep a non-blocking assumption visible; ask before committing an irreversible, policy-breaking, or scope-changing choice. Coordinated work returns these gaps to refine.
 - Describe necessary integration points and what they exchange or guarantee, including in-process boundaries when correctness or ownership depends on them. Exclude incidental calls and speculative architecture. Read [minimum-seams.md](./references/minimum-seams.md) when inclusion is unclear.
 - Use [spec-template.md](./references/spec-template.md) for drafting. Include outcomes, the solution, representative input-to-outcome verification, material choices and their sources, and meaningful exclusions. Add further test guidance or future evolution only when justified; omit empty sections without omission boilerplate.

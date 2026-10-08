@@ -11,7 +11,7 @@ Record project-specific definitions, aliases, relationships, and consequential d
 
 Read existing relevant entries before writing. Resolve factual conflicts from evidence; return material unresolved conflicts to the user or coordinator instead of inventing knowledge.
 
-Verify `.grimoire/` exists; otherwise report that `grimoire-init` is needed. Create missing target files/directories only within authorized maintenance. When writes are restricted, report qualifying pending items, not a persistence claim.
+Before qualifying writes, verify a knowledge store exists: an artifact-only `.grimoire/` is not initialization. If absent, report that `grimoire-init` is needed to establish CONTEXT/ADR; do not bootstrap it through recording. Create missing target files/directories only within authorized maintenance of an existing store. When writes are restricted, report qualifying pending items, not a persistence claim.
 
 Standalone low-urgency updates may be batched. Under `grimoire-refine`, process each settled delta before the next discussion round and return changed paths, concrete skip reasons, or pending items. Do not independently settle decisions or launch clarification.
 

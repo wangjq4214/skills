@@ -12,9 +12,13 @@ Under `grimoire-refine`, require and follow its supplied knowledge boundary, per
 
 Use an adequate current spec, or conversation requirements with clear outcomes, constraints, and acceptance. Reading a spec is not invoking its authoring skill; do not create one merely to satisfy a dependency.
 
-Read relevant context, applicable ADRs, and affected repository surfaces. Resolve bounded factual questions from evidence. Standalone, surface material scope/solution gaps and recommend refine or spec only when needed and authorized; under refine, return those gaps.
+Read available relevant context, applicable ADRs, and affected repository surfaces. Missing optional knowledge files are not prerequisites. Resolve bounded factual questions from evidence. Standalone, surface material scope/solution gaps and recommend refine or spec only when needed and authorized; under refine, return those gaps.
 
-Require `.grimoire/`; otherwise stop and request `grimoire-init`. Create `ticket/` within permission and allocate the next unused numbered folder. Carry source paths or a concise conversation contract into the README and tickets.
+A request to create tickets authorizes creating `.grimoire/ticket/` and missing parents unless writes are restricted. Do not require `grimoire-init` or create unrelated directories or knowledge files; use init only when establishing the CONTEXT/ADR system is requested. A path/type conflict or denied write blocks persistence, not permission to replace existing content.
+
+Allocate the next unused numbered folder. Carry source paths or a concise conversation contract into the README and tickets.
+
+Leave Git configuration (including ignore rules) and agent registration unchanged without separate explicit authorization. The existing Git allowlist permits Markdown tickets; whether to commit them depends on the task lifecycle and user authorization, not ticket creation. Do not install ignore rules or stage/commit tickets merely because they were created; report conflicting ignore rules rather than bypassing them.
 
 # Decompose
 

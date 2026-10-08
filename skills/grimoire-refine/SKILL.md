@@ -14,7 +14,7 @@ User restrictions override the default workflow. Pass every specialist the scope
 
 # Discussion and live recording
 
-Check sources, permissions, and `.grimoire/` availability. Refinement authorizes automatic knowledge recording unless restricted. Missing initialization requires `grimoire-init`: discussion may continue, but persistence and dependent artifacts remain blocked.
+Check sources, permissions, and available project knowledge. Refinement authorizes automatic knowledge recording unless restricted. Use `grimoire-init` when establishing the CONTEXT/ADR system is needed; missing `.grimoire/` alone does not block spec/ticket creation. Keep qualifying record updates pending if initialization or writes are blocked; the live-recording and completion gates still apply. When no qualifying update is pending, selected artifact skills may create only their required directories within permission.
 
 Keep a compact handoff: intent, constraints, acceptance criteria, settled decisions, separately labeled assumptions, source paths, record results, unresolved questions, permissions, and route.
 
