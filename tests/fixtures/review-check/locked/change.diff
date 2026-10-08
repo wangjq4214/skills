@@ -1,0 +1,16 @@
+diff --git a/counter.mjs b/counter.mjs
+--- a/counter.mjs
++++ b/counter.mjs
+@@ -18,8 +18,10 @@
+   let count = 0;
+   return {
+     increment() {
+-      return withLock(() => {
+-        count += 1;
++      return withLock(async () => {
++        const previous = count;
++        await Promise.resolve();
++        count = previous + 1;
+       });
+     },
+     read() {

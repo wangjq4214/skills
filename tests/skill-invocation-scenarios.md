@@ -1,6 +1,8 @@
 # Skill invocation acceptance scenarios
 
-These are host-level acceptance cases, not executed tests. The `.test.mjs` suites protect instruction text only; passing them does not establish routing, permission enforcement, or agent compliance.
+These are host-level acceptance cases, not executed tests. The `.test.mjs` suites protect instruction text and fixture invariants; passing them does not establish routing, permission enforcement, or agent compliance.
+
+For review/check discovery and judgment cases, see [review-check-acceptance.md](./review-check-acceptance.md): unchanged callers, refuted races, and requirements missing despite green tests.
 
 ## Setup and evidence
 

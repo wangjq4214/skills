@@ -7,6 +7,8 @@ Classify required outcomes against authorized scope, not a plan's inventory of f
 | Required notification behavior exists through a different module and relevant checks establish its contract | **match**, or **deviation** if the design difference is material |
 | Planned notifier filename is absent; behavior has not been traced | **needs-verification**, not gap |
 | Relevant path is inspected and neither it nor its collaborators implements required timeout handling | **gap** |
+| Existing tests pass, but a spec-required rejection path is demonstrably absent from implementation and collaborators | **gap**; green tests do not establish complete acceptance |
+| No test covers a requirement and implementation evidence is inconclusive | **needs-verification**, not automatic gap or match |
 | Runtime unavailable and code inspection cannot establish required concurrency behavior | **needs-verification** |
 | Required public field is absent and no compatible contract is provided | **gap** |
 | Different algorithm demonstrably violates a performance requirement | Blocking **deviation** |

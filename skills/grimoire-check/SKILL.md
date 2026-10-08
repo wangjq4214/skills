@@ -9,7 +9,7 @@ Under orchestration, the caller's execution contract governs comparison scope, v
 
 ## Compare outcomes
 
-Accept a plan, ticket, spec, acceptance criteria, or clear conversation goal; no formal plan is required. Derive a behavior-and-constraint checklist. Ask only when competing interpretations would change the verdict; otherwise bound assumptions.
+Accept a plan, ticket, spec, acceptance criteria, or clear conversation goal; no formal plan is required. Derive the behavior-and-constraint checklist from original requirements before comparing implementation summaries or tests, so their omissions do not define the audit scope. Retain a source reference for each scoped outcome, including required error paths and constraints. If original sources are unavailable, disclose the limit rather than treating a summary as exhaustive. Ask only when competing interpretations would change the verdict; otherwise bound assumptions.
 
 Read source artifacts, applicable ADRs, actual implementation, relevant tests/configuration, and available runtime evidence. Separate intent from optional design choices. Inspect related changes for scope expansion; do not infer behavior from filenames.
 
@@ -22,7 +22,7 @@ Each outcome must have evidence or an explicit evidence gap:
 
 A blocking finding requires demonstrated incorrect behavior, concrete risk, or a violated requirement/constraint. Missing runtime access or a failing command alone is not proof of a product defect. A defensible design variation does not become blocking because it differs from a planned filename, class, or algorithm. For examples, read [check-patterns.md](./references/check-patterns.md).
 
-Cross-check acceptance criteria directly. Surface artifact conflicts; prioritize explicit user intent and the latest approved artifact, not a plan's incidental details. Do not count the same issue twice.
+Cross-check each scoped source requirement against the checklist and criterion-specific evidence, including outcomes no test mentions. Green tests establish only what their assertions cover, not complete acceptance. Do not make missing tests a new acceptance condition unless the source requires them. For uncovered outcomes, inspect the implementation and collaborators: demonstrated missing behavior is a gap; insufficient evidence is needs-verification. Surface artifact conflicts; prioritize explicit user intent and the latest approved artifact, not a plan's incidental details. Do not count the same issue twice.
 
 ## Report and status
 

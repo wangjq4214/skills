@@ -3,7 +3,7 @@ name: grimoire-review
 description: Review code changes for evidence-backed correctness, security, compatibility, and other material risks.
 ---
 
-Review actual changes and relevant consumers, not just worker summaries. Include deletions and untracked files. Infer purpose from source intent, diff, tests, and surrounding code; ask only when competing interpretations materially change the verdict.
+Review actual changes and relevant consumers, not just worker summaries. Include deletions and untracked files. For high-risk changes, read original requirements and the diff independently before using the implementer's summary; missing sources remain evidence gaps. Ask only when competing interpretations materially change the verdict. A second reviewer is optional based on risk and cost, not a substitute for independent evidence.
 
 Under orchestration, the caller's execution contract governs scope, permitted verification, writes, checkpoints, reporting, and completion. Apply only enabled responsibilities; do not restore excluded checks. Standalone review is read-only unless the user separately authorizes fixes.
 For read-only work, do not write reports or status, apply fixes, or run commands that may generate files (including test caches, snapshots, and build output). Use existing evidence and report verification gaps instead.
@@ -11,6 +11,10 @@ For read-only work, do not write reports or status, apply fixes, or run commands
 ## Evidence threshold
 
 Always consider correctness and security when behavior changes; add architecture, compatibility, performance, concurrency, or other lenses only when relevant.
+
+Trace changed contracts through actual callers and affected producers/consumers, including unchanged files. Check return values, errors, units, and side effects at those boundaries; a locally correct function can still break a caller using the old contract.
+
+Before classifying a suspected defect, establish its triggering conditions and seek evidence that could refute it. For a suspected race, trace shared state access and synchronization across the relevant paths: the same lock may make the harmful interleaving impossible. Drop refuted concerns; keep unresolved credible ones as needs-verification, with the missing condition identified.
 
 - **blocking** — evidence demonstrates incorrect behavior, security exposure, data loss, regression, violated acceptance criteria, or concrete architectural breakage.
 - **needs-verification** — a credible concern lacks decisive evidence. State what would confirm or refute it.
