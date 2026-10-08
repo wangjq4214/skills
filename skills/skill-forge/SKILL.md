@@ -1,6 +1,6 @@
 ---
 name: skill-forge
-description: Create, review, and simplify agent skills into minimal, effective instructions.
+description: Use when asked to turn a workflow into an agent skill, review or simplify an existing SKILL.md, or fix skill descriptions that miss intended tasks or trigger on unrelated ones.
 disable-model-invocation: true
 ---
 
@@ -22,8 +22,17 @@ Use ordered steps only when sequence matters.
 Include completion criteria where success is ambiguous or premature completion
 is a meaningful risk. Do not require a done condition for every step.
 
-Write the description around recognizable usage situations. Choose automatic
-or explicit invocation according to the target host and intended usage.
+Treat every skill's description as a context pointer: it tells the agent when
+to load the skill, before the body is available. Name concrete user requests,
+task situations, or observable symptoms, not just the skill's capabilities.
+Put the strongest trigger first; add distinct task branches, not synonym lists.
+For example, prefer "Use when tests fail intermittently or a previously fast
+operation slows down" over "Diagnose software problems."
+
+Keep selection cues in the description and procedures in the body. Add a brief
+boundary only where a neighboring skill is likely to be confused with this one.
+Choose automatic or explicit invocation according to the target host and
+intended usage; clearer descriptions do not override invocation restrictions.
 
 ## Keep only what earns its place
 
@@ -42,6 +51,10 @@ Split skills when they have independently useful triggers or responsibilities,
 not merely to shorten a file.
 
 ## Check the result
+
+Check selection using only the description: intended requests, paraphrases,
+and nearby tasks that should not select this skill. Fix missing or overbroad
+triggers in the pointer rather than compensating with more body instructions.
 
 Check representative tasks and important edge cases against the required
 behavior. Use execution evidence when available; label scenario reasoning as
