@@ -11,7 +11,9 @@ Under orchestration, the caller's execution contract governs scope, writes, veri
 
 Default to audit mode. Implement only when authorized; comprehensive implementation already authorizes in-scope internal restructuring without per-finding approval. Preserve observable behavior and public contracts. Ask for material scope expansion, contract changes, or irreversible actions.
 
-Read target code and relevant callers, configuration, state ownership, and tests. Record scope, source revision/dirty state, contracts, and baseline checks when implementing. Optional map data accelerates navigation, not proof; verify source claims.
+Start with user-reported pain points and scoped Git history before deep inspection: look for repeated edits, fixes, and modules changed together over a stated revision/time window. Inspect representative diffs; discount generated, formatting-only, and bulk-migration churn. Use hotspots to order investigation, not as proof of defects or a substitute for requested coverage. If history is absent or shallow, state the limitation and prioritize user pain and source-level coupling.
+
+Read hotspot code and relevant callers, configuration, state ownership, and tests, then expand through affected dependencies and remaining requested scope. Record scope, source revision/dirty state, contracts, and baseline checks when implementing. Optional map data accelerates navigation, not proof; verify source claims.
 
 For broad work, inventory all first-party modules and track file/module coverage, evidence, findings, dependencies, dispositions, and next action. Persist `.grimoire/improve-state.json` only when allowed and not using a coordinator's ledger. Search hits are not inspection; expose unread, excluded, and blocked regions.
 
