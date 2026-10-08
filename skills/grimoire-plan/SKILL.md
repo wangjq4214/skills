@@ -1,6 +1,6 @@
 ---
 name: grimoire-plan
-description: Create or revise an implementation plan from a conversation, spec, or tickets; save it by default or return it in conversation when persistence is disabled.
+description: Use when asked to plan how to implement a change or revise an existing implementation approach, including steps, affected code, dependencies, and verification. For required behavior and acceptance criteria, use grimoire-spec.
 ---
 
 Plan the implementation approach; do not implement production code or treat a saved plan as implementation authorization.

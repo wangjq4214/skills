@@ -1,6 +1,6 @@
 ---
 name: grimoire-debug
-description: Diagnose crashes, incorrect results, failing behavior, performance regressions, or intermittent bugs; reproduce symptoms and establish evidence-backed causes.
+description: Use when a program crashes, produces incorrect results, fails unexpectedly or intermittently, or becomes unexpectedly slow, or when a failing test has an unexplained cause. For an already-understood fix with no diagnosis needed, use grimoire-implement.
 ---
 
 Find, reproduce, locate, and explain failures. An error message is a clue, not proof of a root cause; connect the observed symptom to a mechanism with code inspection and discriminating runtime evidence where available. Separate observations, hypotheses, and confirmed causes.

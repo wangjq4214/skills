@@ -1,6 +1,6 @@
 ---
 name: grimoire-init
-description: Set up .grimoire project knowledge and agent registration, or fill gaps in an existing setup.
+description: Use when explicitly invoked to initialize the .grimoire knowledge store, register it with coding agents, or repair missing setup items. Not required merely to create a spec, ticket, or plan.
 disable-model-invocation: true
 ---
 

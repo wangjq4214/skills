@@ -1,6 +1,6 @@
 ---
 name: grimoire-record
-description: Use when a conversation establishes or corrects project terminology, domain relationships, or lasting architectural decisions.
+description: Use when a conversation establishes or corrects project terminology, domain relationships, or durable architectural decisions, or when asked to preserve that knowledge in context files or ADRs. Not for ordinary task requirements or progress logs.
 ---
 
 # What to record

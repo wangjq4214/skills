@@ -1,6 +1,6 @@
 ---
 name: grimoire-implement
-description: Implement code from a plan, ticket, spec, or sufficiently clear conversation using proportionate design and verification.
+description: Use when asked to add or change code to deliver a feature, satisfy a ticket or spec, apply an implementation plan, or make an already-understood fix. A clear conversation request is sufficient; a saved plan is not required.
 ---
 
 Implement the authorized behavior from the original source and available plan context; a persisted plan is not required.

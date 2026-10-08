@@ -1,6 +1,6 @@
 ---
 name: grimoire-clarify
-description: Use when requirements leave unresolved choices that could change behavior, interfaces, architecture, cost, or irreversible decisions.
+description: Use when asked to clarify requirements, or when unresolved requirements or needed user decisions could materially change behavior, interfaces, architecture, cost, or irreversible actions.
 ---
 
 Resolve material uncertainty, not every unspecified detail.

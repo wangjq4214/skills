@@ -1,6 +1,6 @@
 ---
 name: grimoire-refactor
-description: Use when explicitly asked to coordinate a subsystem or repository refactor, including comprehensive restructuring or simplification with integrated acceptance.
+description: Use when explicitly invoked to coordinate a subsystem or repository refactor with structural improvements, simplification, and integrated acceptance. Not for a standalone local cleanup or a behavior-changing feature.
 disable-model-invocation: true
 ---
 

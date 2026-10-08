@@ -1,6 +1,6 @@
 ---
 name: grimoire-map
-description: Use when asked to map a repository or subsystem, locate responsibility and dependency boundaries, or refresh an existing codebase map.
+description: Use when asked where behavior lives, which module owns state, how repository components connect, or to create or refresh a codebase map. Describes existing structure, not a redesign.
 ---
 
 Make repository behavior paths navigable through source-backed observations, not an invented architecture. Do not modify production code or prescribe a redesign; a map is not proof of behavior.

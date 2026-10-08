@@ -1,6 +1,6 @@
 ---
 name: grimoire-simplify
-description: Use when asked to simplify a function, module, subsystem, or repository by removing redundant code, state, branches, or indirection without changing behavior.
+description: Use when asked to simplify code, remove redundant state or branches, eliminate duplication or dead paths, or reduce valueless indirection without changing behavior. For responsibility or dependency redesign, use grimoire-improve.
 ---
 
 Reduce the concepts, states, branches, indirections, and maintained code needed to explain existing behavior. Cosmetic movement is not simplification.

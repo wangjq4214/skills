@@ -1,6 +1,6 @@
 ---
 name: grimoire-improve
-description: Audit responsibility boundaries and dependencies, then implement authorized structural improvements from one module to a repository.
+description: Use when asked to assess or improve responsibility boundaries, dependency direction, or tangled state ownership in a module or across modules while preserving behavior. For redundant code within existing boundaries, use grimoire-simplify.
 ---
 
 Improve ownership, dependency direction, and how directly a reader can explain behavior—not merely file size.

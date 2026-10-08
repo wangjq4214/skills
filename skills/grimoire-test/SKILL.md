@@ -1,6 +1,6 @@
 ---
 name: grimoire-test
-description: Design, write, run, or diagnose tests for changed behavior, regressions, and important invariants.
+description: Use when asked to add test coverage, write regression or characterization tests, run a test suite, or diagnose defects in tests. For an unexplained product failure exposed by a test, use grimoire-debug.
 ---
 
 Use the test boundary and structure that best expose the relevant failure, not a mandatory unit-test or AAA template.

@@ -1,6 +1,6 @@
 ---
 name: grimoire-loop
-description: Use when the user requests coordinated implementation and quality checks from a conversation, plan, ticket, spec, or diff, including staged execution or human checkpoints.
+description: Use when explicitly invoked to coordinate implementation and quality checks, including custom stage order, omitted stages, or human checkpoints. Not for a plain request to write code.
 disable-model-invocation: true
 ---
 

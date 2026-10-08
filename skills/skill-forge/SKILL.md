@@ -1,6 +1,6 @@
 ---
 name: skill-forge
-description: Use when asked to turn a workflow into an agent skill, review or simplify an existing SKILL.md, or fix skill descriptions that miss intended tasks or trigger on unrelated ones.
+description: Use when explicitly invoked to create an agent skill, review or revise a SKILL.md, or fix descriptions that miss intended requests or select unrelated tasks. Not for implementing the workflow described by a skill.
 disable-model-invocation: true
 ---
 

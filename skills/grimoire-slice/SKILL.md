@@ -1,6 +1,6 @@
 ---
 name: grimoire-slice
-description: Use when asked to break clear requirements into tickets for multi-step execution or handoff.
+description: Use when asked to break clear requirements or an existing spec into independently verifiable tickets, identify blocking dependencies, or sequence a ticket set for execution or handoff. Not for an implementation plan within one task.
 ---
 
 Write ticket sets in `.grimoire/ticket/NNNN-title/` primarily for multi-step execution and handoff; do not implement code or invent requirements. Tickets are not a permanent task log. Completed redundant tickets are retired by explicitly invoked `grimoire-tidy`, only after preserving any requirements unique to them and active-work continuity.

@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Draft a gitmoji-prefixed Conventional Commit message for staged changes and create the local commit after user approval.
+description: Use when explicitly invoked to draft a commit message for staged changes or create a local commit with a gitmoji-prefixed Conventional Commit message.
 disable-model-invocation: true
 ---
 

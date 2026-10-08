@@ -1,6 +1,6 @@
 ---
 name: grimoire-spec
-description: Use when asked to create or revise a requirements spec from a conversation or repository context.
+description: Use when asked to write or revise a requirements spec defining outcomes, constraints, integration contracts, and observable acceptance criteria from a conversation or repository context. Not for implementation steps or ticket decomposition.
 ---
 
 Write requirements contracts in `.grimoire/spec/`, not production code. Preserve every independent outcome; scale detail to risk. A spec retains value after implementation while it explains required behavior, constraints, or acceptance. Small tasks may proceed from clear conversation requirements without a spec; do not make one a universal prerequisite.

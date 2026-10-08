@@ -1,6 +1,6 @@
 ---
 name: grimoire-refine
-description: Use when the user requests coordinated requirements discussion with durable knowledge recording and a choice of handoff, spec, or tickets.
+description: Use when explicitly invoked to work through requirements, preserve settled project knowledge, and choose a handoff, spec, or ticket set. Not for implementation planning or code execution.
 disable-model-invocation: true
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: grimoire-review
-description: Review code changes for evidence-backed correctness, security, compatibility, and other material risks.
+description: Use when asked to review a diff, pull request, or code changes for defects, security risks, compatibility breaks, or regressions. For whether the implementation fulfills the original requirements, use grimoire-check.
 ---
 
 Review actual changes and relevant consumers, not just worker summaries. Include deletions and untracked files. For high-risk changes, read original requirements and the diff independently before using the implementer's summary; missing sources remain evidence gaps. Ask only when competing interpretations materially change the verdict. A second reviewer is optional based on risk and cost, not a substitute for independent evidence.

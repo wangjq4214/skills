@@ -1,6 +1,6 @@
 ---
 name: grimoire-tidy
-description: Use when explicitly asked to audit or clean up Git-tracked .grimoire documents, consolidate knowledge, or retire redundant specs and tickets.
+description: Use when explicitly invoked to audit or clean up Git-tracked .grimoire documents, consolidate stored knowledge, or retire redundant specs and tickets. Not for source-code cleanup or automatic deletion after implementation.
 disable-model-invocation: true
 ---
 
