@@ -1,6 +1,7 @@
 ---
 name: grimoire-spec
 description: Use when asked to write or revise a requirements spec defining outcomes, constraints, integration contracts, and observable acceptance criteria from a conversation or repository context. Not for implementation steps or ticket decomposition.
+disable-model-invocation: false
 ---
 
 Write requirements contracts in `.grimoire/spec/`, not production code. Preserve every independent outcome; scale detail to risk. A spec retains value after implementation while it explains required behavior, constraints, or acceptance. Small tasks may proceed from clear conversation requirements without a spec; do not make one a universal prerequisite.
@@ -10,7 +11,7 @@ Under `grimoire-refine`, require and follow its supplied knowledge boundary, per
 
 # Build the contract
 
-- A request to create a spec authorizes creating `.grimoire/spec/` and missing parents unless writes are restricted. Do not require `grimoire-init` or create unrelated directories or knowledge files; use init only when establishing the CONTEXT/ADR system is requested. A path/type conflict or denied write blocks persistence, not permission to replace existing content.
+- When saving a requested spec, create `.grimoire/spec/` and missing parents unless writes are restricted; no separate initialization approval is needed. Do not require `grimoire-init` or create unrelated directories or knowledge files; use init only when establishing the CONTEXT/ADR system is requested. A path/type conflict or denied write blocks persistence, not permission to replace existing content.
 - Allocate unused `NNNN-title-with-dashes.md` names; do not overwrite unrelated specs.
 - Leave Git configuration (including ignore rules) and agent registration unchanged without separate explicit authorization. The existing Git allowlist permits Markdown specs; creating one neither installs that policy nor authorizes staging or committing. Report conflicting ignore rules rather than bypassing them.
 - Read the requirement, available relevant context/domain files, applicable ADRs, and affected repository surfaces. Missing optional knowledge files are not prerequisites. Scan ADR titles/statuses before expanding unrelated history.

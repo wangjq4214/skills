@@ -18,6 +18,7 @@ test('refinement skill identities and invocation modes remain intact', () => {
     assert.match(metadata, new RegExp(`^name: grimoire-${name}$`, 'm'));
     assert.match(metadata, /^description: .+/m);
     assert.equal(/^disable-model-invocation: true$/m.test(metadata), name === 'refine');
+    if (['spec', 'slice'].includes(name)) assert.match(metadata, /^disable-model-invocation: false$/m);
   }
 });
 
@@ -74,10 +75,10 @@ test('refine loads the selected specialist method instead of merely naming it', 
 
 test('spec and slice create only authorized artifact paths without initialization', () => {
   for (const [name, request, directory] of [
-    ['spec', 'a spec', 'spec'], ['slice', 'tickets', 'ticket'],
+    ['spec', 'a requested spec', 'spec'], ['slice', 'requested tickets', 'ticket/NNNN-title'],
   ]) {
     const source = skill(name);
-    assert.ok(source.includes(`A request to create ${request} authorizes creating \`.grimoire/${directory}/\` and missing parents unless writes are restricted`), name);
+    assert.ok(source.includes(`When saving ${request}, create \`.grimoire/${directory}/\` and missing parents unless writes are restricted; no separate initialization approval is needed`), name);
     assert.match(source, /Do not require `grimoire-init` or create unrelated directories or knowledge files/, name);
     assert.match(source, /use init only when establishing the CONTEXT\/ADR system is requested/, name);
     assert.match(source, /A path\/type conflict or denied write blocks persistence, not permission to replace existing content/, name);

@@ -1,6 +1,7 @@
 ---
 name: grimoire-slice
 description: Use when asked to break clear requirements or an existing spec into independently verifiable tickets, identify blocking dependencies, or sequence a ticket set for execution or handoff. Not for an implementation plan within one task.
+disable-model-invocation: false
 ---
 
 Write ticket sets in `.grimoire/ticket/NNNN-title/` primarily for multi-step execution and handoff; do not implement code or invent requirements. Tickets are not a permanent task log. Completed redundant tickets are retired by explicitly invoked `grimoire-tidy`, only after preserving any requirements unique to them and active-work continuity.
@@ -14,7 +15,7 @@ Use an adequate current spec, or conversation requirements with clear outcomes, 
 
 Read available relevant context, applicable ADRs, and affected repository surfaces. Missing optional knowledge files are not prerequisites. Resolve bounded factual questions from evidence. Standalone, surface material scope/solution gaps and recommend refine or spec only when needed and authorized; under refine, return those gaps.
 
-A request to create tickets authorizes creating `.grimoire/ticket/` and missing parents unless writes are restricted. Do not require `grimoire-init` or create unrelated directories or knowledge files; use init only when establishing the CONTEXT/ADR system is requested. A path/type conflict or denied write blocks persistence, not permission to replace existing content.
+When saving requested tickets, create `.grimoire/ticket/NNNN-title/` and missing parents unless writes are restricted; no separate initialization approval is needed. Do not require `grimoire-init` or create unrelated directories or knowledge files; use init only when establishing the CONTEXT/ADR system is requested. A path/type conflict or denied write blocks persistence, not permission to replace existing content.
 
 Allocate the next unused numbered folder. Carry source paths or a concise conversation contract into the README and tickets.
 
