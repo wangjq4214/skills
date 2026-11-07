@@ -40,26 +40,46 @@ test('turn-batched durable recording and coordinated artifact boundaries remain 
   const refine = skill('refine');
   const record = skill('record');
   assert.match(refine, /Within each user turn, collect related settled domain knowledge and consequential durable decisions\/constraints into one pending batch/);
-  assert.match(refine, /Invoke record for a qualifying batch before yielding to the user or handing off to artifact work, not after each delta/);
+  assert.match(refine, /Invoke record for an authorized qualifying batch before yielding to the user or handing off to artifact work, not after each delta/);
   assert.match(refine, /Keep ordinary task requirements in the handoff or selected artifacts; exclude unresolved statements and unconfirmed assumptions/);
   assert.match(refine, /If nothing qualifies[^\n]*without invoking record/);
-  assert.match(refine, /Pass record the batch, sources, relevant prior reads\/results, and write permissions/);
+  assert.match(refine, /Pass record the batch, sources, relevant prior reads\/results, and the user's recording authorization, scope, and write restrictions/);
   assert.match(refine, /Delegate deduplication, index maintenance, and ADR consistency checks to record/);
   assert.match(refine, /use this report to reconcile the batch rather than repeat its checks/);
   assert.match(refine, /Retain blocked or unverified items as pending/);
   assert.match(record, /Reuse relevant reads unless sources changed or conflicts require rechecking/);
-  assert.match(record, /process the coordinator's qualifying batch before a user-turn pause or artifact handoff/);
+  assert.match(record, /process the coordinator's authorized qualifying batch before a user-turn pause or artifact handoff/);
   for (const name of ['refine', 'record', 'clarify']) {
     assert.doesNotMatch(skill(name), /process each settled delta|After each resolved discussion delta|overrides standalone batching|live recording before the next round/);
   }
   assert.match(skill('clarify'), /Never present an assumption as a confirmed fact/);
   assert.match(skill('record'), /Skip[^\n]*unconfirmed assumptions/);
-  assert.match(skill('refine'), /no downstream invention followed by retrospective recording/);
+  assert.match(skill('refine'), /No downstream invention followed by retrospective recording/i);
   for (const name of ['spec', 'slice']) {
     assert.match(skill(name), /require and follow its supplied knowledge boundary, permissions, and endpoint/);
   }
   assert.match(skill('refine'), /recommend user invocation of `grimoire-loop`; do not start it/);
   assert.match(read('skills/grimoire-record/references/adr-template.md'), /body metadata, not YAML frontmatter/);
+});
+
+test('knowledge recording requires user authorization rather than settled facts', () => {
+  const record = skill('record');
+  assert.match(record, /A user request to record or update knowledge authorizes writes for that requested scope, subject to write restrictions/);
+  assert.match(record, /do not ask for redundant confirmation/);
+  assert.match(record, /A settled fact, a correction in conversation, or a batch discovered by `grimoire-refine` is not write authorization/);
+  assert.match(record, /A coordinator must pass through the user's recording authorization and scope/);
+  assert.match(record, /Without that authorization, return qualifying candidates as unpersisted, pending approval/);
+  assert.match(record, /Do not create or modify knowledge-store files/);
+});
+
+test('refine keeps recording permission separate from workflow and artifact selection', () => {
+  const refine = skill('refine');
+  assert.match(refine, /Invoking refine or selecting spec\/ticket output does not authorize CONTEXT\/ADR writes/);
+  assert.match(refine, /An explicit user request to record knowledge authorizes that scope without another confirmation/);
+  assert.match(refine, /otherwise keep discovered knowledge as unpersisted candidates and obtain approval before writing/);
+  assert.match(refine, /Track recording authorization separately from artifact permissions/);
+  assert.match(refine, /apply the same recording-authorization gate before resuming/);
+  assert.doesNotMatch(refine, /Refinement authorizes automatic knowledge recording unless restricted/);
 });
 
 test('standalone artifact skills do not require the refinement coordinator', () => {
@@ -106,9 +126,11 @@ test('artifact creation leaves Git policy, registration, and commits separately 
 });
 
 test('refinement distinguishes missing artifact directories from pending knowledge initialization', () => {
-  assert.match(skill('refine'), /missing `\.grimoire\/` alone does not block spec\/ticket creation/);
-  assert.match(skill('refine'), /Keep qualifying record updates pending if initialization or writes are blocked/);
-  assert.match(skill('refine'), /the recording and completion gates still apply/);
+  const refine = skill('refine');
+  assert.match(refine, /Missing initialization or recording permission does not block selected spec\/ticket work/);
+  assert.match(refine, /If the knowledge store is absent[^\n]*do not initialize it without authorization/);
+  assert.match(refine, /keep unauthorized or failed updates Pending without blocking resumption unless the user or caller explicitly requires persistence/);
+  assert.match(refine, /Only when the user or caller explicitly requires knowledge persistence do blocked or unverified qualifying record updates prevent overall completion/);
   assert.match(skill('record'), /Before qualifying writes/);
   assert.match(skill('record'), /an artifact-only `\.grimoire\/` is not initialization/);
   assert.match(skill('record'), /`grimoire-init` is needed to establish CONTEXT\/ADR/);

@@ -28,14 +28,17 @@ test('loop Eval fixture retains the seeded normalization defect', () => {
 
 test('every loop specialist states the coordinated permission boundary', () => {
   for (const name of ['plan', 'implement', 'test', 'review', 'check']) {
-    assert.match(skill(name), /Under orchestration, the caller's execution contract governs/, name);
-    assert.match(skill(name), /Apply only enabled responsibilities/, name);
+    assert.match(skill(name), /Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults/, name);
   }
 });
 
 test('planning supports conversation-only work and minimal directory creation', () => {
   const source = skill('plan');
-  assert.match(source, /If persistence is disabled[\s\S]*?do not create directories, files, or a viewer/);
+  assert.match(source, /Standalone, return the plan in conversation by default/);
+  assert.match(source, /Write plan files only when the user explicitly requests a saved plan or the caller's execution contract authorizes persistence/);
+  assert.match(source, /Otherwise, do not create directories, files, or a viewer/);
+  assert.match(source, /A preview request alone does not authorize saving a plan or creating\/updating viewer files/);
+  assert.match(source, /if authorization is absent or persistence is disabled, resolve the conflict before writing/);
   assert.match(source, /create missing parent directories when authorized/);
   assert.match(source, /Do not require grimoire-init or change registration, knowledge files, or Git configuration/);
   assert.doesNotMatch(source, /If not, stop|tell the user to run grimoire-init/);
@@ -44,9 +47,12 @@ test('planning supports conversation-only work and minimal directory creation', 
 
 test('implementation and test defaults cannot restore excluded verification or writes', () => {
   assert.match(skill('implement'), /When verification is enabled/);
-  assert.match(skill('implement'), /disabled verification stays omitted, not passed/);
-  assert.match(skill('test'), /Authoring-only work must not execute tests/);
-  assert.match(skill('test'), /execution-only work must not author or repair them/);
+  assert.match(skill('implement'), /Unavailable or disabled checks cannot establish verified success; do not silently run them/);
+  assert.match(skill('test'), /Standalone, design, write, and run relevant tests unless the request narrows that scope/);
+  assert.match(skill('test'), /When execution is enabled/);
+  assert.match(skill('test'), /Fix test defects only within write permissions/);
+  assert.match(skill('test'), /Unrun tests are authored, not passing/);
+  assert.match(skill('loop'), /Every stage\/substage is independently selectable[^\n]*test design\/authoring\/execution/);
   assert.match(skill('loop'), /Do not restore a disabled stage through a specialist's defaults/);
 });
 
@@ -68,8 +74,10 @@ test('artifact transitions preserve history and distinguish pending verification
   assert.match(source, /Implementation complete; identified required verification remains pending.*Testing/);
   assert.match(source, /all required verification satisfied.*Completed/);
   assert.match(source, /Excluded or unavailable required checks do not justify/);
-  assert.match(skill('check'), /Explicit read-only requests prohibit status writes in any mode/);
-  assert.match(skill('check'), /coordinator owns shared artifact status/);
+  assert.match(skill('check'), /Standalone, remain read-only: report findings without changing Spec, Ticket, or other artifact statuses/);
+  assert.match(skill('check'), /Update statuses only with explicit user authorization or permission from the caller's execution contract/);
+  assert.match(skill('check'), /evidence alone is not write permission/);
+  assert.match(skill('check'), /Change only authorized status fields supported by evidence/);
 });
 
 test('human checkpoint authority stays in the main skill; resumption details are reachable', () => {

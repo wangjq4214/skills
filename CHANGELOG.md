@@ -1,9 +1,16 @@
 # skills
 
-## Unreleased
+## 0.6.0
+
+### Minor Changes
+
+- b02be9c: Separate refactoring data ownership and define a shared coordination contract v1. Keep map storage v1, pin immutable source/owner results, and replace duplicated refactor ledgers with run schema v2 references. Preserve standalone and no-persistence use; require explicit legacy-state conversion and fresh integrated evidence. Add static contract checks and runtime-unverified handoff scenarios.
 
 ### Patch Changes
 
+- Align static regression assertions with the current orchestration and persistence contracts, and add Record, Refine, and Map authorization checks. All 68 maintenance tests pass; three in-memory permission-rule mutations are detected. These checks do not establish agent runtime compliance.
+- ed369ec: Prioritize architecture discovery using change frequency alongside coupling, navigation, state ownership, and testability signals. Replace comprehensive refactoring's fixed two-clean-pass gate with a mandatory first full-scope recheck and risk-driven follow-up; retain coverage and integrated acceptance requirements. Update bilingual guidance, static checks, and runtime-unverified evaluation scenarios.
+- 20a9485: Explicitly allow model invocation of grimoire-spec and grimoire-slice. Create their artifact directories and missing parents on save without requiring grimoire-init or separate initialization approval, while preserving write restrictions and existing content.
 - Require explicit knowledge-persistence authorization in grimoire-record and grimoire-refine: direct recording requests authorize their scope, while knowledge discovered during refinement remains unpersisted pending approval. Spec/ticket selection does not grant CONTEXT/ADR write permission. Separate grimoire-map navigation queries from map creation or updates: ordinary queries return source-backed results without writing map files; persistence requires an explicit map request, including under orchestration. Runtime behavior remains unverified.
 - Make standalone grimoire-plan conversation-only by default and grimoire-check read-only by default; require explicit user authorization or an upstream execution contract for plan persistence and artifact status updates. Preview requests do not implicitly authorize plan or viewer file writes. Decouple grimoire-refine artifact delivery from knowledge persistence: report unsaved knowledge as Pending without blocking completed specs or other selected outputs unless persistence is explicitly required. Runtime behavior remains unverified.
 - Standardize orchestration precedence across grimoire-implement, test, review, check, improve, simplify, map, plan, and debug with one shared sentence: the caller's execution contract takes precedence over each skill's standalone defaults. Remove redundant orchestration exceptions while retaining standalone defaults and task-specific boundaries. Runtime behavior remains unverified.

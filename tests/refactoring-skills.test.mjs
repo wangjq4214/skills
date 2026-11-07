@@ -160,17 +160,31 @@ test('zero and non-code baselines do not fabricate percentage achievement', () =
 });
 
 test('refactoring children inherit no-write and persistence restrictions', () => {
-  for (const name of ['map', 'improve', 'simplify']) {
+  for (const name of ['improve', 'simplify']) {
     const source = read(skillPath(name));
-    assert.match(source, /Under orchestration, the caller's execution contract governs/);
-    assert.match(source, /Apply only enabled responsibilities/);
-    assert.match(source, /Explicit no-write requests/);
+    assert.match(source, /Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults/, name);
+    assert.match(source, /persistence remains permission-gated/, name);
   }
+  const map = read(skillPath('map'));
+  assert.match(map, /within that scope and any write restrictions/);
+  assert.match(map, /Under orchestration, the caller must pass through that authorization/);
+  assert.match(map, /If persistence is not authorized, return results inline, not files/);
   const source = read(skillPath('refactor'));
   assert.match(source, /Before any writes/);
   assert.match(source, /create no map, ledger, or report files/);
   assert.match(source, /Pass these restrictions to every child skill/);
   assert.match(source, /Implementation, numeric achievement, and dry passes are not audit gates/);
+});
+
+test('map navigation is read-only and map persistence requires an explicit request', () => {
+  const source = read(skillPath('map'));
+  assert.match(source, /For ordinary code-navigation questions, inspect only what is needed and return source-backed locations, relationships, and uncertainty/);
+  assert.match(source, /Do not create, refresh, repair, or clean map files/);
+  assert.match(source, /verify relevant claims against current source/);
+  assert.match(source, /Stop when the question is answered; the map-building procedure below is not a prerequisite/);
+  assert.match(source, /only when the user explicitly requests creating or updating a map/);
+  assert.match(source, /calling this skill or supplying an artifact path alone does not grant it/);
+  assert.doesNotMatch(source, /Standalone, persist/);
 });
 
 test('refactor uses risk-driven rechecks without weakening integrated acceptance', () => {

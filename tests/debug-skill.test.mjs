@@ -20,7 +20,8 @@ test('debug retains causal evidence, original-symptom verification, and repair b
   assert.match(source, /also verify the original scenario/);
   assert.match(source, /single clean run does not establish resolution/);
   assert.match(source, /Diagnosis alone does not authorize repairs/);
-  assert.match(source, /omitted checks remain unverified/);
+  assert.match(source, /If that is unavailable or prohibited, report the fix as unverified for the original symptom/);
+  assert.match(source, /do not equate[^\n]*an unexecuted check with a resolved failure/);
   for (const name of ['implement', 'test', 'check']) assert.ok(source.includes(`\`grimoire-${name}\``));
 });
 
