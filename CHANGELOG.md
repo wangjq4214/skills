@@ -5,6 +5,7 @@
 ### Patch Changes
 
 - Clarify only consequential decisions whose prerequisites are resolved. Delegate knowledge-store validation and consistency checks to grimoire-record while preserving grimoire-refine's turn-batched recording and pending-item gates.
+- Strengthen grimoire-test fault-detection guidance: derive expectations independently of the implementation, verify important regressions fail for the relevant fault and pass with corrected behavior, and challenge coverage-only confidence with targeted mutations, fault injection, or counterexamples. Preserve execution/write permissions and report unverified detection without requiring test-first ordering or a full mutation-testing campaign.
 - Restructure grimoire-loop into path selection (Direct / Structured / Orchestrated), execution contract, selected stages, and completion assessment. Keep simple tasks free of mandatory planning and preserve authorization, disabled-stage, human-gate, and evidence requirements in the main skill. Load detailed checkpoint, parallel handoff, and recovery guidance only when needed. Update static regressions and mark the revised routing scenarios as runtime-unverified.
 
 ## 0.5.0

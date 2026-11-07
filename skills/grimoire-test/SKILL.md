@@ -19,6 +19,14 @@ Prefer public outcomes, but allow focused internal assertions for characterizati
 
 For dependency or structure choices needing examples, read [patterns.md](./references/patterns.md) and [examples.md](./references/examples.md).
 
+## Fault-detection strength
+
+- Derive expected results from independent facts, specifications, or known-correct behavior, not by calling or duplicating the implementation under test. Characterization records observed behavior; it does not establish correctness.
+- For important regression tests, verify that the relevant fault makes the test fail for the intended reason and that the corrected behavior passes. Use the known-buggy version when practical; otherwise use a targeted mutation, fault injection, or another concrete counterexample. A setup or compilation failure is not evidence of detection.
+- Executed test code or line/branch coverage alone does not prove the target behavior was checked. When detection is uncertain, challenge the assertions with a relevant counterexample rather than adding coverage alone.
+
+Keep these checks within execution and write permissions; isolate and remove temporary faults without discarding existing changes. Report unverified detection and its limitation explicitly. Neither test-first ordering nor a full mutation-testing campaign is required.
+
 ## Execution and evidence
 
 When execution is enabled, run the narrowest useful command during iteration, then the broader affected suite when authorized and practical. Fix test defects only within write permissions; report product defects rather than silently changing intended behavior. Distinguish baseline failures, new failures, and unavailable infrastructure.
