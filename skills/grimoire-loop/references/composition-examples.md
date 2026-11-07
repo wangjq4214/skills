@@ -29,6 +29,4 @@ After explicit user invocation of loop, these scenarios illustrate the compositi
 | ADR implementation is complete; required manual verification is pending | Recommend Testing for an active ADR | No Completed status or overall acceptance before required evidence. |
 | A Superseded ADR still has code in the repository | Retain historical status | Code presence cannot reactivate the old decision. |
 
-## Resume walkthrough
-
-For a manual E2E checkpoint, hand off the build/version, environment, relevant scenarios, and feedback needed. End the turn with those stages pending. If the user reports one scenario passing and another failing, preserve the partial evidence; route the failure to fixes only when authorized. If feedback targets an older build, establish applicability before releasing the checkpoint. If the user instead explicitly cancels E2E, update the contract and retain the fact that E2E acceptance was not established.
+For manual E2E preparation, partial feedback, and version-bound resumption, see [checkpoints.md](./checkpoints.md).

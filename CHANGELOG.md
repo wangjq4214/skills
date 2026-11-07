@@ -1,5 +1,11 @@
 # skills
 
+## Unreleased
+
+### Patch Changes
+
+- Restructure grimoire-loop into path selection (Direct / Structured / Orchestrated), execution contract, selected stages, and completion assessment. Keep simple tasks free of mandatory planning and preserve authorization, disabled-stage, human-gate, and evidence requirements in the main skill. Load detailed checkpoint, parallel handoff, and recovery guidance only when needed. Update static regressions and mark the revised routing scenarios as runtime-unverified.
+
 ## 0.5.0
 
 ### Minor Changes

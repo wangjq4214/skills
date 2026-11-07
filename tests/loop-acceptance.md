@@ -55,3 +55,21 @@ SHA-256 provenance:
 Descriptions should select refine for a requested coordinated requirements discussion, loop for requested implementation/QA coordination, spec for a requirements-spec request, slice for execution/handoff tickets, and tidy for explicit document cleanup. Plain implementation does not automatically invoke loop; code cleanup does not select tidy. Invocation restrictions still apply.
 
 Explicit conversation-only planning must not create files. Staged work requiring recovery should retain useful planning. Disabled test execution must remain disabled even on the lightweight route. Refine batching and spec/ticket retirement cases are listed in [skill-invocation-scenarios.md](./skill-invocation-scenarios.md); those are not claimed as executed by this loop Eval.
+
+## Progressive-disclosure revision — runtime-unverified
+
+The historical runs above evaluated the recorded skill hash, not the current four-part layout. Static checks cover retained boundaries and reachable references; they do not establish reduced agent reasoning cost or correct conditional loading.
+
+Scenario reasoning for this revision:
+
+| Situation | Expected path and reference use |
+| --- | --- |
+| Simple fix or its paraphrase, inline, no handoff | Direct; implement and targeted verification, without planning or loading checkpoint/handoff/recovery references on the success path. |
+| Consequential multi-step approach, no coordination | Structured; selected specialist skills, not all orchestration references. Conversation-only planning still creates no files. |
+| Plan then wait for approval | Orchestrated with planning; load checkpoints before the gate, end the turn, and do not release implementation on automated success. Partial or stale feedback does not release unresolved work. |
+| Authorized parallel test authoring and review | Orchestrated; load handoffs and relevant QA templates, coordinate writes, and refresh dependent checks over the combined result. Do not infer a planning requirement. |
+| Failed check, single pass, no fixes | Load recovery; distinguish missing prerequisites from defects, report the stop, and do not retry or write a repair. |
+| Resume after files changed while waiting | Load handoffs and checkpoints; reconcile the current version and invalidate affected evidence before releasing authorized work. |
+| Disable all stages, or only review without writes | Contract overrides every path default; do not restore stages to fill a route. |
+
+Description-only check: explicit “coordinate implementation and QA”, “skip review and wait after tests”, and their paraphrases fit loop. Plain code implementation, standalone review, and drafting a plan do not automatically invoke it. The description and explicit-invocation restriction are unchanged. These are unexecuted scenarios, not new runtime passes.

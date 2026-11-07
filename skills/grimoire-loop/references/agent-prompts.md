@@ -4,7 +4,7 @@ Use these modules only when delegated QA is selected. Identify the assigned skil
 
 ## Shared handoff
 
-Prepend to each assignment and specialize the modules below to enabled responsibilities only. Composition policy and checkpoint behavior are defined in [../SKILL.md](../SKILL.md); pass their applicable execution contract to every delegate.
+Prepend to each assignment and specialize the modules below to enabled responsibilities only. Pass the execution contract from [../SKILL.md](../SKILL.md) to every delegate. Follow [handoffs.md](./handoffs.md) for scheduling; when a human gate applies, follow [checkpoints.md](./checkpoints.md).
 
 ```text
 Use {skill_name} for the assigned responsibility at {risk_level} depth. Load only relevant references. If it is unavailable, report that limitation and the fallback used.
@@ -43,11 +43,3 @@ Use grimoire-test for the selected test responsibilities {test_substages} coveri
 Reuse adequate existing coverage; do not add tests merely to create an artifact.
 Write only within {test_write_scope}. Report product defects rather than changing production behavior. Return actual commands/results, test changes, and pending human evidence for enabled downstream stages.
 ```
-
-## Delegation guidance
-
-- Combine enabled read-only dimensions when separate agents would duplicate exploration. Separate test-writing and read-only assignments with explicit permissions; only schedule enabled downstream assessments.
-- Split dimensions when independent perspectives materially increase coverage and delegation is authorized.
-- Supply bounded context plus paths for further inspection; do not omit the intent needed to judge the change.
-- Sequence dependent assignments and coordinate test writes before enabled downstream checks, or isolate writes and refresh affected enabled checks over the combined result.
-- The coordinator owns cross-stage status; a child's clean result is evidence for its assigned scope, not the whole change.

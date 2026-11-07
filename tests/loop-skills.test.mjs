@@ -15,7 +15,7 @@ test('loop selects a lightweight default without losing explicit planning', () =
   assert.match(source, /default to \*\*implement → targeted verification → report\*\*/);
   assert.match(source, /Do not invoke plan or create a Plan file, plan directory, or viewer merely because loop was selected/);
   assert.match(source, /Explicitly requested planning or artifacts still apply/);
-  assert.match(source, /When sequencing, recovery, coordination, or consequential approach decisions make a plan useful/);
+  assert.match(source, /when sequencing or consequential approach decisions make a plan useful/);
   assert.match(source, /Persist before production edits by default only on this route/);
   assert.match(source, /implement may perform targeted verification without a separate QA stage or report/);
   assert.doesNotMatch(source, /^Default: \*\*plan/m);
@@ -72,13 +72,19 @@ test('artifact transitions preserve history and distinguish pending verification
   assert.match(skill('check'), /coordinator owns shared artifact status/);
 });
 
-test('human checkpoints stop downstream work and bind resumption to current evidence', () => {
+test('human checkpoint authority stays in the main skill; resumption details are reachable', () => {
   const source = skill('loop');
+  assert.match(source, /stop before gated work/);
   assert.match(source, /end the turn/);
-  assert.match(source, /Do not substitute automated approval/);
-  assert.match(source, /launch downstream work/);
-  assert.match(source, /partial or ambiguous feedback leaves unresolved checkpoint work paused/);
-  assert.match(source, /Invalidate affected evidence if files changed while waiting/);
+  assert.match(source, /Automated success is not human approval/);
+  assert.match(source, /Add discretionary checkpoints only when authorized/);
+  assert.match(source, /\(\.\/references\/checkpoints\.md\), before reaching or releasing the gate/);
+  const checkpoints = reference('loop', 'checkpoints');
+  assert.match(checkpoints, /Do not substitute automated approval/);
+  assert.match(checkpoints, /launch downstream work/);
+  assert.match(checkpoints, /Independent work during a pause requires explicit user permission/);
+  assert.match(checkpoints, /partial or ambiguous feedback leaves unresolved checkpoint work paused/);
+  assert.match(checkpoints, /Invalidate affected evidence if files changed while waiting/);
 });
 
 test('conditional batch evidence remains reachable without fixing document structure', () => {
@@ -138,4 +144,33 @@ test('read-only review prohibits direct and command-induced file changes', () =>
   assert.match(source, /test caches, snapshots, and build output/);
   assert.match(source, /Use existing evidence and report verification gaps instead/);
   assert.match(skill('loop'), /Only review.*excludes other work stages/);
+});
+
+test('loop paths keep orchestration and conditional references optional', () => {
+  const source = skill('loop');
+  for (const path of ['Direct', 'Structured', 'Orchestrated']) {
+    assert.ok(source.includes(`**${path}:**`), path);
+  }
+  assert.match(source, /defaults, not mandatory stage bundles/);
+  assert.match(source, /Coordination alone does not require a plan, subagents, or all references/);
+  assert.match(source, /no contract artifact is required/);
+  assert.match(source, /Read references only for the selected situation/);
+  assert.match(source, /\(\.\/references\/handoffs\.md\), before dispatch or resumption/);
+  assert.match(source, /\(\.\/references\/recovery\.md\), before classifying failures or retrying/);
+});
+
+test('handoff and recovery references preserve coordination and stopping boundaries', () => {
+  const handoffs = reference('loop', 'handoffs');
+  assert.match(handoffs, /Handoffs do not authorize delegation, planning, persistence, or additional writes/);
+  assert.match(handoffs, /\(\.\/agent-prompts\.md\)/);
+  assert.match(handoffs, /Coordinate write ownership and sequence dependent assignments/);
+  assert.match(handoffs, /refresh affected enabled checks over the combined result/);
+  assert.match(handoffs, /A child's clean result establishes only its assigned scope/);
+  const recovery = reference('loop', 'recovery');
+  assert.match(recovery, /recovery never restores disabled work/);
+  assert.match(recovery, /Fix only with both fix and corresponding write permission/);
+  assert.match(recovery, /Resolve uncertainty only with authorized checks/);
+  assert.match(recovery, /honor single-pass\/user limits/);
+  assert.match(recovery, /Stop with a reason on nonconvergence/);
+  assert.match(recovery, /do not blindly replay writes or commands with side effects/);
 });

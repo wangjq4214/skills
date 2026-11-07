@@ -1,6 +1,6 @@
 # Format Detection
 
-Use during loop's Format and report step when the project's formatting approach is unclear. The permission and verification rules in [grimoire-loop](../SKILL.md) govern execution; this reference helps select tooling and scope.
+Use during selected formatting work when the project's formatting approach is unclear. The permission and verification rules in [grimoire-loop](../SKILL.md) govern execution; this reference helps select tooling and scope.
 
 ## Determine the project's convention
 
