@@ -1,6 +1,6 @@
 ---
 name: grimoire-check
-description: Use when asked whether an implementation fulfills the original request, acceptance criteria, spec, or ticket, including missing requirements despite passing tests. For defects and regressions in a diff, use grimoire-review.
+description: Use when asked whether an implementation satisfies user intent, the original request, a spec, ticket, or acceptance criteria, including missing requirements despite passing tests or work beyond the requested scope. For code defects, security, compatibility, or performance risks, use grimoire-review.
 ---
 
 Compare implementation with user intent and acceptance criteria, not literal adherence to a plan. Plans are design guidance; code and relevant execution evidence establish behavior. Tickets, specs, and applicable ADRs refine constraints.

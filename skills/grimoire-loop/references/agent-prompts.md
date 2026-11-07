@@ -2,6 +2,8 @@
 
 Use these modules only when delegated QA is selected. Identify the assigned skill by name; the child may not inherit the parent's loaded skills. Give enough source and repository access to verify claims, not only a diff excerpt.
 
+For a combined review + check assignment, name and load both skills, pass one shared handoff, and include both assignment modules below. Follow the joint path in [../SKILL.md](../SKILL.md): reuse source evidence and return one deduplicated result while retaining each axis's coverage and uncertainty.
+
 ## Shared handoff
 
 Prepend to each assignment and specialize the modules below to enabled responsibilities only. Pass the execution contract from [../SKILL.md](../SKILL.md) to every delegate. Follow [handoffs.md](./handoffs.md) for scheduling; when a human gate applies, follow [checkpoints.md](./checkpoints.md).

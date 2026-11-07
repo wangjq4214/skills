@@ -8,6 +8,11 @@ After explicit user invocation of loop, these scenarios illustrate the compositi
 | “Skip planning; implement directly from this ticket.” | Ticket supplies implementation context; other applicable defaults remain | No plan file is created or demanded by a delegate. |
 | “Plan first, but don't save a file.” | Keep the approach in conversation, then continue applicable defaults | Plan persistence is disabled independently of planning. |
 | “Only review this diff; don't change anything.” | Read-only review and requested results | No plan creation, implementation, test authoring, fixes, or writing formatter. “Only” excludes other work stages. |
+| “Check this small change for bugs and whether it meets my request.” | Load review + check inline; share the diff, original task, and evidence; return one result | Two axes do not require two agents or duplicate source reads. |
+| “Only check acceptance criteria; skip code review.” | Intent Check only | The joint path does not restore Code Risk. |
+| Both axes find the same broken required error path | One finding labeled for both axes, linked to the affected criterion | Count one blocker without losing criterion coverage. |
+| Code Risk finds no defects, but a required outcome lacks evidence | Keep Intent Check needs-verification in the combined result | A clean code review cannot establish overall acceptance. |
+| A high-risk change benefits from authorized independent reviewers | Reviewers use the same source snapshot; coordinator consolidates their results | Independent inspection may reread sources; after fixes, refresh affected checks rather than reuse stale verdicts. |
 | “No review or intent check.” | Other applicable defaults without either assessment skill | Neither responsibility is silently assigned to another agent. |
 | “Write tests, but don't run them.” | Test authoring without execution | Implementation verification and final verification do not run the excluded tests; test results remain unavailable. |
 | “No tests at all.” | Other enabled work without test design, authoring, or execution | No hidden test run through specialist defaults or finalization. |

@@ -42,6 +42,18 @@ For selected planning, reuse/revise adequate plans. Persist before production ed
 
 For local reversible work, implement may perform targeted verification without a separate QA stage or report. Select deeper enabled checks for integration, security, migration, concurrency, API, or architectural risks. Run final integrated verification only within its enabled scope. Format only after behavioral work stabilizes, when enabled and writes are authorized; verification-only formatting uses non-writing checks.
 
+### Joint review + check
+
+When both responsibilities are enabled for the same change and the contract permits grouping, default to one inline pass with both skills loaded. Read the complete diff and original task/sources once; share relevant code, tests, and execution evidence for that snapshot. Reuse actual source evidence, not just the implementer's summary; inspect additional consumers or requirements as either axis demands.
+
+Keep two assessments distinct:
+- **Code Risk — grimoire-review:** correctness, security, compatibility, performance, and other relevant regression risks.
+- **Intent Check — grimoire-check:** source-derived outcomes and constraints, including missing behavior and unauthorized extras even when tests pass.
+
+When reporting is enabled, return one consolidated result: deduplicate findings by root cause, retain both axis labels where applicable, and preserve criterion-to-evidence coverage and each axis's unresolved gaps. Count a shared blocker once. Assess acceptance once against the required evidence from both axes; no code findings does not establish intent satisfaction, and matched requirements do not establish code safety.
+
+Do not create two agents merely because two skills are selected. Use authorized parallel reviewers only when context size, risk, or the value of independent scrutiny justifies it. Share the same source snapshot and prior evidence, not predetermined verdicts; independent reviewers may reread sources. Keep separate stages when required by order or human gates, and never enable an excluded axis through this path.
+
 Read references only for the selected situation:
 - **Human checkpoint preparation or resumption:** [checkpoints.md](./references/checkpoints.md), before reaching or releasing the gate.
 - **Delegation, parallel work, or cross-session handoff:** [handoffs.md](./references/handoffs.md), before dispatch or resumption; it links QA assignment templates.
