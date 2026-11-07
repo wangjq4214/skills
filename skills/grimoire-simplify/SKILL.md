@@ -23,7 +23,9 @@ Only for a user-specified LOC target, fix the baseline inventory, counter/versio
 
 Trace entry → policy → state → effects. Find dead/duplicate paths, repeated policy, redundant state/conversions, routing, and forwarding chains. Use [candidate-guide.md](./references/candidate-guide.md) for retention and hidden contracts. Read [examples.md](./references/examples.md) when comparison would clarify a choice; use [large-scale-patterns.md](./references/large-scale-patterns.md) for broad refactoring.
 
-Prefer deletion, equivalent-state consolidation, or inlining valueless indirection. Rewrite a bounded private path when incremental edits preserve a confusing shape. Keep meaningful domain operations and necessary boundaries even with one caller/implementation. Helpers must reduce understanding cost or enforce a real boundary.
+Subtract before adding: try deletion, equivalent-state consolidation, or inlining valueless indirection before introducing a helper, option, or layer. Rewrite a bounded private path when incremental edits preserve a confusing shape.
+
+Favor deep modules: a small, coherent interface should encapsulate substantial implementation detail so callers need fewer concepts, configuration choices, or sequencing rules. Keep meaningful domain operations and necessary boundaries even with one caller/implementation. Remove pass-through layers only when they preserve no policy, invariant, or necessary boundary. Reject helpers that merely rename steps callers must still understand; fewer helpers are not inherently better.
 
 Deduplicate by root cause. Each unit includes affected callers/tests, owned scope, dependencies, preserved contracts, and expected complexity reduction. Set shared contracts before migrations; no display limit truncates the backlog.
 
@@ -35,11 +37,11 @@ Replace obsolete private paths completely, including unreachable adapters, state
 
 Run permitted baseline/changed-risk checks, consumers, and integration paths. Inspect guarantees tests may miss: authorization, error precedence, ordering, cleanup, transactions, concurrency, ownership, and sensitive performance. Repair or selectively undo regressions; unavailable checks remain unresolved, not passes.
 
-Compare before/after explanations and relevant structural evidence: duplicate implementations, nesting, responsibility concentration, cycles, and call/file hops. Retain changes only when they reduce understanding cost without hiding complexity; fewer lines or files alone prove nothing.
+Compare before/after explanations: which concepts, independent states, or caller obligations no longer need to be understood? Support this with relevant structural evidence: duplicate implementations, nesting, cycles, and call/file hops. Retain changes only when they reduce understanding cost across callers and implementation, not merely relocate complexity. LOC may stay flat or grow; fewer lines or files alone prove nothing.
 
 ## Rescan and finish
 
-Continue while actionable in-scope candidates remain. For comprehensive work, revisit all in-scope modules and cross-module seams after integration; bounded work rechecks changed paths and affected relationships, not unrelated modules. Reuse only hash-validated inspection. Decline stylistic/equivalent-complexity swaps, speculative generalization, or contract-breaking candidates with concrete retention reasons. Update navigation and refresh affected evidence in an existing map or flag it stale.
+Continue only while actionable in-scope candidates offer a concrete reduction in understanding cost, not merely more deletions. For comprehensive work, revisit all in-scope modules and cross-module seams after integration; bounded work rechecks changed paths and affected relationships, not unrelated modules. Reuse only hash-validated inspection. Decline stylistic/equivalent-complexity swaps, speculative generalization, or contract-breaking candidates with concrete retention reasons. Update navigation and refresh affected evidence in an existing map or flag it stale.
 
 Completion requires full requested coverage, no unresolved actionable candidates, behavior evidence, and all required gates. Safe candidates exhausted below a user-specified aspirational LOC target may still complete: disclose the shortfall and retention evidence. An explicitly required threshold remains binding. Do not stop merely at a target or force unsafe changes to reach it. Blocked checks or interruption require incomplete status and a next action.
 

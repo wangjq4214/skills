@@ -205,4 +205,6 @@ After:
 
 > Update the status and save its normalized value.
 
-If the explanation merely uses different nouns or hides steps behind a new name, the change has not reduced the understanding path. Diff size is not part of this test: a larger rewrite is preferable when it produces a materially shorter and more direct explanation.
+If the explanation merely uses different nouns or puts steps behind a new name while callers still need their details, the change has not reduced the understanding path. Diff size is not part of this test: a larger rewrite is preferable when it produces a materially shorter and more direct explanation.
+
+A change deleting 8% of production LOC can be sufficient when it removes redundant state and callers no longer coordinate internal steps. After requested coverage and verification, stop if further deletions only expose encapsulated details; do not pursue an unstated percentage. Conversely, a few extra lines can simplify a module when a coherent operation replaces caller-managed configuration and sequencing and reduces overall understanding cost across callers and implementation, even if some coordination complexity moves inside the module.
