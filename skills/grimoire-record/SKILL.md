@@ -13,7 +13,7 @@ Read existing relevant entries before writing. Resolve factual conflicts from ev
 
 Before qualifying writes, verify a knowledge store exists: an artifact-only `.grimoire/` is not initialization. If absent, report that `grimoire-init` is needed to establish CONTEXT/ADR; do not bootstrap it through recording. Create missing target files/directories only within authorized maintenance of an existing store. When writes are restricted, report qualifying pending items, not a persistence claim.
 
-Batch related settled updates within each user turn. Under `grimoire-refine`, process the coordinator's qualifying batch before a user-turn pause or artifact handoff; return changed paths, concrete skip reasons, or pending items. Reuse relevant reads unless sources changed or conflicts require rechecking. Do not independently settle decisions or launch clarification.
+Batch related settled updates within each user turn. Under `grimoire-refine`, process the coordinator's qualifying batch before a user-turn pause or artifact handoff; return the completion report below. Reuse relevant reads unless sources changed or conflicts require rechecking. Do not independently settle decisions or launch clarification.
 
 # Domain context
 
@@ -48,3 +48,5 @@ Preserve decision history:
 # Completion
 
 Read back entries or inspect diffs. Qualifying knowledge is recorded or has a concrete skip/block reason; context entries remain reachable and consistent, ADR metadata and history links are valid, and only authorized knowledge-store paths changed.
+
+Return changed paths and verification results, concrete skip reasons, and any pending items with blockers.

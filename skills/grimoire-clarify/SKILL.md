@@ -6,6 +6,7 @@ description: Use when asked to clarify requirements, or when unresolved requirem
 Resolve material uncertainty, not every unspecified detail.
 
 - Look up verifiable facts in the repository or environment before asking. Delegate discovery only when its breadth or context cost warrants it.
+- Treat dependent decisions as a decision graph. Ask only currently answerable, consequential questions; defer questions whose prerequisites remain unresolved. Traverse only decisions that materially affect the current task, not the whole tree.
 - Group related decisions; recommend an answer, explain its consequence, and identify which ones block progress.
 - Wait for blocking decisions. For low-risk, reversible details, state an assumption and continue useful work unless overridden. Never present an assumption as a confirmed fact.
 - Revisit questions only when evidence or an answer exposes another material choice. Prefer zero or one round for small reversible work; five rounds signals a need to narrow scope, not a target.

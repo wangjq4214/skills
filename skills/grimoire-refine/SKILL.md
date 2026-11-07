@@ -18,11 +18,11 @@ Check sources, permissions, and available project knowledge. Refinement authoriz
 
 Keep a compact handoff: intent, constraints, acceptance criteria, settled decisions, separately labeled assumptions, source paths, record results, unresolved questions, permissions, and route.
 
-Run clarify. Within each user turn, merge related settled updates into one pending batch; run record before yielding to the user or handing off to selected artifact work, not after every discussion delta. Record only project knowledge with lasting value for later tasks: domain meanings and consequential durable decisions/constraints. Exclude unresolved statements, unconfirmed assumptions, transient execution details, and already-recorded information. Keep ordinary task requirements in the handoff or selected artifacts, not context/ADRs.
+Run clarify. Within each user turn, collect related settled domain knowledge and consequential durable decisions/constraints into one pending batch. Keep ordinary task requirements in the handoff or selected artifacts; exclude unresolved statements and unconfirmed assumptions. Invoke record for a qualifying batch before yielding to the user or handing off to artifact work, not after each delta. If nothing qualifies, retain a concrete no-change reason without invoking record.
 
-Reuse the turn's relevant reads and record results unless sources changed or a conflict needs checking. Verify the combined update through changed entries or diffs, including affected indexes and ADR links. If nothing qualifies, retain a concrete no-change reason without invoking record merely to rewrite or recheck unchanged entries. For blocked writes, retain pending items; a chat summary is not persistence.
+Pass record the batch, sources, relevant prior reads/results, and write permissions. Delegate deduplication, index maintenance, and ADR consistency checks to record. Require changed paths and verification results, concrete skip reasons, and pending items with blockers; use this report to reconcile the batch rather than repeat its checks. Retain blocked or unverified items as pending; a chat summary is not persistence.
 
-At a user-turn pause, flush the qualifying batch and resume these responsibilities with the next answer. Leave discussion only when no blocking decision or qualifying record update remains pending. Explicitly read-only discussion ends with the handoff and unpersisted items, without artifact writes.
+Resume batching with the next user answer. Leave discussion only when no blocking decision or qualifying record update remains pending. Explicitly read-only discussion ends with the handoff and unpersisted items, without artifact writes.
 
 # Choose the endpoint
 

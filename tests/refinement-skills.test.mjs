@@ -37,12 +37,18 @@ test('refinement instructions have no broken local references', () => {
 });
 
 test('turn-batched durable recording and coordinated artifact boundaries remain explicit', () => {
-  assert.match(skill('refine'), /Within each user turn, merge related settled updates into one pending batch/);
-  assert.match(skill('refine'), /before yielding to the user or handing off to selected artifact work/);
-  assert.match(skill('refine'), /only project knowledge with lasting value for later tasks/);
-  assert.match(skill('refine'), /If nothing qualifies[\s\S]*without invoking record/);
-  assert.match(skill('refine'), /Reuse the turn's relevant reads and record results unless sources changed/);
-  assert.match(skill('record'), /process the coordinator's qualifying batch before a user-turn pause or artifact handoff/);
+  const refine = skill('refine');
+  const record = skill('record');
+  assert.match(refine, /Within each user turn, collect related settled domain knowledge and consequential durable decisions\/constraints into one pending batch/);
+  assert.match(refine, /Invoke record for a qualifying batch before yielding to the user or handing off to artifact work, not after each delta/);
+  assert.match(refine, /Keep ordinary task requirements in the handoff or selected artifacts; exclude unresolved statements and unconfirmed assumptions/);
+  assert.match(refine, /If nothing qualifies[^\n]*without invoking record/);
+  assert.match(refine, /Pass record the batch, sources, relevant prior reads\/results, and write permissions/);
+  assert.match(refine, /Delegate deduplication, index maintenance, and ADR consistency checks to record/);
+  assert.match(refine, /use this report to reconcile the batch rather than repeat its checks/);
+  assert.match(refine, /Retain blocked or unverified items as pending/);
+  assert.match(record, /Reuse relevant reads unless sources changed or conflicts require rechecking/);
+  assert.match(record, /process the coordinator's qualifying batch before a user-turn pause or artifact handoff/);
   for (const name of ['refine', 'record', 'clarify']) {
     assert.doesNotMatch(skill(name), /process each settled delta|After each resolved discussion delta|overrides standalone batching|live recording before the next round/);
   }
