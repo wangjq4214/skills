@@ -5,7 +5,9 @@ description: Use when asked to add test coverage, write regression or characteri
 
 Use the test boundary and structure that best expose the relevant failure, not a mandatory unit-test or AAA template.
 
-Under orchestration, the caller's execution contract governs test design, authoring, execution, write scope, checkpoints, reporting, and completion. Apply only enabled responsibilities. Standalone, design, write, and run relevant tests unless the request narrows that scope. Authoring-only work must not execute tests; execution-only work must not author or repair them.
+Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
+
+Standalone, design, write, and run relevant tests unless the request narrows that scope.
 
 ## Test selection
 
@@ -33,6 +35,6 @@ When execution is enabled, run the narrowest useful command during iteration, th
 
 Return test paths and covered contracts, source snapshot, commands/working directories/results, changed files, and skipped/unavailable checks when reporting is enabled. A command that found zero relevant tests is not a passing behavior check. Evidence from an older or different tree cannot establish current success without checking applicability.
 
-Complete when selected responsibilities have results or explicit limitations. Unrun tests are authored, not passing. Do not mark the whole change accepted or modify shared orchestration status.
+Complete when selected responsibilities have results or explicit limitations. Unrun tests are authored, not passing. Do not mark the whole change accepted.
 
 For refactoring or batch assignments, read [batch-context.md](./references/batch-context.md) for baseline characterization, integrated-tree validation, and collision avoidance.

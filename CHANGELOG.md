@@ -4,6 +4,7 @@
 
 ### Patch Changes
 
+- Standardize orchestration precedence across grimoire-implement, test, review, check, improve, simplify, map, plan, and debug with one shared sentence: the caller's execution contract takes precedence over each skill's standalone defaults. Remove redundant orchestration exceptions while retaining standalone defaults and task-specific boundaries. Runtime behavior remains unverified.
 - Strengthen grimoire-simplify's subtract-before-adding and deep-module guidance. Judge simplification by reduced concepts and overall understanding cost rather than deleted lines; preserve meaningful boundaries and stop when further deletions offer no cognitive benefit. Add examples where modest LOC reduction is sufficient or extra implementation code reduces caller burden. Runtime behavior remains unverified.
 - Add a joint review + check path to grimoire-loop that shares source evidence, preserves separate code-risk and intent assessments, and consolidates duplicate findings without requiring separate agents. Clarify the specialists' selection boundaries and preserve disabled stages, human gates, and evidence gaps. Add composition examples; runtime behavior remains unverified.
 - Clarify only consequential decisions whose prerequisites are resolved. Delegate knowledge-store validation and consistency checks to grimoire-record while preserving grimoire-refine's turn-batched recording and pending-item gates.

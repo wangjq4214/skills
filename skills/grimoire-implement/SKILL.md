@@ -6,7 +6,7 @@ description: Use when asked to add or change code to deliver a feature, satisfy 
 Implement the authorized behavior from the original source and available plan context; a persisted plan is not required.
 Standalone, do not start `grimoire-loop`; it requires explicit user invocation.
 
-Under orchestration, the caller's execution contract governs scope, writes, verification, checkpoints, reporting, and completion. Apply only enabled responsibilities; disabled verification stays omitted, not passed. The practices below are standalone defaults, not permission to restore excluded stages.
+Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
 
 ## Source and scope
 

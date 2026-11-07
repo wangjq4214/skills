@@ -5,7 +5,7 @@ description: Use when asked to simplify code, remove redundant state or branches
 
 Reduce the concepts, states, branches, indirections, and maintained code needed to explain existing behavior. Cosmetic movement is not simplification.
 
-Under orchestration, the caller's execution contract governs scope, writes, verification, persistence, reporting, and completion. Apply only enabled responsibilities; use its baseline and unit criteria, return results, and do not overwrite shared maps, reports, or acceptance state. Standalone defaults apply only where unspecified. Explicit no-write requests create no artifacts.
+Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
 
 ## Authorization and baseline
 

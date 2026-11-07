@@ -5,7 +5,7 @@ description: Use when asked to assess architecture or improve responsibility bou
 
 Improve ownership, dependency direction, and how directly a reader can explain behavior—not merely file size.
 
-Under orchestration, the caller's execution contract governs scope, writes, verification, persistence, reporting, and completion. Apply only enabled responsibilities; return findings/results rather than overwrite shared ledgers, maps, or reports. Standalone defaults below apply only where unspecified. Explicit no-write requests create no artifacts.
+Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
 
 ## Scope and discovery
 

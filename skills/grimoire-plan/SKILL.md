@@ -7,9 +7,9 @@ Plan the implementation approach; do not implement production code or treat a sa
 
 ## Invocation and permissions
 
-Under orchestration, the caller's execution contract governs inputs, persistence, checkpoints, reporting, and completion. Apply only enabled responsibilities; do not restore excluded work through this skill's defaults.
+Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
 
-Standalone, save the plan by default and end with the handoff. If persistence is disabled, keep the approach in conversation: do not create directories, files, or a viewer. Under loop, return control without adding an approval gate.
+Standalone, save the plan by default and end with the handoff. If persistence is disabled, keep the approach in conversation: do not create directories, files, or a viewer.
 
 ## Source and destination
 

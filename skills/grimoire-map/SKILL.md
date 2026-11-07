@@ -5,7 +5,9 @@ description: Use when asked where behavior lives, which module owns state, how r
 
 Make repository behavior paths navigable through source-backed observations, not an invented architecture. Do not modify production code or prescribe a redesign; a map is not proof of behavior.
 
-Under orchestration, the caller's execution contract governs scope, writes, persistence, reporting, and completion. Apply only enabled responsibilities. Explicit no-write requests return in-memory observations without creating map files. Standalone, persist `.grimoire/map/index.json` and supporting shards; no other skill is required.
+Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
+
+Standalone, persist `.grimoire/map/index.json` and supporting shards; no other skill is required.
 
 ## Inventory and inspect
 

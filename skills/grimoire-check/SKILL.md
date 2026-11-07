@@ -5,7 +5,9 @@ description: Use when asked whether an implementation satisfies user intent, the
 
 Compare implementation with user intent and acceptance criteria, not literal adherence to a plan. Plans are design guidance; code and relevant execution evidence establish behavior. Tickets, specs, and applicable ADRs refine constraints.
 
-Under orchestration, the caller's execution contract governs comparison scope, verification, writes, checkpoints, reporting, and completion. Apply only enabled responsibilities. The coordinator owns shared artifact status: return justified transitions instead of writing shared artifacts. Explicit read-only requests prohibit status writes in any mode. Standalone, justified status updates are allowed unless excluded; fix code only when implementation is also authorized.
+Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
+
+Standalone, justified status updates are allowed unless excluded; fix code only when implementation is also authorized.
 
 ## Compare outcomes
 

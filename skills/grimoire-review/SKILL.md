@@ -5,7 +5,9 @@ description: Use when asked to review a diff, pull request, or code changes for 
 
 Review actual changes and relevant consumers, not just worker summaries. Include deletions and untracked files. For high-risk changes, read original requirements and the diff independently before using the implementer's summary; missing sources remain evidence gaps. Ask only when competing interpretations materially change the verdict. A second reviewer is optional based on risk and cost, not a substitute for independent evidence.
 
-Under orchestration, the caller's execution contract governs scope, permitted verification, writes, checkpoints, reporting, and completion. Apply only enabled responsibilities; do not restore excluded checks. Standalone review is read-only unless the user separately authorizes fixes.
+Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
+
+Standalone review is read-only unless the user separately authorizes fixes.
 For read-only work, do not write reports or status, apply fixes, or run commands that may generate files (including test caches, snapshots, and build output). Use existing evidence and report verification gaps instead.
 
 ## Evidence threshold
@@ -29,4 +31,4 @@ For each finding give location, evidence, impact, recommendation, severity, and 
 
 Return a concise summary with confirmed blocker count, unresolved verification, suggestions, executed checks, and inspected/partial/unread coverage when reporting is enabled. No findings in inspected code is not a clean review of unread code. Complete when the assigned scope is assessed or its remaining coverage/evidence gaps are explicit.
 
-For large, urgent, disputed, or unfamiliar-domain reviews, consult [review-patterns.md](./references/review-patterns.md). For refactoring or batch assignments, read [batch-context.md](./references/batch-context.md) for snapshot tracking and integrated cross-unit risks. Under orchestration, return findings rather than mutate shared status.
+For large, urgent, disputed, or unfamiliar-domain reviews, consult [review-patterns.md](./references/review-patterns.md). For refactoring or batch assignments, read [batch-context.md](./references/batch-context.md) for snapshot tracking and integrated cross-unit risks.

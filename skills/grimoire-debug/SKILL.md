@@ -27,7 +27,9 @@ If reproduction or instrumentation is unavailable, use the available code/log ev
 
 ## Repair boundary and verification
 
-Diagnosis alone does not authorize repairs. For authorized code fixes, load and apply `grimoire-implement`; use `grimoire-test` for test design, execution, and durable regression protection, and `grimoire-check` to judge whether the original problem and requirements are resolved. The same agent may continue inline: no mandatory handoff or full pipeline. Do not start `grimoire-loop` without explicit user invocation. Under orchestration, honor the caller's write and execution limits; omitted checks remain unverified.
+Diagnosis alone does not authorize repairs. For authorized code fixes, load and apply `grimoire-implement`; use `grimoire-test` for test design, execution, and durable regression protection, and `grimoire-check` to judge whether the original problem and requirements are resolved. The same agent may continue inline: no mandatory handoff or full pipeline. Do not start `grimoire-loop` without explicit user invocation.
+
+Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
 
 TDD is not required. Existing tests, temporary reproduction scripts, logs, profiler output, and real program runs are valid evidence. Add durable regression tests when recurrence risk warrants them, not merely to satisfy a workflow gate.
 
