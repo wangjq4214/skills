@@ -173,14 +173,37 @@ test('refactoring children inherit no-write and persistence restrictions', () =>
   assert.match(source, /Implementation, numeric achievement, and dry passes are not audit gates/);
 });
 
-test('refactor retains distinct-lens convergence and integrated acceptance', () => {
+test('refactor uses risk-driven rechecks without weakening integrated acceptance', () => {
   const source = read(skillPath('refactor'));
-  assert.match(source, /two consecutive full-scope discovery passes with different lenses and no new actionable findings/);
-  assert.match(source, /Only comprehensive refactoring requires two consecutive/);
+  assert.match(source, /a first full-scope recheck is mandatory after the planned backlog is integrated/);
+  assert.match(source, /Require a second full-scope pass with different lenses if the first finds actionable issues or cross-module risk is high/);
+  assert.match(source, /Record the evidence for requiring or skipping that pass/);
+  assert.match(source, /Resolve findings and recheck affected paths and seams after fixes/);
+  assert.match(source, /Changes invalidate affected evidence, not a fixed clean-pass count/);
   assert.match(source, /For bounded work,[^\n]*do not rescan unrelated modules or require two full-scope passes/);
-  assert.match(source, /A code change resets the count/);
+  assert.match(source, /full requested coverage, no unresolved actionable work/);
+  assert.doesNotMatch(source, /two consecutive full-scope|A code change resets the count/);
+  const coordination = read('skills/grimoire-refactor/references/coordination.md');
+  assert.match(coordination, /recheck records .*rationale for further passes/);
+  assert.doesNotMatch(coordination, /dry-pass count/);
   assert.match(source, /conflict-free merging and worker summaries do not establish acceptance/);
   assert.match(source, /unavailable required checks remain unresolved/);
+});
+
+test('improve ranks maintenance friction without treating hotspots as defects', () => {
+  const source = read(skillPath('improve'));
+  assert.match(source, /When no scope is specified, start discovery with recent Git change hotspots/);
+  assert.match(source, /otherwise keep history analysis within the requested scope/);
+  assert.match(source, /not as proof of defects or a substitute for requested coverage/);
+  assert.match(source, /If history is absent or shallow, state the limitation/);
+  const dimensions = read('skills/grimoire-improve/references/dimensions.md');
+  for (const lens of ['Change frequency', 'Change coupling', 'Navigation cost', 'State ownership', 'Testability']) {
+    assert.ok(dimensions.includes(`| ${lens}`), lens);
+  }
+  assert.match(dimensions, /Prioritize frequent changes .*maintenance friction/);
+  assert.match(dimensions, /Sharing a commit does not establish one change driver/);
+  assert.match(dimensions, /one clear authoritative owner/);
+  assert.match(dimensions, /verified through stable boundaries/);
 });
 
 test('scan costs follow task scope without weakening full-scope coverage', () => {

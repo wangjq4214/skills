@@ -1,6 +1,6 @@
 ---
 name: grimoire-improve
-description: Use when asked to assess or improve responsibility boundaries, dependency direction, or tangled state ownership in a module or across modules while preserving behavior. For redundant code within existing boundaries, use grimoire-simplify.
+description: Use when asked to assess architecture or improve responsibility boundaries, dependency direction, or tangled state ownership in a module or across modules while preserving behavior. For redundant code within existing boundaries, use grimoire-simplify.
 ---
 
 Improve ownership, dependency direction, and how directly a reader can explain behavior—not merely file size.
@@ -11,7 +11,7 @@ Under orchestration, the caller's execution contract governs scope, writes, veri
 
 Default to audit mode. Implement only when authorized; comprehensive implementation already authorizes in-scope internal restructuring without per-finding approval. Preserve observable behavior and public contracts. Ask for material scope expansion, contract changes, or irreversible actions.
 
-Start with user-reported pain points and scoped Git history before deep inspection: look for repeated edits, fixes, and modules changed together over a stated revision/time window. Inspect representative diffs; discount generated, formatting-only, and bulk-migration churn. Use hotspots to order investigation, not as proof of defects or a substitute for requested coverage. If history is absent or shallow, state the limitation and prioritize user pain and source-level coupling.
+When no scope is specified, start discovery with recent Git change hotspots; otherwise keep history analysis within the requested scope. Combine user-reported pain points with scoped Git history before deep inspection: look for repeated edits, fixes, and modules changed together over a stated revision/time window. Inspect representative diffs; discount generated, formatting-only, and bulk-migration churn. Use hotspots to order investigation, not as proof of defects or a substitute for requested coverage. If history is absent or shallow, state the limitation and prioritize user pain and source-level coupling.
 
 Read hotspot code and relevant callers, configuration, state ownership, and tests, then expand through affected dependencies and remaining requested scope. Record scope, source revision/dirty state, contracts, and baseline checks when implementing. Optional map data accelerates navigation, not proof; verify source claims.
 
