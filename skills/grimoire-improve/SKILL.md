@@ -15,9 +15,11 @@ When no scope is specified, start discovery with recent Git change hotspots; oth
 
 Read hotspot code and relevant callers, configuration, state ownership, and tests, then expand through affected dependencies and remaining requested scope. Record scope, source revision/dirty state, contracts, and baseline checks when implementing. Optional map data accelerates navigation, not proof; verify source claims.
 
-For broad work, inventory all first-party modules and track file/module coverage, evidence, findings, dependencies, dispositions, and next action. Persist `.grimoire/improve-state.json` only when allowed and not using a coordinator's ledger. Search hits are not inspection; expose unread, excluded, and blocked regions.
+Own structural findings, recommendations, and analysis coverage; map owns reusable source evidence and navigation. For broad work, account for every in-scope first-party module, but reference the map inventory and source relationships rather than copying them into an improvement ledger. Search hits are not inspection; expose unread, excluded, and blocked regions.
 
-Use [dimensions.md](./references/dimensions.md) to examine within- and cross-module relationships. Record finding ID, locations, evidence, affected contract, impact, confidence, cost, and consumers. Names, size, or implementation counts alone are not findings.
+For structured handoffs or resumable persistence, read the shared [coordination contract v1](../grimoire-map/references/coordination-contract.md). Publish owner analysis and check records; refactor references them rather than taking ownership. Standalone work may supply source evidence inline in the same format without requiring another skill. Small tasks need no ledger; persistence remains permission-gated.
+
+Use [dimensions.md](./references/dimensions.md) to examine within- and cross-module relationships. Capture root cause, affected contract, impact, confidence, cost, and consumers with source evidence; use the shared finding shape when exchanging records. Names, size, or implementation counts alone are not findings.
 
 ## Design and execution
 

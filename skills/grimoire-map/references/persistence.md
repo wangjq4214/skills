@@ -18,7 +18,7 @@ Snapshot IDs identify scans, not just commits; dirty trees at the same HEAD may 
 
 Inspection and assignment are independent. Count every included file once as inspected, inventoried-only, partial, or blocked, and separately count null module IDs as unclassified. Module coverage is inspected only when all assigned files are inspected, blocked when all are blocked, inventoried-only when all are inventoried-only, and partial otherwise (including empty modules). Index coverage covers the persisted scope; requestedRoots identifies the attempted refresh.
 
-Freshness is current, stale, or unknown, independent of inspection. Current inventory-only records are not inspected. Empty observation arrays do not prove absence; candidate test commands do not prove execution. Execution results separately need snapshot, exit status, and output location.
+Freshness is current, stale, or unknown, independent of inspection. Current inventory-only records are not inspected. Empty observation arrays do not prove absence; candidate test commands do not prove execution. Actual results belong to their executor, using the shared [coordination contract](./coordination-contract.md) for handoffs—not to the map's navigation shards.
 
 ## Incremental updates
 
@@ -31,7 +31,7 @@ Freshness is current, stale, or unknown, independent of inspection. Current inve
 
 One coordinator publishes. Write new immutable shards, parse and validate them against wire-format, then atomically replace the index where supported. Check paths, IDs, counts, hashes, and provenance before publication; never reference missing shards. If atomic replacement is unavailable, retain the previous valid index and a recoverable temporary file.
 
-Workers return branch-bound observations; revalidate against the integrated tree. Clean orphan snapshots only after checking index references; never remove the last valid snapshot during an update.
+Workers return branch-bound observations; revalidate against the integrated tree. For coordinated use, retain the contract's immutable index copy as well as its referenced shards. Clean orphan snapshots only after checking map, analysis, and active-run references; never remove a referenced baseline or the last valid snapshot during an update.
 
 On corruption, retain the damaged artifact and rebuild separately from source. Reject unsupported versions without overwriting/downgrading them; use separate versioned output. On resume, compare fingerprints and reuse only valid evidence. Preserve unknown keys when updating.
 

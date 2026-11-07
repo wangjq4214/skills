@@ -1,13 +1,12 @@
 # Coordination and integration
 
-## Persistent run state
+## Run state
 
-When persistence is allowed, store `.grimoire/refactor/<run-id>/state.json` with `schemaVersion: 1`, repository identity, requested scope, authorization, immutable baseline revision/fingerprint, measurement configuration, acceptance criteria, map snapshot reference, discovery coverage, findings, work units, integration head/fingerprint, validation records, recheck records (snapshot, scope, lenses, findings, cross-module risks, and rationale for further passes), and next action. Large findings/results may live in referenced per-unit files. One coordinator writes shared state; publish valid JSON safely and retain the prior valid state on interruption.
-Record the execution contract (allowed writes, persistence, checks, and reporting) and each numeric target's value, scope, source, and aspirational/required status. All artifact writes below are conditional on these permissions. Without persistence, return equivalent state and next actions inline; do not create artifacts.
+Use the shared [coordination contract v1](../../grimoire-map/references/coordination-contract.md) for source/evidence references, owner analyses, checks, and run schema v2. It is the only schema authority; do not recreate its records here. When allowed, store coordination state at `.grimoire/refactor/<run-id>/state.json`; keep immutable owner result editions in authorized artifact paths and reference them. Without persistence, use inline artifacts and return the next action without creating files.
 
-Each finding has a stable ID, root cause, evidence, locations, affected contract, and disposition: pending, planned, implemented, retained-with-reason, out-of-scope, or blocked. Deduplicate against all previously evaluated findings, not just accepted ones. Reopen a dismissed finding only for new evidence or changed source.
+The coordinator owns permissions, deduplication links, execution dependencies, integration progress, acceptance, and recheck records (snapshot, scope, requested lenses, owner result references, cross-module risks, and rationale for further passes). Owners retain findings and dispositions. Reports are derived views, not another writable ledger.
 
-Each work unit records ID, objective, finding IDs, owned write paths, read dependencies, upstream unit IDs, contract, shared interface decisions, validation commands, expected benefit, base revision/fingerprint, branch/worktree, result paths, and status:
+Work-unit status transitions:
 
 ```text
 planned → ready → running → verified → integrated → accepted
@@ -20,23 +19,15 @@ planned → ready → running → verified → integrated → accepted
 
 Inputs to a worker:
 
-- mode: analyze or implement; selected responsible skill;
-- target, objective, acceptance criteria, targets with source and aspirational/required status, preserved behavior;
-- base revision plus relevant dirty-source fingerprint;
-- owned write paths, read-only neighbors, persistence and reporting permissions;
-- upstream contracts and decisions, relevant map shards;
-- permitted validation commands, working directory, baseline failures;
-- output location and integration dependencies.
+- Contract version and responsible skill, mode, scope, objective, and preserved behavior;
+- acceptance criteria and targets with source and aspirational/required status;
+- pinned source, proposal, and finding references; upstream contracts and decisions;
+- owned writes, read-only neighbors, persistence/reporting permissions, and output destination;
+- permitted checks, working directory, baseline check references, and integration dependencies.
 
-Outputs:
+Outputs use the shared `UnitResult` shape with referenced owner analyses and checks. Return newly observed source facts to map and recommendations to their analysis owner; do not write a second findings ledger into run state. Check executors produce their own results; an adapter may serialize an existing result but must preserve its provenance and classification.
 
-- unit ID, actual base/head or file fingerprints, branch/commit where applicable;
-- actual changed paths, summary of deleted/flattened/consolidated code;
-- findings/evidence, contracts preserved, external or dependency changes;
-- commands, working directories, exit statuses, log paths, checks not run;
-- remaining risks, blockers, and prerequisite changes needed.
-
-Markdown or JSON is acceptable if the fields are explicit. Standalone skills may return a concise response rather than create a run ledger. Workers never fabricate metrics, self-approve a public-contract change, or mark shared acceptance complete.
+The coordinator supplies the shared contract to delegates and resolves all returned references before using them. Standalone skills may return concise prose instead of versioned records. Workers never fabricate metrics, self-approve public-contract changes, or mark shared acceptance complete.
 
 ## Worktree execution
 
@@ -46,7 +37,7 @@ Markdown or JSON is acceptable if the fields are explicit. Standalone skills may
 4. Workers run focused checks and preserve their diff on a reachable branch/commit or durable patch before temporary worktree cleanup. A host may remove a worktree automatically; capture its returned branch and inspect the actual diff rather than the summary.
 5. Integrate one dependency-ready unit at a time into a designated integration tree using project-approved merge or cherry-pick practice. Do not force-push, discard unrelated commits, or choose conflict sides mechanically. Repair semantic conflicts against agreed contracts.
 6. Run affected consumer and integration checks on the combined tree, even after a conflict-free merge. Rebase/recreate queued dependent work against the new base and rerun affected checks; independent running work can finish but must be reconciled before acceptance.
-7. Update the ledger and refresh map evidence after integration. Publish shared map snapshots from the integrated tree, not worker branches. Delete temporary work only after its result is preserved and verified, following host/project policy.
+7. Update coordination references after integration. Only integrated-tree evidence advances the shared current map index; retain branch-scoped immutable source artifacts under the shared contract before worktree cleanup. Delete temporary work only after its diff and evidence are preserved and verified, following host/project policy.
 
 Read-only discovery can overlap freely. Shared contracts should settle before parallel consumer migration. Worktree isolation prevents file races, not semantic conflicts. If Git, worktrees, or subagents are unavailable, execute these units serially; do not make tooling availability a pretext to skip coverage or validation.
 

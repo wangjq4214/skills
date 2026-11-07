@@ -7,7 +7,7 @@ Make repository behavior paths navigable through source-backed observations, not
 
 Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
 
-Standalone, persist `.grimoire/map/index.json` and supporting shards; no other skill is required.
+Standalone, persist `.grimoire/map/index.json` and supporting shards; no other skill is required. Own navigation, source snapshots, inventory/inspection coverage, source dependency edges, and evidence—not improvement findings or acceptance. For cross-skill handoffs, read the shared [coordination contract v1](./references/coordination-contract.md).
 
 ## Inventory and inspect
 

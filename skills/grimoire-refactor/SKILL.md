@@ -4,7 +4,7 @@ description: Use when explicitly invoked to coordinate a subsystem or repository
 disable-model-invocation: true
 ---
 
-Own coordination and acceptance; use `grimoire-map`, `grimoire-improve`, `grimoire-simplify`, `grimoire-test`, `grimoire-review`, and `grimoire-check` for their respective responsibilities. Load each when used. Do not nest `grimoire-loop`. If a skill is unavailable, disclose it and use equivalent steps only when permitted; never claim it ran.
+Own only cross-stage coordination and final acceptance. Map owns navigation and source evidence; improve/simplify own their findings and recommendations; check executors own verification results. Reference those records rather than creating parallel stores. Use `grimoire-map`, `grimoire-improve`, `grimoire-simplify`, `grimoire-test`, `grimoire-review`, and `grimoire-check` for their respective responsibilities. Load each when used. Do not nest `grimoire-loop`. If a skill is unavailable, disclose it and use equivalent steps only when permitted; never claim it ran.
 
 ## Execution contract
 
@@ -14,17 +14,17 @@ Comprehensive implementation authorization covers reversible in-scope internal r
 
 ## 1. Establish baseline
 
-Record source revision and dirty-tree fingerprint, user changes to preserve, baseline checks, and acceptance criteria. Optimize understanding cost; there is no default LOC reduction target. Use LOC as a target only when the user explicitly requests a quantified compression goal. Only an explicitly required numeric threshold is a hard gate; targets are global, never worker quotas.
+Use map to establish the scoped baseline source reference before publishing run state; record user changes to preserve, baseline check references, and acceptance criteria. Optimize understanding cost; there is no default LOC reduction target. Use LOC as a target only when the user explicitly requests a quantified compression goal. Only an explicitly required numeric threshold is a hard gate; targets are global, never worker quotas.
 
 Use [measurement.md](./references/measurement.md) when evaluating a user-specified LOC target; otherwise use relevant structural evidence without requiring a LOC baseline. Separate user targets' aspirational/required status from behavior and structural gates.
 
-When persistence is allowed, create `.grimoire/refactor/<run-id>/state.json` using [coordination.md](./references/coordination.md). Revalidate prior evidence on resume.
+Read the shared [coordination contract v1](../grimoire-map/references/coordination-contract.md) for owner records and references, and [coordination.md](./references/coordination.md) for handoffs and integration. When persistence is allowed, create `.grimoire/refactor/<run-id>/state.json` using run schema v2. Revalidate referenced owner evidence on resume; without persistence, use the same contract with inline artifacts.
 
 ## 2. Discover and synthesize
 
-Use `grimoire-map` for scoped navigation, then `grimoire-improve` and `grimoire-simplify` in analyze-only mode within the same scope. Examine responsibility/state, control flow, duplication/dead code, abstractions/dependencies, and cross-module reuse where relevant. Omit irrelevant lenses with reasons, not unexamined in-scope subsystems. For subsystem/repository scans, require file-level coverage; function-level observations may leave the containing file partial. Search hits are not inspection. Keep unread/blocked regions visible and retain module results without loading the entire repository into one context.
+Extend the baseline map with scoped navigation, then use `grimoire-improve` and `grimoire-simplify` in analyze-only mode within the same scope. Have the analysis owners examine responsibility/state, control flow, duplication/dead code, abstractions/dependencies, and cross-module reuse where relevant. Omit irrelevant lenses with reasons, not unexamined in-scope subsystems. For subsystem/repository scans, require file-level coverage; function-level observations may leave the containing file partial. Search hits are not inspection. Keep unread/blocked regions visible and retain module results without loading the entire repository into one context.
 
-Deduplicate findings by root cause and affected contract. Validate deletions against callers, exports, registrations, tests, and configuration. Every retained finding needs a dependency-ordered work unit or evidence-backed disposition. Units specify write ownership, read dependencies, preserved contracts, checks, and expected benefit. Set shared-helper contracts before consumer migrations; serialize cycles and shared writes or group them atomically. Report emphasis must not cap the backlog.
+Link duplicate owner findings by root cause and affected contract; retain their original IDs and evidence. Ask the responsible owner to validate deletions against callers, exports, registrations, tests, and configuration. Every retained finding needs a dependency-ordered work unit or owner-recorded evidence-backed disposition. Compose units from owner proposals; resolve shared-helper contracts before consumer migrations. Serialize cycles and shared writes or group them atomically. Report emphasis must not cap the backlog.
 
 **Audit stop:** return findings, coverage, and a proposed dependency plan here. Complete audit coverage requires inspecting the requested scope; unread/blocked regions mean a partial audit. Benefits are estimates. Implementation, numeric achievement, and dry passes are not audit gates.
 
@@ -38,7 +38,7 @@ Follow the coordination reference for dirty-source snapshots, isolated writers, 
 
 Run `grimoire-review` on the integrated diff and cross-module effects; run `grimoire-check` against acceptance criteria independently of review readiness. Run permitted affected build/type/lint/integration tests, using `grimoire-test` when behavior evidence is missing. Preserve their classifications; unavailable required checks remain unresolved.
 
-Refresh affected map evidence and relevant metrics. For bounded work, recheck changed paths and affected relationships for obsolete code and new complexity; do not rescan unrelated modules or require two full-scope passes.
+Have map refresh affected source evidence and the analysis owners refresh relevant metrics and recheck findings. For bounded work, recheck changed paths and affected relationships for obsolete code and new complexity; do not rescan unrelated modules or require two full-scope passes.
 
 For comprehensive refactoring, a first full-scope recheck is mandatory after the planned backlog is integrated: inspect obsolete paths, duplicate helpers, concentrated responsibilities, deep routing, and disconnected documentation. Route actionable findings back to synthesis. Require a second full-scope pass with different lenses if the first finds actionable issues or cross-module risk is high, such as shared state/lifecycle changes across several consumers or weak integration evidence. Record the evidence for requiring or skipping that pass. Resolve findings and recheck affected paths and seams after fixes; repeat broader inspection when new findings or unresolved cross-module risks warrant it. Changes invalidate affected evidence, not a fixed clean-pass count. Reuse hash-validated coverage but revisit cross-module effects.
 

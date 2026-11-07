@@ -13,7 +13,9 @@ Explicit simplification requests authorize behavior-preserving internal rewrites
 
 No map or other skill is required. Revalidate supplied map evidence used for the task against source. Match inspection to scope: a function and necessary callers/contracts/tests; a module's internals and adjacent dependencies/consumers; every module and seam in a specified subsystem; or the full first-party repository for deep whole-repository work. Inspect relevant registrations/configuration; expand only for affected contracts or uncertain reachability. Record source revision/dirty state, contracts, boundaries, validation commands, and baseline results. Before risky poorly tested rewrites, add characterization coverage when authorized.
 
-For broad work, inventory every in-scope first-party module and cross-module seam. Track coverage, candidate evidence/dispositions, dependencies, results, and next action; search hits are not inspection. Persist `.grimoire/simplify-state.json` only when allowed and not using a coordinator's ledger.
+Own simplification findings, recommendations, retention reasons, and analysis coverage; map owns reusable source evidence and navigation. For broad work, account for every in-scope first-party module and cross-module seam; reference the map inventory and source relationships rather than maintaining a competing ledger. Search hits are not inspection.
+
+For structured handoffs or resumable persistence, read the shared [coordination contract v1](../grimoire-map/references/coordination-contract.md). Publish owner analysis and check records; refactor owns scheduling and final acceptance, not these findings. Standalone work can supply source evidence inline in the same format. Small tasks need no ledger; persistence remains permission-gated.
 
 Optimize understanding cost, not line count. There is no default LOC reduction target; use LOC as a target only when the user explicitly requests a quantified compression goal. Only an explicitly required numeric threshold is a hard gate. Under orchestration, user targets are global, never per-worker quotas.
 
