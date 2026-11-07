@@ -14,7 +14,7 @@ User restrictions override the default workflow. Pass every specialist the scope
 
 # Discussion and turn-batched recording
 
-Check sources, permissions, and available project knowledge. Refinement authorizes automatic knowledge recording unless restricted. Use `grimoire-init` when establishing the CONTEXT/ADR system is needed; missing `.grimoire/` alone does not block spec/ticket creation. Keep qualifying record updates pending if initialization or writes are blocked; the recording and completion gates still apply. When no qualifying update is pending, selected artifact skills may create only their required directories within permission.
+Check sources, permissions, and available project knowledge. Refinement authorizes automatic knowledge recording unless restricted. Use `grimoire-init` when establishing the CONTEXT/ADR system is needed; missing `.grimoire/` alone does not block spec/ticket creation. Keep qualifying record updates pending if initialization or writes are blocked. Selected artifact skills may create only their required directories within permission, even while recording remains pending.
 
 Keep a compact handoff: intent, constraints, acceptance criteria, settled decisions, separately labeled assumptions, source paths, record results, unresolved questions, permissions, and route.
 
@@ -22,7 +22,7 @@ Run clarify. Within each user turn, collect related settled domain knowledge and
 
 Pass record the batch, sources, relevant prior reads/results, and write permissions. Delegate deduplication, index maintenance, and ADR consistency checks to record. Require changed paths and verification results, concrete skip reasons, and pending items with blockers; use this report to reconcile the batch rather than repeat its checks. Retain blocked or unverified items as pending; a chat summary is not persistence.
 
-Resume batching with the next user answer. Leave discussion only when no blocking decision or qualifying record update remains pending. Explicitly read-only discussion ends with the handoff and unpersisted items, without artifact writes.
+Resume batching with the next user answer. Leave discussion once blocking decisions are resolved; pending recording alone does not block artifact work unless the user or caller explicitly requires knowledge persistence. Explicitly read-only discussion ends with the handoff and unpersisted items, without artifact writes.
 
 # Choose the endpoint
 
@@ -43,13 +43,13 @@ Pass this section's instructions, not merely a link, to spec/slice together with
 
 - Consume settled requirements and established solution choices. Organize, express, decompose, and sequence them, but do not invent or revise domain facts, requirements, constraints, acceptance semantics, architecture, or unconfirmed assumptions.
 - Trace meaningful assertions and choices to the handoff or sources. Formatting and execution ordering do not authorize filling semantic gaps.
-- Suspend on a needed new fact or decision and return the gap to refine. Resolve it through clarify and flush any new qualifying batch before resuming; no downstream invention followed by retrospective recording. Do not re-record already processed updates.
+- Suspend on a needed new fact or decision and return the gap to refine. Resolve it through clarify and attempt recording of any new qualifying batch before resuming; keep failed persistence Pending without blocking resumption unless the user or caller explicitly requires it. No downstream invention followed by retrospective recording. Do not re-record already processed updates.
 - These constraints override standalone decision, assumption, and downstream-routing permissions. Return results to refine at the selected endpoint.
 
 Run selected specialists and read their outputs: specs in `.grimoire/spec/`; relationship README and tickets in `.grimoire/ticket/`. Apply their completion checks and compare claims to sources. Unsupported claims keep the stage incomplete. After new discussion, recheck the route and affected artifacts.
 
 # Close
 
-Completion requires the selected endpoint's verified outputs, no blocking knowledge gaps, and no pending qualifying record updates. Otherwise report the blocker and resumption point.
+Completion requires the selected endpoint's verified outputs and no blocking knowledge gaps. Pending knowledge persistence alone does not prevent delivering a completed Spec or other selected output: report it as Pending with the unpersisted items, blockers, and resumption point. Only when the user or caller explicitly requires knowledge persistence do blocked or unverified qualifying record updates prevent overall completion; automatic recording authorization is not such a requirement.
 
 Report route, context/ADR updates or no-change reasons, artifact paths, explicit assumptions/limitations, and the handoff. For execution-ready work, recommend user invocation of `grimoire-loop`; do not start it or invoke a separate plan stage.

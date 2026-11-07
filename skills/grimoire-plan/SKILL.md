@@ -9,13 +9,13 @@ Plan the implementation approach; do not implement production code or treat a sa
 
 Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
 
-Standalone, save the plan by default and end with the handoff. If persistence is disabled, keep the approach in conversation: do not create directories, files, or a viewer.
+Standalone, return the plan in conversation by default. Write plan files only when the user explicitly requests a saved plan or the caller's execution contract authorizes persistence. Otherwise, do not create directories, files, or a viewer.
 
 ## Source and destination
 
 Accept conversation, spec, ticket, selected slice tickets plus their relationship README, or an existing plan. Preserve source paths or a concise intent/acceptance/constraints contract. User intent and acceptance criteria outrank incidental plan details.
 
-Reuse an adequate existing plan; revise the same file for the same goal. Keep unrelated goals separate. For a new persisted plan, use `.grimoire/plans/NNNN-title.md`, with a short kebab-case title and one more than the highest existing plan number (or `0001`), ignoring `viewer.html`.
+Reuse an adequate existing plan; when persistence is authorized, revise the same file for the same goal. Keep unrelated goals separate. For a new persisted plan, use `.grimoire/plans/NNNN-title.md`, with a short kebab-case title and one more than the highest existing plan number (or `0001`), ignoring `viewer.html`.
 
 Persistence needs only `.grimoire/plans/`: create missing parent directories when authorized. Do not require grimoire-init or change registration, knowledge files, or Git configuration. A path/type conflict or denied write is a blocker to persistence, not permission to replace existing content.
 
@@ -38,4 +38,4 @@ For persisted plans, adapt [markdown-template.md](./references/markdown-template
 
 Complete when every material criterion has an owning step/check or an explicit unresolved limitation, and the selected deliverable is available. Return path or conversation context, assumptions, and blockers when reporting is enabled. Never claim a failed save succeeded.
 
-Only on an explicit preview request, follow [preview.md](./references/preview.md); if persistence is disabled, resolve the conflict before creating preview files.
+Only on an explicit preview request, follow [preview.md](./references/preview.md). A preview request alone does not authorize saving a plan or creating/updating viewer files. Before any preview-related file writes, confirm explicit user authorization or permission from the caller's execution contract; if authorization is absent or persistence is disabled, resolve the conflict before writing.

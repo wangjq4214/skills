@@ -7,7 +7,7 @@ Compare implementation with user intent and acceptance criteria, not literal adh
 
 Under orchestration, the caller's execution contract takes precedence over this skill's standalone defaults.
 
-Standalone, justified status updates are allowed unless excluded; fix code only when implementation is also authorized.
+Standalone, remain read-only: report findings without changing Spec, Ticket, or other artifact statuses. Update statuses only with explicit user authorization or permission from the caller's execution contract; evidence alone is not write permission. Fix code only when implementation is also authorized.
 
 ## Compare outcomes
 
