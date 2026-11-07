@@ -1,7 +1,13 @@
 ---
 name: grimoire-record
-description: Use when a conversation establishes or corrects project terminology, domain relationships, or durable architectural decisions, or when asked to preserve that knowledge in context files or ADRs. Not for ordinary task requirements or progress logs.
+description: Use when asked to record or correct project terminology, domain relationships, or durable architectural decisions in context files or ADRs, or to assess a proposed knowledge-recording batch. Not for ordinary task requirements or progress logs.
 ---
+
+# Persistence authorization
+
+A user request to record or update knowledge authorizes writes for that requested scope, subject to write restrictions; do not ask for redundant confirmation. A settled fact, a correction in conversation, or a batch discovered by `grimoire-refine` is not write authorization. A coordinator must pass through the user's recording authorization and scope, not infer it from invoking a workflow or selecting spec/ticket output.
+
+Without that authorization, return qualifying candidates as unpersisted, pending approval. Do not create or modify knowledge-store files. Apply the recording procedures below only to authorized updates.
 
 # What to record
 
@@ -13,7 +19,7 @@ Read existing relevant entries before writing. Resolve factual conflicts from ev
 
 Before qualifying writes, verify a knowledge store exists: an artifact-only `.grimoire/` is not initialization. If absent, report that `grimoire-init` is needed to establish CONTEXT/ADR; do not bootstrap it through recording. Create missing target files/directories only within authorized maintenance of an existing store. When writes are restricted, report qualifying pending items, not a persistence claim.
 
-Batch related settled updates within each user turn. Under `grimoire-refine`, process the coordinator's qualifying batch before a user-turn pause or artifact handoff; return the completion report below. Reuse relevant reads unless sources changed or conflicts require rechecking. Do not independently settle decisions or launch clarification.
+Batch related settled updates within each user turn. Under `grimoire-refine`, process the coordinator's authorized qualifying batch before a user-turn pause or artifact handoff; return the completion report below. Reuse relevant reads unless sources changed or conflicts require rechecking. Do not independently settle decisions or launch clarification.
 
 # Domain context
 
