@@ -18,7 +18,7 @@ Inspect relevant implementation and consumers. Plans predict files and types, no
 
 Implement coherent units, allowing coupled files to change atomically. Include adjacent cleanup only when necessary for correctness, removing duplication introduced by the change, or materially reducing its risk. Avoid unrelated formatting and opportunistic rewrites.
 
-An abstraction may be justified by current boundary value—test substitution, dependency inversion, external isolation, invariant enforcement—even with one implementation. Do not add interfaces solely for predicted future variation. For consequential ownership or boundary tradeoffs, consult [principles.md](./references/principles.md); these are heuristics, not syntax rules.
+An abstraction may be justified by current boundary value—test substitution, dependency inversion, external isolation, invariant enforcement—even with one implementation. Do not add interfaces solely for predicted future variation. Before adding a shared or general-purpose component, or for consequential ownership or boundary tradeoffs, consult [principles.md](./references/principles.md); these are heuristics, not syntax rules.
 
 ## Evidence and handoff
 
