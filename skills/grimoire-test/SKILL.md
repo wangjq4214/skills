@@ -33,8 +33,10 @@ Keep these checks within execution and write permissions; isolate and remove tem
 
 When execution is enabled, run the narrowest useful command during iteration, then the broader affected suite when authorized and practical. Fix test defects only within write permissions; report product defects rather than silently changing intended behavior. Distinguish baseline failures, new failures, and unavailable infrastructure.
 
+After a tool or command failure, distinguish blocked checks from those still runnable. Try reasonable alternatives within existing authorization and continue unaffected checks. Do not retry without a plausible path forward or bypass permission boundaries; report remaining blockers.
+
 Return test paths and covered contracts, source snapshot, commands/working directories/results, changed files, and skipped/unavailable checks when reporting is enabled. A command that found zero relevant tests is not a passing behavior check. Evidence from an older or different tree cannot establish current success without checking applicability.
 
-Complete when selected responsibilities have results or explicit limitations. Unrun tests are authored, not passing. Do not mark the whole change accepted.
+Complete when selected responsibilities have results or explicit limitations. Reporting a limitation does not justify leaving feasible, authorized verification unrun. Unrun tests are authored, not passing. Do not mark the whole change accepted.
 
 For refactoring or batch assignments, read [batch-context.md](./references/batch-context.md) for baseline characterization, integrated-tree validation, and collision avoidance.
