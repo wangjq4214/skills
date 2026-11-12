@@ -14,6 +14,8 @@ Resolve intended outcomes, constraints, and acceptance criteria from the supplie
 
 Inspect relevant implementation and consumers. Plans predict files and types, not immutable boundaries. When repository evidence invalidates the approach, make authorized adaptations and return material deviations to the coordinator; ask before changing approved scope or irreversible decisions.
 
+For changes to UI appearance or interaction, read [ui-changes.md](./references/ui-changes.md) before implementation. Its requirements do not apply to non-UI changes.
+
 ## Change boundaries
 
 Implement coherent units, allowing coupled files to change atomically. Include adjacent cleanup only when necessary for correctness, removing duplication introduced by the change, or materially reducing its risk. Avoid unrelated formatting and opportunistic rewrites.
