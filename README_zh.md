@@ -122,6 +122,7 @@ Grimoire Skills 分为两种调用方式：
 | 🔨 **[skill-forge](./skills/skill-forge/SKILL.md)**         | 创建、审查和精简 Agent 技能            |
 | 📦 **[grimoire-init](./skills/grimoire-init/SKILL.md)**     | 按需初始化 `.grimoire` 项目知识库      |
 | 🧺 **[grimoire-tidy](./skills/grimoire-tidy/SKILL.md)**     | 整理知识库，保留长期知识与活跃工作契约后清理冗余 spec/ticket |
+| 🔎 **[grimoire-retro](./skills/grimoire-retro/SKILL.md)**   | 分析 Agent 错误与当前／历史会话，提出防复发改进；跨宿主、默认只读 |
 | 🗣️ **[grimoire-refine](./skills/grimoire-refine/SKILL.md)** | 协调澄清、上下文落盘、规格、工单与执行交接 |
 | 🔄 **[grimoire-loop](./skills/grimoire-loop/SKILL.md)**     | 编排实现和 QA；仅在有价值或明确要求时规划 |
 | 🧩 **[grimoire-refactor](./skills/grimoire-refactor/SKILL.md)** | 按依赖分批编排大规模改造，并在集成后验收 |
